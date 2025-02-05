@@ -2111,63 +2111,65 @@ function formJugadorSeguro(modalTitle, idRecibido, idJugador, opcion) {
 }
 
 function guardarSeguroJugador(idRecibido, tabla, opcion) {
-  var inputNuevo_idJugador = $('#inputNuevo_idJugador').val();
-  var inputNuevo_siniestro = $('#inputNuevo_siniestro').val();
-  var inputNuevo_valorPagado = $('#inputNuevo_valorPagado').val();
-  var inputNuevo_fechaPagoSeguro = $('#inputNuevo_fechaPagoSeguro').val();
-  var inputNuevo_fechaLesion = $('#inputNuevo_fechaLesion').val();
-  var inputNuevo_jornadaLesion = $('#inputNuevo_jornadaLesion').val();
-  var inputNuevo_comentarios = $('#inputNuevo_comentarios').val();
+  var inputNuevo_idJugador           = $('#inputNuevo_idJugador').val();
+  var inputNuevo_siniestro           = $('#inputNuevo_siniestro').val();
+  var inputNuevo_valorPagado         = $('#inputNuevo_valorPagado').val();
+  var inputNuevo_fechaPagoSeguro     = $('#inputNuevo_fechaPagoSeguro').val();
+  var inputNuevo_fechaLesion         = $('#inputNuevo_fechaLesion').val();
+  var inputNuevo_jornadaLesion       = $('#inputNuevo_jornadaLesion').val();
+  var inputNuevo_competicionLesion   = $('#inputNuevo_competicionLesion').val();
+  var inputNuevo_comentarios         = $('#inputNuevo_comentarios').val();
   var d = new Date();
-  var strDate = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
+  var strDate = d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate();
 
-  if (inputNuevo_siniestro == '' || inputNuevo_valorPagado == '' || inputNuevo_fechaPagoSeguro == '' || inputNuevo_fechaPagoSeguro > strDate || inputNuevo_fechaLesion == '' || inputNuevo_jornadaLesion == '' || inputNuevo_comentarios == '') {
-    $('.needs-validation').addClass('was-validated');
-    if (inputNuevo_fechaPagoSeguro > strDate) {
-      notifica('error', "La fecha de pago seguro debe ser menor o igual que el día de hoy.");
-    } else {
-      notifica('error', "Debe ingresar los campos requeridos.");
-    }
-    return false;
+  if (inputNuevo_siniestro == '' || inputNuevo_valorPagado == '' || inputNuevo_fechaPagoSeguro == '' || inputNuevo_fechaPagoSeguro > strDate || inputNuevo_fechaLesion == '' || inputNuevo_jornadaLesion == '' || inputNuevo_comentarios == '' || inputNuevo_competicionLesion == '' ) {
+      $('.needs-validation').addClass('was-validated');
+      if(inputNuevo_fechaPagoSeguro > strDate) {
+        notifica('error', "La fecha de pago seguro debe ser menor o igual que el día de hoy.");
+      } else {
+        notifica('error', "Debe ingresar los campos requeridos.");
+      }
+      return false;
   };
 
   parametros = {
-    "type": 'guardarSeguroJugador',
-    'idRecibido': idRecibido,
-    'inputNuevo_idJugador': inputNuevo_idJugador,
-    'inputNuevo_siniestro': inputNuevo_siniestro,
-    'inputNuevo_valorPagado': inputNuevo_valorPagado,
-    'inputNuevo_fechaPagoSeguro': inputNuevo_fechaPagoSeguro,
-    'inputNuevo_fechaLesion': inputNuevo_fechaLesion,
-    'inputNuevo_jornadaLesion': inputNuevo_jornadaLesion,
-    'inputNuevo_comentarios': inputNuevo_comentarios,
-    'tabla': tabla,
-    'opcion': opcion,
+      "type"                           : 'guardarSeguroJugador',
+      'idRecibido'                     : idRecibido,
+      'inputNuevo_idJugador'           : inputNuevo_idJugador,
+      'inputNuevo_siniestro'           : inputNuevo_siniestro,
+      'inputNuevo_valorPagado'         : inputNuevo_valorPagado,
+      'inputNuevo_fechaPagoSeguro'     : inputNuevo_fechaPagoSeguro,
+      'inputNuevo_fechaLesion'         : inputNuevo_fechaLesion,
+      'inputNuevo_jornadaLesion'       : inputNuevo_jornadaLesion,
+      'inputNuevo_competicionLesion'   : inputNuevo_competicionLesion,
+      'inputNuevo_comentarios'         : inputNuevo_comentarios,
+      'tabla'                          : tabla,
+      'opcion'                         : opcion,
   };
   $.ajax({
-    data: parametros,
-    url: "option.php",
-    type: "get",
-    beforeSend: function () {
-    },
-    success: function (response) {
-      if (response == 1) {
-        if (opcion == 'agregar') {
-          notifica('success', 'Registro agregado con éxito.', '');
-        } else if (opcion == 'editar') {
-          notifica('success', 'Registro actualizado con éxito.', '');
-        }
-        $('#modalGeneral_otro').modal('toggle');
-      } else if (response == 0) {
-        notifica('error', 'Algo ha fallado. Intente Nuevamente.');
+      data: parametros,
+      url: "option.php",
+      type: "get",
+      beforeSend: function () { 
+      },
+      success: function (response) {
+        if (response == 1) {
+          if(opcion == 'agregar'){
+            notifica('success', 'Registro agregado con éxito.', '');               
+          } else if (opcion == 'editar'){
+            notifica('success', 'Registro actualizado con éxito.', '');              
+          } 
+          $('#modalGeneral_otro').modal('toggle');
+        } else if (response == 0) {
+          notifica('error', 'Algo ha fallado. Intente Nuevamente.');
+        }        
+      },
+      complete: function (response) {
+        $('#listarJugadoresSeguro').click(); 
+      },
+      error: function (e) {
+          alert(e);
       }
-    },
-    complete: function (response) {
-      $('#listarJugadoresSeguro').click();
-    },
-    error: function (e) {
-      notifica('error', 'Ocurrió un error, por favor intente nuevamente o contacte el aministrador del sistema.');
-    }
   });
 }
 

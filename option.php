@@ -104,20 +104,28 @@ switch ($type){
     if ($_SESSION[$siglaSistema.'_nivel'] == 9 || $_SESSION[$siglaSistema.'_nivel'] == 8) {
       $admin01=<<<EOD
         <li class="menu-header">Administrar </li>
-        <li class="menu-item"> 
-          <a href="#" id="listarUsuarios" class="menu-link" onclick="credencialesInicio();"><span class="menu-icon fa fa-users"></span></span> <span class="menu-text"> Credenciales</span></a>
-        </li>  
         <li class="menu-item has-child">
-          <a href="#" class="menu-link"><span class="menu-icon fa fa-cog"></span></span> <span class="menu-text"> Configuraciones</span></a>
+          <a href="#" class="menu-link"><span class="menu-icon fa fa-cog"></span></span> <span class="menu-text"> Ajustes</span></a>
           <ul class="menu">
+            <li class="menu-item"> 
+              <a href="#" id="opcSeguros" class="menu-link" onclick="opcionesSeguro('Opciones Generales','Todas');">Valor Seguro</span></a>
+            </li> 
             <li class="menu-item"> 
               <a href="#" id="reglasnegocio" class="menu-link" onclick="reglasNegocio('Reglas de Negócio');">Reglas de Negócio</a>
             </li> 
           </ul>
         </li>
-        <li class="menu-item"> 
-          <a href="#" class="menu-link" onclick="formSumula('Generar Hoja del Partido');"><span class="menu-icon fa fa-file-excel"></span></span> <span class="menu-text"> Hoja del Partido</span></a>
-        </li>
+        <li class="menu-item has-child">
+          <a href="#" class="menu-link" ><span class="menu-icon fa fa-user"></span></span> <span class="menu-text"> Usuarios</span></a>
+          <ul class="menu">
+            <li class="menu-item"> 
+              <a href="#" id="listarUsuarios" class="menu-link" onclick="credencialesInicio();">Listar Usuarios</a>
+            </li> 
+            <li class="menu-item"> 
+              <a href="#" id="agregarUsuarios" class="menu-link" onclick="credenciales_nuevo('credenciales','Agregar Usuario de Sistema');">Agregar Usuario</a>
+            </li> 
+          </ul>
+        </li> 
         <li class="menu-item has-child">
           <a href="#" class="menu-link"><span class="menu-icon fas fa-futbol"></span></span> <span class="menu-text"> Competiciones</span></a>
           <ul class="menu">
@@ -139,7 +147,10 @@ switch ($type){
               <a href="#" class="menu-link" onclick="formEquipos('Agregar','','equipos','agregarEquipos');">Agregar Equipo</a>
             </li>
           </ul>
-        </li>   
+        </li>
+        <li class="menu-item"> 
+          <a href="#" class="menu-link" onclick="formSumula('Generar Hoja del Partido');"><span class="menu-icon fa fa-file-excel"></span></span> <span class="menu-text"> Hoja del Partido</span></a>
+        </li> 
         <li class="menu-item has-child d-none" hidden>
           <a href="#" class="menu-link"><span class="menu-icon far fa-calendar-alt"></span></span> <span class="menu-text"> Programación</span></a>
           <ul class="menu">
@@ -151,6 +162,26 @@ switch ($type){
             </li>
           </ul>
         </li>
+        <li class="menu-item has-child">
+          <a class="menu-link"><span class="menu-icon fas fa-chart-line"></span></span> <span class="menu-text"> Reportes</span></a>
+          <ul class="menu">                   
+            <li class="menu-item"> 
+              <a href="#" id="jugadoresDuplicados2" class="menu-link d-none" onclick="jugadoresDuplicados('Jugadores Inscritos en 2 equipos','3')">Duplicados +1</a>
+            </li>  
+            <li class="menu-item"> 
+              <a href="#" id="jugadoresDuplicadosN" class="menu-link d-none" onclick="jugadoresDuplicados('Jugadores Inscritos en N equipos','10')">Duplicados +N</a>
+            </li> 
+            <li class="menu-item"> 
+              <a href="#" id="reporteInscritos" class="menu-link" onclick="reportesSeguros('Inscritos sin pagos efectuados','1');">Seguro Inscritos</a>
+            </li>  
+            <li class="menu-item"> 
+              <a href="#" id="reporteSegurosPagados" class="menu-link" onclick="reportesSeguros('Total de seguros pagados','2');">Seguro Pagados</a>
+            </li> 
+            <li class="menu-item"> 
+              <a href="#" id="reporteSaldoSeguro" class="menu-link" onclick="reportesSeguros('Saldo financiero asegurados','3');">Seguro Saldo Financiero </a>
+            </li> 
+          </ul>
+        </li>
         <li class="menu-item has-child d-none" hidden>
           <a href="#" class="menu-link"><span class="menu-icon fas fa-gavel"></span></span> <span class="menu-text"> Tribunal</span></a>
           <ul class="menu">
@@ -160,23 +191,6 @@ switch ($type){
             <li class="menu-item"> 
               <a href="#" class="menu-link" onclick="notifica('warning','Calmao hermano! Esa wea todavía no esta lista, pero luego estará te lo prome.');">Agregar una Suspensión</a>
             </li>
-          </ul>
-        </li>
-        <li class="menu-item has-child">
-          <a class="menu-link"><span class="menu-icon fa fa-medkit"></span></span> <span class="menu-text"> Seguro</span></a>
-          <ul class="menu">                   
-            <li class="menu-item">
-              <a href="#" id="opcSeguros" class="menu-link" onclick="opcionesSeguro('Opciones Generales','Todas');">Opciones</span></a>
-            </li>
-            <li class="menu-item"> 
-              <a href="#" id="reporteInscritos" class="menu-link" onclick="reportesSeguros('Inscritos sin pagos efectuados','1');">Inscritos</a>
-            </li>  
-            <li class="menu-item"> 
-              <a href="#" id="reporteSegurosPagados" class="menu-link" onclick="reportesSeguros('Suma Seguro pagados','2');">Seguros Pagados</a>
-            </li> 
-            <li class="menu-item"> 
-              <a href="#" id="reporteSaldoSeguro" class="menu-link" onclick="reportesSeguros('Saldo financiero asegurados','3');">Saldo Financiero</a>
-            </li> 
           </ul>
         </li>
       EOD;
@@ -319,10 +333,8 @@ switch ($type){
     $campoAcambiar = $_GET['campoAcambiar'];
     $idLinea = $_GET['idLinea'];
     $valorCheckbox = $_GET['valorCheckbox'];
-    if ($tabla=='credenciales' || $tabla=='competiciones') {
-      if ($valorCheckbox=="true") {$valorCheckbox_num="1";}
-      if ($valorCheckbox=="false") {$valorCheckbox_num="0";} 
-    } 
+    if ($valorCheckbox=="true") {$valorCheckbox_num="1";}
+    if ($valorCheckbox=="false") {$valorCheckbox_num="0";} 
     $set="{$campoAcambiar}={$valorCheckbox_num}";
     $where="id={$idLinea}";
     $cambioCheckbox_ejecutaResp   = $ClassTodas->actualizaCosasVariasSetWhere($tabla,$set,$where);
@@ -3205,16 +3217,14 @@ switch ($type){
 
   case 'reportesSeguros':
     $numReport = $_GET['numReport'];
-    $datosTabla = '';
-    $valorSeguroFijado = 0;
     if($numReport == '1'){
       $count = 0;
       $countValorDebido = 0;
-      $buscaDatosJugadores = $ClassTodas->get_datoVariosWhereOrderInformes("SELECT  jugadores.*, jugadores_seguros.valorPagado, jugadores_seguros.fechaPagoSeguro, jugadores_seguros.siniestro, jugadores_seguros.modificadoPor, jugadores_seguros.fechaLesion, jugadores_seguros.jornadaLesion, jugadores_seguros.comentarios FROM jugadores LEFT JOIN jugadores_seguros ON jugadores.id = jugadores_seguros.id_jugador WHERE jugadores.asegurado = 1 AND jugadores_seguros.id IS NULL");
+      $buscaDatosJugadores = $ClassTodas->get_datoVariosWhereOrderInformes("SELECT  jg.*, js.valorPagado, js.fechaPagoSeguro, js.siniestro, js.modificadoPor, js.fechaLesion, js.jornadaLesion, js.competicionLesion, js.comentarios, js.seguimiento FROM jugadores as jg LEFT JOIN jugadores_seguros as js ON jg.id = js.id_jugador WHERE jg.asegurado = 1 AND js.id IS NULL");
       if (empty($buscaDatosJugadores)) {
         $datosTabla =<<<EOD
           <tr>              
-            <td colspan="14" class="text-center py-3">No hay datos para mostrar en la tabla.</td>
+            <td colspan="100" class="text-center py-3">No hay datos para mostrar en la tabla.</td>
           </tr>
         EOD;
       } else {
@@ -3229,70 +3239,72 @@ switch ($type){
           $documento              = $value['documento'];
           $fnacimientoSinTrab     = $value['fnacimiento'];
           $fnacimiento            = $ClassTodas->cambiaf_a_normal2($fnacimientoSinTrab);
+          $id_equipo              = $value['id_equipo'];
           $email                  = $value['email'];
           $celular                = $value['celular'];
           $asegurado              = $value['asegurado'];
-          $fechaLesion            = $ClassTodas->cambiaf_a_normal2($value['fechaLesion']);
-          $fechaLesion            = (empty($fechaLesion)) ? 'No Aplica' : $fechaLesion;
+          $seguimiento            = $value['seguimiento'];
+          $fechaLesion            = (isset($value['fechaLesion'])) ? $ClassTodas->cambiaf_a_normal2($value['fechaLesion']) : 'No Aplica';
           $jornadaLesion          = $value['jornadaLesion'];
           $jornadaLesion          = (empty($jornadaLesion)) ? 'No Aplica' : $jornadaLesion;
+          $competicionLesion      = $value['competicionLesion'];
+          $competicionLesion      = (empty($competicionLesion)) ? 'No Aplica' : $competicionLesion;
           $comentarios            = $value['comentarios'];
           $aseguradoTxT           = ($asegurado == 1) ? 'Sí' : 'No';
+          $seguimientoTxT         = ($seguimiento == 1) ? 'Sí' : 'No';
           $fechaPagoSeguro        = (empty($value['fechaPagoSeguro'])) ? 'No Aplica' : $ClassTodas->cambiaf_a_normal2($value['fechaPagoSeguro']);
           $siniestro              = (empty($value['siniestro'])) ? 'No Aplica' : $value['siniestro'];
           $valorPagado            = (empty($value['valorPagado'])) ? $valorSeguroFijado : $value['valorPagado'];
           $modificadoPor          = (empty($value['modificadoPor'])) ? 'No aplica' : $value['modificadoPor'];
           $fechaModificacion      = $value['fechaModificacion'];
           $edadJugador            = $ClassTodas->obtener_edad_segun_fecha($fnacimiento);
-
-          $equiposUsuario = '';
-          $datosEquipos = $ClassTodas->get_datoVariosWhereOrderInformes("SELECT eq.nombre FROM jugadores_equipos as jeq LEFT JOIN equipos as eq ON eq.id = jeq.id_equipo WHERE jeq.id_jugador=$id_jg");
-          if(empty($datosEquipos)){
-            $equiposUsuario = 'Sin Equipo';
-          } else {
-            foreach($datosEquipos as $row){
-              $equiposUsuario .= '<span class="badge badge-subtle badge-primary m-1">'.$row['nombre'].'</span>';
-            }
-          }
-
+          $buscaDatosEquipos = $ClassTodas->get_datoVariosWhereOrder('equipos','WHERE id='.$id_equipo,'');
+          foreach ($buscaDatosEquipos as $value) {
+            $equipo         = $value['nombre'];
+          }  
           $datosTabla .=<<<EOD
             <tr id="tr_$id_jg">  
               <td class="align-middle">$count</td>
-              <td class="align-middle">$nombre $apellido <i class="fa fa-edit cursor-pointer" onclick="formJugadores('Editar','$id_jg','jugadores','editarJugadores')"></i></td>
+              <td class="align-middle">$nombre $apellido <a href="#" tilte="Editar Jugador" onclick="formJugadores('Editar','$id_jg','jugadores','editarJugadores')"><i class="fa fa-edit"></i></a></td>
               <td class="align-middle">$documento</td>
-              <td class="align-middle">$fnacimiento <small>(Edad: $edadJugador)</small></td>
-              <td class="align-middle">$equiposUsuario</td>
+              <td class="align-middle text-nowrap">$fnacimiento <small>(Edad: $edadJugador)</small></td>
+              <td class="align-middle">$equipo</td>
               <td class="align-middle">$aseguradoTxT</td>
-              <td class="align-middle">$fechaPagoSeguro</td>
+              <td class="align-middle">$seguimientoTxT</td>
+              <td class="align-middle text-nowrap">$fechaPagoSeguro</td>
               <td class="align-middle">$siniestro</td>
               <td class="align-middle" title="$fechaModificacion">$modificadoPor</td>
-              <td class="align-middle">$fechaLesion</td>
+              <td class="align-middle text-nowrap">$fechaLesion</td>
               <td class="align-middle">$jornadaLesion</td>
-              <td class="align-middle">$email</td>
-              <td class="align-middle">$comentarios</td>
+              <td class="align-middle">$competicionLesion</td>
+              <td class="align-middle text-center"><i class="fa fa-eye" title="$comentarios"></i></td>
             </tr>
           EOD;
         }
       }
       $countValorDebido       = $valorSeguroFijado * $count;
       $tablaReportes =<<<EOD
-        <div class="table-responsive">
-          <table class="table  table-condensed table-bordered table-sm table-striped font-size-sm" id="tablaReportes">
+        <div class="table-responsive-lg">
+          <table class="table table-condensed table-bordered table-striped table-sm font-size-sm w-100" id="tablaReportes">
             <thead>
+              <tr class="bg-primary text-center text-white">
+                <th colspan="100" class="align-middle"><h5 class="mb-0">Total de jugadores asegurados: $count</h5></th>
+              </tr>
               <tr>
                 <th>Nº</th>
                 <th>Nombre</th>
                 <th>Documento</th>
-                <th>Fecha Nacimiento</th>                
+                <th>Nacimiento</th>
                 <th>Equipo</th>
                 <th>Asegurado</th>
-                <th>Fecha Pago Seguro</th>
+                <th>¿Dar Seguimiento?</th>
+                <th>Fecha Pago</th>
                 <th>Siniestro</th>
-                <th>Modificado por</th>
-                <th>Fecha Lesión</th>
-                <th>Jornada Lesión</th>
-                <th>Email</th>
-                <th>Comentarios</th>
+                <th>Modif. por</th>
+                <th>Fecha Jornada</th>
+                <th>Nº Jornada</th>
+                <th>Competición</th>
+                <th>Obs.</th>
               </tr>
             </thead>
             <tbody>
@@ -3306,11 +3318,11 @@ switch ($type){
       $count=0;
       $countAsegurado = 0;
       $countValorP = 0;
-      $buscaDatosJugadores = $ClassTodas->get_datoVariosWhereOrderInformes("SELECT  j.*, js.valorPagado, js.fechaPagoSeguro, js.siniestro, js.modificadoPor, js.fechaLesion, js.jornadaLesion, js.comentarios FROM jugadores as j LEFT JOIN jugadores_seguros as js ON j.id = js.id_jugador WHERE j.asegurado = 1 AND js.siniestro > 0");
+      $buscaDatosJugadores = $ClassTodas->get_datoVariosWhereOrderInformes("SELECT jg.*, js.valorPagado, js.fechaPagoSeguro, js.siniestro, js.modificadoPor, js.fechaLesion, js.jornadaLesion, js.competicionLesion, js.comentarios, js.seguimiento FROM jugadores AS jg LEFT JOIN jugadores_seguros AS js ON jg.id = js.id_jugador WHERE jg.asegurado = 1 AND js.siniestro > 0");
       if (empty($buscaDatosJugadores)) {
         $datosTabla =<<<EOD
           <tr>              
-            <td colspan="14" class="text-center py-3">No hay datos para mostrar en la tabla.</td>
+            <td colspan="100" class="text-center py-3">No hay datos para mostrar en la tabla.</td>
           </tr>
         EOD;
       } else {
@@ -3322,16 +3334,20 @@ switch ($type){
           $apellido               = $value['apellido'];
           $documento              = $value['documento'];
           $fnacimientoSinTrab     = $value['fnacimiento'];
-          $fnacimiento            = $ClassTodas->cambiaf_a_normal2($fnacimientoSinTrab);          
+          $fnacimiento            = $ClassTodas->cambiaf_a_normal2($fnacimientoSinTrab);
+          $id_equipo              = $value['id_equipo'];
           $email                  = $value['email'];
           $celular                = $value['celular'];
           $asegurado              = $value['asegurado'];
-          $fechaLesion            = $ClassTodas->cambiaf_a_normal2($value['fechaLesion']);
-          $fechaLesion            = (empty($fechaLesion)) ? 'No Aplica' : $fechaLesion;
+          $seguimiento            = $value['seguimiento'];
+          $fechaLesion            = (isset($value['fechaLesion'])) ? $ClassTodas->cambiaf_a_normal2($value['fechaLesion']) : 'No Aplica';
           $jornadaLesion          = $value['jornadaLesion'];
-          $jornadaLesion            = (empty($jornadaLesion)) ? 'No Aplica' : $jornadaLesion;
+          $jornadaLesion          = (empty($jornadaLesion)) ? 'No Aplica' : $jornadaLesion;
+          $competicionLesion      = $value['competicionLesion'];
+          $competicionLesion      = (empty($competicionLesion)) ? 'No Aplica' : $competicionLesion;
           $comentarios            = $value['comentarios'];
           $aseguradoTxT           = ($asegurado == 1) ? 'Sí' : 'No';
+          $seguimientoTxT         = ($seguimiento == 1) ? 'Sí' : 'No';
           $fechaPagoSeguro        = (empty($value['fechaPagoSeguro'])) ? 'No Aplica' : $ClassTodas->cambiaf_a_normal2($value['fechaPagoSeguro']);
           $siniestro              = $value['siniestro'];
           $valorPagado            = $value['valorPagado'];
@@ -3341,67 +3357,60 @@ switch ($type){
           $valorPagado            = $valorPagado * $siniestro;
           if($asegurado == 1) { $countAsegurado++; }
           $countValorP       = $countValorP + $valorPagado;
-          $equiposUsuario = '';
-          $datosEquipos = $ClassTodas->get_datoVariosWhereOrderInformes("SELECT eq.nombre FROM jugadores_equipos as jeq LEFT JOIN equipos as eq ON eq.id = jeq.id_equipo WHERE jeq.id_jugador=$id_jg");
-          if(empty($datosEquipos)){
-            $equiposUsuario = 'Sin Equipo';
-          } else {
-            foreach($datosEquipos as $row){
-              $equiposUsuario .= '<span class="badge badge-subtle badge-primary m-1">'.$row['nombre'].'</span>';
-            }
-          }
+          $buscaDatosEquipos = $ClassTodas->get_datoVariosWhereOrder('equipos','WHERE id='.$id_equipo,'');
+          foreach ($buscaDatosEquipos as $value) {
+            $equipo         = $value['nombre'];
+          }  
           $datosTabla .=<<<EOD
             <tr id="tr_$id_jg">  
               <td class="align-middle">$count</td>
               <td class="align-middle">$nombre $apellido <i class="fa fa-edit cursor-pointer" onclick="formJugadores('Editar','$id_jg','jugadores','editarJugadores')"></i></td>
               <td class="align-middle">$documento</td>
-              <td class="align-middle">$fnacimiento <small>(Edad: $edadJugador)</small></td>
-              <td class="align-middle">$equiposUsuario</td>
+              <td class="align-middle text-nowrap">$fnacimiento <small>(Edad: $edadJugador)</small></td>
+              <td class="align-middle">$equipo</td>
               <td class="align-middle">$aseguradoTxT</td>
-              <td class="align-middle">$fechaPagoSeguro</td>
+              <td class="align-middle">$seguimientoTxT</td>
+              <td class="align-middle text-nowrap">$fechaPagoSeguro</td>
               <td class="align-middle">$siniestro</td>
               <td class="align-middle" title="$fechaModificacion">$modificadoPor</td>              
               <td class="align-middle">$$valorPagado</td>
-              <td class="align-middle">$fechaLesion</td>
+              <td class="align-middle text-nowrap">$fechaLesion</td>
               <td class="align-middle">$jornadaLesion</td>
-              <td class="align-middle">$email</td>
-              <td class="align-middle">$comentarios</td>
+              <td class="align-middle">$competicionLesion</td>
+              <td class="align-middle text-center"><i class="fa fa-eye" title="$comentarios"></i></td>
             </tr>
           EOD;
         }
       }
+      $countValorP = '$'.number_format($countValorP, 0, ',', '.');
       $tablaReportes =<<<EOD
-        <div class="table-responsive">
-          <table class="table  table-condensed table-bordered table-sm table-striped font-size-sm" id="tablaReportes">
+        <div class="table-responsive-lg">
+          <table class="table table-condensed table-bordered table-striped table-sm font-size-sm w-100" id="tablaReportes">
             <thead>
+              <tr class="bg-success text-center text-white">
+                <th colspan="100" class="align-middle"><h5 class="mb-0">Total de valores pagados: $countValorP</h5></th>
+              </tr>
               <tr>
                 <th>Nº</th>
                 <th>Nombre</th>
                 <th>Documento</th>
-                <th>Fecha Nacimiento</th>                
+                <th>Nacimiento</th>                
                 <th>Equipo</th>
                 <th>Asegurado</th>
-                <th>Fecha Pago Seguro</th>
+                <th>¿Dar Seguimiento?</th>
+                <th>Fecha Pago</th>
                 <th>Siniestro</th>
-                <th>Modificado por</th>
+                <th>Modif. por</th>
                 <th>Valor Pagado</th>
-                <th>Fecha Lesión</th>
-                <th>Jornada Lesión</th>
-                <th>Email</th>
-                <th>Comentarios</th>
+                <th>Fecha Jornada</th>
+                <th>Nº Jornada</th>
+                <th>Competición</th>
+                <th>Obs.</th>
               </tr>
             </thead>
             <tbody>
               $datosTabla
             </tbody>
-            <tfoot>
-              <tr>
-                <th colspan="8"></th>
-                <th colspan="1" class="text-right">Total:</th>
-                <th colspan="1">$$countValorP</th>   
-                <th colspan="4"></th>        
-              </tr>
-            </tfoot>
           </table>
         </div>
       EOD; 
@@ -3410,16 +3419,16 @@ switch ($type){
       $countAsegurado = 0;
       $countValorP = 0;
       $valorDebido = 0;
-      $buscaDatosJugadores = $ClassTodas->get_datoVariosWhereOrderInformes("SELECT jugadores.*, jugadores_seguros.id AS idJS, jugadores_seguros.valorPagado, jugadores_seguros.fechaPagoSeguro, jugadores_seguros.siniestro, jugadores_seguros.modificadoPor, jugadores_seguros.fechaLesion, jugadores_seguros.jornadaLesion, jugadores_seguros.comentarios FROM jugadores LEFT JOIN jugadores_seguros ON jugadores.id = jugadores_seguros.id_jugador WHERE jugadores.asegurado = 1");
+      $buscaDatosJugadores = $ClassTodas->get_datoVariosWhereOrderInformes("SELECT jg.*, js.id AS idJS, js.valorPagado, js.fechaPagoSeguro, js.siniestro, js.modificadoPor, js.fechaLesion, js.jornadaLesion, js.competicionLesion, js.comentarios, js.seguimiento FROM jugadores AS jg LEFT JOIN jugadores_seguros AS js ON jg.id = js.id_jugador WHERE jg.asegurado = 1");
       if (empty($buscaDatosJugadores)) {
         $datosTabla =<<<EOD
           <tr>              
-            <td colspan="14" class="text-center py-3">No hay datos para mostrar en la tabla.</td>
+            <td colspan="100" class="text-center py-3">No hay datos para mostrar en la tabla.</td>
           </tr>
         EOD;
       } else {
         $buscaValorSeguro = $ClassTodas->get_datoVariosWhereOrder('seguro_opciones','WHERE tipo="ValorSeguro"','ORDER BY id DESC LIMIT 1');
-        foreach($buscaValorSeguro as $value){ $valorSeguroFijado = $value['valor'];}        
+        foreach($buscaValorSeguro as $value){ $valorSeguroFijado = $value['valor'];}
         foreach ($buscaDatosJugadores as $value) {
           $count++;
           $id_jg                          = $value['id'];
@@ -3429,15 +3438,19 @@ switch ($type){
           $documento                      = $value['documento'];
           $fnacimientoSinTrab             = $value['fnacimiento'];
           $fnacimiento                    = $ClassTodas->cambiaf_a_normal2($fnacimientoSinTrab);
+          $id_equipo                      = $value['id_equipo'];
           $email                          = $value['email'];
           $celular                        = $value['celular'];
           $asegurado                      = $value['asegurado'];
-          $fechaLesion                    = $ClassTodas->cambiaf_a_normal2($value['fechaLesion']);
-          $fechaLesion                    = (empty($fechaLesion)) ? 'No Aplica' : $fechaLesion;
+          $seguimiento                    = $value['seguimiento'];
+          $fechaLesion                    = (isset($value['fechaLesion'])) ? $ClassTodas->cambiaf_a_normal2($value['fechaLesion']) : 'No Aplica';
           $jornadaLesion                  = $value['jornadaLesion'];
           $jornadaLesion                  = (empty($jornadaLesion)) ? 'No Aplica' : $jornadaLesion;
+          $competicionLesion              = $value['competicionLesion'];
+          $competicionLesion              = (empty($competicionLesion)) ? 'No Aplica' : $competicionLesion;
           $comentarios                    = $value['comentarios'];
           $aseguradoTxT                   = ($asegurado == 1) ? 'Sí' : 'No';
+          $seguimientoTxT                 = ($seguimiento == 1) ? 'Sí' : 'No';
           $fechaPagoSeguro                = (empty($value['fechaPagoSeguro'])) ? 'No Aplica' : $ClassTodas->cambiaf_a_normal2($value['fechaPagoSeguro']);
           $siniestro                      = (empty($value['siniestro'])) ? 'No Aplica' : $value['siniestro'];
           $valorPagado                    = (empty($value['valorPagado'])) ? '0' : $value['valorPagado'];
@@ -3453,81 +3466,74 @@ switch ($type){
           if ($valorPagado !== null && is_numeric($valorPagado)) {
             $countValorP                    = $countValorP + $valorPagado;
           }
-          $equiposUsuario = '';
-          $datosEquipos = $ClassTodas->get_datoVariosWhereOrderInformes("SELECT eq.nombre FROM jugadores_equipos as jeq LEFT JOIN equipos as eq ON eq.id = jeq.id_equipo WHERE jeq.id_jugador=$id_jg");
-          if(empty($datosEquipos)){
-            $equiposUsuario = 'Sin Equipo';
-          } else {
-            foreach($datosEquipos as $row){
-              $equiposUsuario .= '<span class="badge badge-subtle badge-primary m-1">'.$row['nombre'].'</span>';
-            }
-          }
+          $gEquipos                       = $ClassTodas->get_datoVariosWhereOrder('equipos','WHERE id='.$id_equipo,'');
+          foreach ($gEquipos as $value) { $equipo = $value['nombre']; }  
           // if($valorPagado == 0) { $valorPagado = '-'.$valorSeguroFijado;}
           $datosTabla .=<<<EOD
             <tr id="tr_$id_jg">  
               <td class="align-middle">$count</td>
               <td class="align-middle">$nombre $apellido <i class="fa fa-edit cursor-pointer" onclick="formJugadores('Editar','$id_jg','jugadores','editarJugadores')"></i></td>
               <td class="align-middle">$documento</td>
-              <td class="align-middle">$fnacimiento <small>(Edad: $edadJugador)</small></td>
-              <td class="align-middle">$equiposUsuario</td>
+              <td class="align-middle text-nowrap">$fnacimiento <small>(Edad: $edadJugador)</small></td>
+              <td class="align-middle">$equipo</td>
               <td class="align-middle">$aseguradoTxT</td>
-              <td class="align-middle">$fechaPagoSeguro</td>
+              <td class="align-middle">$seguimientoTxT</td>
+              <td class="align-middle text-nowrap">$fechaPagoSeguro</td>
               <td class="align-middle">$siniestro</td>
               <td class="align-middle" title="$fechaModificacion">$modificadoPor</td>
-              <td class="align-middle">$valorPagado</td>
-              <td class="align-middle">$fechaLesion</td>
+              <td class="align-middle">$$valorPagado</td>
+              <td class="align-middle text-nowrap">$fechaLesion</td>
               <td class="align-middle">$jornadaLesion</td>
-              <td class="align-middle">$email</td>
-              <td class="align-middle">$comentarios</td>
+              <td class="align-middle">$competicionLesion</td>
+              <td class="align-middle text-center"><i class="fa fa-eye" title="$comentarios"></i></td>
             </tr>
           EOD;
         }
       }
-      $diferenciaPagadoDebido = $countValorP - $valorDebido;
+      $diferenciaPagadoDebido = $valorDebido - $countValorP;
+      $bgNegativoPositivo = ($diferenciaPagadoDebido < 0) ? 'bg-red' : 'bg-success';
+      $diferenciaPagadoDebido = '$'.number_format($diferenciaPagadoDebido, 0, ',', '.');
       $tablaReportes =<<<EOD
-        <div class="table-responsive">
-          <table class="table  table-condensed table-bordered table-sm table-striped font-size-sm" id="tablaReportes">
+        <div class="table-responsive-lg">
+          <table class="table table-condensed table-bordered table-striped table-sm font-size-sm w-100" id="tablaReportes">
             <thead>
+              <tr class="$bgNegativoPositivo text-center text-white">
+                <th colspan="100" class="align-middle"><h5 class="mb-0">Saldo Financiero: $diferenciaPagadoDebido</h5></th>
+              </tr>
               <tr>
                 <th>Nº</th>
                 <th>Nombre</th>
                 <th>Documento</th>
-                <th>Fecha Nacimiento</th>                
+                <th>Nacimiento</th>                
                 <th>Equipo</th>
                 <th>Asegurado</th>
-                <th>Fecha Pago Seguro</th>
+                <th>¿Dar seguimiento?</th>
+                <th>Fecha Pago</th>
                 <th>Siniestro</th>
-                <th>Modificado por</th>
+                <th>Modif. por</th>
                 <th>Valor Pagado</th>
-                <th>Fecha Lesión</th>
-                <th>Jornada Lesión</th>
-                <th>Email</th>
-                <th>Comentarios</th>
+                <th>Fecha Jornada</th>
+                <th>Nº Jornada</th>
+                <th>Competición</th>
+                <th>Obs.</th>
               </tr>
             </thead>
             <tbody>
               $datosTabla
             </tbody>
-            <tfoot>
-              <tr>
-                <th colspan="8"></th>
-                <th colspan="1" class="text-right">Diferencia:</th>
-                <th colspan="1">$$diferenciaPagadoDebido</th> 
-                <th colspan="4"></th>          
-              </tr>
-            </tfoot>
           </table>
         </div>
       EOD;    
     }
     echo $tablaReportes;  
   break;
-
   case 'formJugadorSeguro':
     $idRecibido = $_GET['idRecibido'];
     $opcion    = $_GET['opcion'];
     $idJugador = $_GET['idJugador'];
+    
     if($opcion == 'agregar'){
+      
       $getNombreJugador = $ClassTodas->get_datoVariosWhereOrder('jugadores','WHERE id='.$idJugador,'LIMIT 1');
       if(empty($getNombreJugador)){
       } else {
@@ -3535,6 +3541,15 @@ switch ($type){
           $nombre = $value['nombre'];
           $apellido = $value['apellido'];
           $nombreJugador = $nombre.' '.$apellido;
+        }
+      }
+
+      $getCompeticiones = $ClassTodas->get_datoVariosWhereOrder('competiciones','WHERE activo = 1','');
+      if(empty($getCompeticiones)){
+      } else {
+        foreach($getCompeticiones as $value){
+          $nombre = $value['nombre'];
+          $optionCompeticionesLesion .= '<option value="'.$nombre.'">'.$nombre.'</option>';
         }
       }
       $modalFooter =<<<EOD
@@ -3548,16 +3563,30 @@ switch ($type){
       if(empty($getDatosSeguros)){
       } else {
         foreach($getDatosSeguros as $value){
-          $nombre           = $value['nombre'];
-          $siniestro        = $value['siniestro'];
-          $fechaLesion      = $value['fechaLesion'];
-          $jornadaLesion    = $value['jornadaLesion'];
-          $valorPagado      = $value['valorPagado'];
-          $fechaPagoSeguro  = $value['fechaPagoSeguro'];
-          $nombre           = $value['nombre'];
-          $apellido         = $value['apellido'];
-          $comentarios      = $value['comentarios'];
-          $nombreJugador    = $nombre.' '.$apellido;
+          $siniestro            = $value['siniestro'];
+          $fechaLesion          = $value['fechaLesion'];
+          $jornadaLesion        = $value['jornadaLesion'];
+          $competicionLesion    = $value['competicionLesion'];
+          $valorPagado          = $value['valorPagado'];
+          $fechaPagoSeguro      = $value['fechaPagoSeguro'];
+          $nombre               = $value['nombre'];
+          $apellido             = $value['apellido'];
+          $comentarios          = $value['comentarios'];
+          $nombreJugador        = $nombre.' '.$apellido;
+        }
+      }
+
+      $getCompeticiones = $ClassTodas->get_datoVariosWhereOrder('competiciones','WHERE activo = 1','');
+      if(empty($getCompeticiones)){
+      } else {
+        foreach($getCompeticiones as $value){
+          $nombre = $value['nombre'];
+          if($nombre == $competicionLesion){
+            $optionCompeticionesLesion .= '<option value="'.$nombre.'" selected>'.$nombre.'</option>';
+          } else {
+            $optionCompeticionesLesion .= '<option value="'.$nombre.'">'.$nombre.'</option>';
+          }
+          
         }
       }
       $modalFooter =<<<EOD
@@ -3589,19 +3618,28 @@ switch ($type){
             <div class="invalid-feedback"> Ingrese una fecha de lesión </div>
             <small id="" class="form-text text-muted">Ingrese una fecha de lesión</small>
           </div>
-          <div class="col-12 col-md-6 mb-3">
+          <div class="col-12 col-md-3 mb-3">
             <label>Jornada <abbr title="Required">*</abbr></label>
             <input type="number" class="form-control" id="inputNuevo_jornadaLesion" name="inputNuevo_jornadaLesion" value="$jornadaLesion" maxlength="15" required>
             <div class="invalid-feedback"> Ingrese la jornada de la lesión </div>
             <small id="" class="form-text text-muted">Ingrese la jornada de la lesión</small>
           </div>
-        </div>
-        <div class="form-row">
-          <div class="col-12 col-md-6 mb-3">
+          <div class="col-12 col-md-3 mb-3">
             <label>Valor Pagado</label>
             <input type="text" class="form-control" id="inputNuevo_valorPagado" name="inputNuevo_valorPagado" value="$valorPagado" required>
             <div class="invalid-feedback"> Ingrese el valor pagado </div>
             <small id="" class="form-text text-muted">Ingrese el valor pagado</small>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="col-12 col-md-6 mb-3">
+            <label>Competición Lesión</label>
+            <select class="form-control" id="inputNuevo_competicionLesion" name="inputNuevo_competicionLesion" required>
+              <option></option>
+              $optionCompeticionesLesion
+            </select>
+            <div class="invalid-feedback"> Ingrese la competición en que el jugador se lesionó </div>
+            <small id="" class="form-text text-muted">Ingrese la competición en que el jugador se lesionó</small>
           </div>
           <div class="col-12 col-md-6 mb-3">
             <label>Fecha Pago</label>
@@ -3623,56 +3661,75 @@ switch ($type){
     EOD;
     echo $formulario;
   break;
-
   case 'guardarSeguroJugador':
-    $opcion                     = $_GET['opcion'];
-    $tabla                      = $_GET['tabla'];
-    $idRecibido                 = $_GET['idRecibido'];
-    $inputNuevo_idJugador       = $_GET['inputNuevo_idJugador'];
-    $inputNuevo_siniestro       = $_GET['inputNuevo_siniestro'];
-    $inputNuevo_valorPagado     = $_GET['inputNuevo_valorPagado'];
-    $inputNuevo_fechaPagoSeguro = $_GET['inputNuevo_fechaPagoSeguro'];
-    $inputNuevo_fechaLesion     = $_GET['inputNuevo_fechaLesion'];
-    $inputNuevo_jornadaLesion   = $_GET['inputNuevo_jornadaLesion'];
-    $inputNuevo_comentarios     = $_GET['inputNuevo_comentarios'];
+    $opcion                         = $_GET['opcion'];
+    $tabla                          = $_GET['tabla'];
+    $idRecibido                     = $_GET['idRecibido'];
+    $inputNuevo_idJugador           = $_GET['inputNuevo_idJugador'];
+    $inputNuevo_siniestro           = $_GET['inputNuevo_siniestro'];
+    $inputNuevo_valorPagado         = $_GET['inputNuevo_valorPagado'];
+    $inputNuevo_fechaPagoSeguro     = $_GET['inputNuevo_fechaPagoSeguro'];
+    $inputNuevo_fechaLesion         = $_GET['inputNuevo_fechaLesion'];
+    $inputNuevo_jornadaLesion       = $_GET['inputNuevo_jornadaLesion'];
+    $inputNuevo_competicionLesion   = $_GET['inputNuevo_competicionLesion'];
+    $inputNuevo_comentarios         = $_GET['inputNuevo_comentarios'];
     if($opcion == 'agregar'){
-      $campos_gsj = "id_jugador,siniestro,fechaLesion,jornadaLesion,valorPagado,fechaPagoSeguro,comentarios,modificadoPor,fechaModificacion";
-      $valores_gsj = "'{$inputNuevo_idJugador}','{$inputNuevo_siniestro}','{$inputNuevo_fechaLesion}','{$inputNuevo_jornadaLesion}','{$inputNuevo_valorPagado}','{$inputNuevo_fechaPagoSeguro}','{$inputNuevo_comentarios}','{$nombreUsuarioGeneral}','{$date}'";
+      $campos_gsj = "id_jugador,siniestro,fechaLesion,jornadaLesion,competicionLesion,valorPagado,fechaPagoSeguro,comentarios,modificadoPor,fechaModificacion";
+      $valores_gsj = "'{$inputNuevo_idJugador}','{$inputNuevo_siniestro}','{$inputNuevo_fechaLesion}','{$inputNuevo_jornadaLesion}','{$inputNuevo_competicionLesion}','{$inputNuevo_valorPagado}','{$inputNuevo_fechaPagoSeguro}','{$inputNuevo_comentarios}','{$nombreUsuarioGeneral}','{$date}'";
       $resultadoQuery = $ClassTodas->insertCosasVarias($tabla,$campos_gsj,$valores_gsj);
     } elseif($opcion == 'editar'){
-      $set_gsj = "id_jugador='{$inputNuevo_idJugador}',siniestro='{$inputNuevo_siniestro}',fechaLesion='{$inputNuevo_fechaLesion}',jornadaLesion='{$inputNuevo_jornadaLesion}',valorPagado='{$inputNuevo_valorPagado}',fechaPagoSeguro='{$inputNuevo_fechaPagoSeguro}',comentarios='{$inputNuevo_comentarios}',modificadoPor='{$nombreUsuarioGeneral}',fechaModificacion='{$date}'";
+      $set_gsj = "id_jugador='{$inputNuevo_idJugador}',siniestro='{$inputNuevo_siniestro}',fechaLesion='{$inputNuevo_fechaLesion}',jornadaLesion='{$inputNuevo_jornadaLesion}',competicionLesion='{$inputNuevo_competicionLesion}',valorPagado='{$inputNuevo_valorPagado}',fechaPagoSeguro='{$inputNuevo_fechaPagoSeguro}',comentarios='{$inputNuevo_comentarios}',modificadoPor='{$nombreUsuarioGeneral}',fechaModificacion='{$date}'";
       $where_gsj = "id='{$idRecibido}'";
       $resultadoQuery = $ClassTodas->actualizaCosasVariasSetWhere($tabla,$set_gsj,$where_gsj);
     }
     echo $resultadoQuery;
   break;
-
   case 'listarJugadorSeguro':
     $idRecibido  = $_GET['idRecibido'];
     $dato        = $_GET['dato'];
     $getJugadoresSeguros = $ClassTodas->get_datoVariosWhereOrderInformes("SELECT jugadores_seguros.* FROM jugadores_seguros INNER JOIN jugadores ON jugadores.id = jugadores_seguros.id_jugador WHERE jugadores_seguros.id_jugador=$idRecibido AND jugadores.asegurado = 1 ORDER BY jugadores_seguros.siniestro DESC");
     if(empty($getJugadoresSeguros)){
-      $trListarJugadores = '<tr><td colspan="8" class="text-center">No hay datos todavía</td></tr>';
+      $trListarJugadores = '<tr><td colspan="100" class="text-center">No hay datos todavía</td></tr>';
     } else {
       foreach($getJugadoresSeguros as $value){
-        $idJugSeg_gjs        = $value['id'];
-        $siniestro_gjs       = $value['siniestro'];
-        $valorPagado_gjs     = $value['valorPagado'];
-        $fechaLesion_gjs     = $ClassTodas->cambiaf_a_normal2($value['fechaLesion']);
-        $jornadaLesion_gjs   = $value['jornadaLesion'];
-        $comentarios_gjs     = $value['comentarios'];
-        $fechaPagoSeguro_gjs = $ClassTodas->cambiaf_a_normal2($value['fechaPagoSeguro']);
-        $modificadoPor_gjs   = $value['modificadoPor'];
+        $idJugSeg_gjs            = $value['id'];
+        $siniestro_gjs           = $value['siniestro'];
+        $valorPagado_gjs         = $value['valorPagado'];
+        $fechaLesion_gjs         = $ClassTodas->cambiaf_a_normal2($value['fechaLesion']);
+        $jornadaLesion_gjs       = $value['jornadaLesion'];
+        $competicionLesion_gjs   = $value['competicionLesion'];
+        $comentarios_gjs         = $value['comentarios'];
+        $fechaPagoSeguro_gjs     = $ClassTodas->cambiaf_a_normal2($value['fechaPagoSeguro']);
+        $modificadoPor_gjs       = $value['modificadoPor'];
+        $seguimiento_gjs         = $value['seguimiento'];
+        if ($seguimiento_gjs == 1) {
+          $switchSeg =<<<EOD
+            <div class="custom-control custom-switch" style="padding-top:5px;">
+              <input type="checkbox" class="custom-control-input" id="inputCambia_seguimiento_$idJugSeg_gjs" checked  onclick="cambioCheckbox('jugadores_seguros','#inputCambia_seguimiento_$idJugSeg_gjs','seguimiento','$idJugSeg_gjs')">
+              <label class="custom-control-label" for="inputCambia_seguimiento_$idJugSeg_gjs"></label>
+            </div>
+          EOD;
+        }
+        if (empty($seguimiento_gjs))  {
+          $switchSeg =<<<EOD
+            <div class="custom-control custom-switch" style="padding-top:5px;">
+              <input type="checkbox" class="custom-control-input" id="inputCambia_seguimiento_$idJugSeg_gjs"  onclick="cambioCheckbox('jugadores_seguros','#inputCambia_seguimiento_$idJugSeg_gjs','seguimiento','$idJugSeg_gjs')">
+              <label class="custom-control-label" for="inputCambia_seguimiento_$idJugSeg_gjs"></label>
+            </div>
+          EOD;
+        }
         $trListarJugadores .=<<<EOD
           <tr>
             <td style="display: none;">$idJugSeg_gjs</td>
             <td>$siniestro_gjs</td>
             <td>$fechaLesion_gjs</td>
             <td>$jornadaLesion_gjs</td>
+            <td>$competicionLesion_gjs</td>
             <td><span>$</span>$valorPagado_gjs</td>
             <td>$fechaPagoSeguro_gjs</td>
             <td>$comentarios_gjs</td>
             <td>$modificadoPor_gjs</td>
+            <td>$switchSeg</td>
             <td>
               <button type="button" title="Editar" class="btn btn-icon btn-sm btn-secondary" onclick="formJugadorSeguro('Editar Pago Seguro', '$idJugSeg_gjs', '$idRecibido', 'editar')"><i class="fa fa-edit"></i></button>
               <button type="button" title="Eliminar" class="btn btn-icon btn-sm btn-secondary" onclick="eliminarLinea('jugadores_seguros','$idJugSeg_gjs');"><i class="fa fa-trash"></i></button>
@@ -3685,18 +3742,20 @@ switch ($type){
       <a type="button" style="display:none;" id="listarJugadoresSeguro" onclick="listarJugadorSeguro('$idRecibido','');"></a>
       <button type="button" class="btn btn-primary my-3" title="Agregar" onclick="formJugadorSeguro('Agregar Pago Seguro', '', '$idRecibido', 'agregar')"><i class="fa fa-plus"></i> Agregar Pago Seguro</button>
       <h6>Listado de pagos de seguro para este jugador</h6>
-      <div class="table-responsive">
-        <table class="table table-bordered table-striped table-condensed table-sm" id="tableListarSeguros">
+      <div class="table-responsive-lg">
+        <table class="table table-condensed table-bordered table-striped table-sm font-size-sm w-100" id="tableListarSeguros">
           <thead>
             <tr>
               <th style="display: none;">Jugador</th>
               <th>Siniestro</th>
               <th>Fecha Lesión</th>
               <th>Jornada Lesión</th>
+              <th>Competición Lesión</th>
               <th>Valor Pagado</th>
               <th>Fecha Pago</th>
               <th>Comentarios</th>
               <th>Modificado Por</th>
+              <th>Seguimiento</th>
               <th>Opciones</th>
             </tr>
           </thead>
