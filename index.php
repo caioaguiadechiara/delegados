@@ -28,7 +28,7 @@
   if (isset($_REQUEST['limpiar'])) {
       session_destroy();
   }
-  $datoUltimoIngreso = $ClassTodas->get_datoVariosWhereOrder('ingresosSistema',' where rutUsuario='.$_SESSION[$siglaSistema.'_rut'],'');
+  $datoUltimoIngreso = $ClassTodas->get_datoVariosWhereOrder('ingresos_sistema',' where rutUsuario='.$_SESSION[$siglaSistema.'_rut'],'');
       foreach ($datoUltimoIngreso as $value_datoUltimoIngreso) {
         $rutUsuario_datoUltimoIngreso= $value_datoUltimoIngreso['rutUsuario'];
         $fecha_datoUltimoIngresoSinTrab = $value_datoUltimoIngreso['fecha_ingreso_tabla'];
@@ -57,6 +57,15 @@
   if (!$_SESSION[$siglaSistema.'_login']== 1 && !$_SESSION[$siglaSistema.'_activo']== 1) {
     echo "<script>alert('Usted no está habilitado para usar este sistema. Por favor contacte al administrador de la liga.');location='login.php';</script>";
   }
+
+  
+  $datosEquipos = $ClassTodas->get_datoVariosWhereOrderInformes("SELECT eq.nombre FROM credenciales_equipos as ce LEFT JOIN equipos as eq ON eq.id = ce.id_equipo WHERE ce.id_credencial=$idUsuario");
+  if(empty($datosEquipos) && !in_array($nivelUsuario, array(8,9))){
+    session_destroy();
+    echo "<script>alert('Usted no está habilitado para usar este sistema. Por favor contacte al administrador de la liga.');location='login.php';</script>";
+    exit;
+  }
+  
   
   $ctx = hash_init('sha1');
   hash_update($ctx, 'SGF');

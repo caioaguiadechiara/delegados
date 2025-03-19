@@ -238,7 +238,7 @@ class ClassTodas
         $return = false;
         $query = '';
         //$query = "INSERT INTO $table (id_proceso, rut, sec) VALUES ('$id_proceso','$rut','$sec')";            
-        $query = "SELECT rut, password  FROM $table WHERE rut='$username' and password='$password'";
+        $query = "SELECT rut, password  FROM $table WHERE rut='$username' and password='$password' and activo=1";
         //echo $query;
         $qry = mysqli_query($this->myconn, $query) or die('Query: ' . $query . '<br>Error validaUserEnter(): ' . mysqli_error($this->myconn));
         //print_r($qry);

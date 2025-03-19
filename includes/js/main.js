@@ -1525,7 +1525,7 @@ function guardarEditaJugadores(idRecibido, tabla, opcion) {
       if (response == 0) {
         alerta('error', 'Ya existe un jugador con este numero de documento, por favor intente nuevamente.');
       } else {
-        alerta(response.tipo, response.principal, response.mensaje);
+        notifica(response.tipo, response.principal, response.mensaje);
         if(response.tipo == 'success'){
           $('#listarJugadores').click();
         }

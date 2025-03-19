@@ -2,11 +2,9 @@
   session_start(); 
   setlocale(LC_TIME, 'spanish');  
   date_default_timezone_set('America/Santiago');
-  $date              = date('Y-m-d H:i:s');
-  $SOLOdate          = date('Y-m-d');
-  //include 'includes/admin.php';
-  //$admin = new Admin();
-  include 'includes/class/ClassTodas.php';
+  $date = date('Y-m-d H:i:s');
+  $SOLOdate = date('Y-m-d');
+  include __DIR__.'/includes/class/ClassTodas.php';
   $ClassTodas               = new ClassTodas();
   $siglaSistema             = $ClassTodas->siglaSistema();
   $get_base_url             = $ClassTodas->get_base_url();
@@ -18,6 +16,7 @@
   $nombreUsuarioGeneral     = isset($_SESSION[$siglaSistema.'_nombreProveedor']) ? $_SESSION[$siglaSistema.'_nombreProveedor'] : null;
   $rutUsuarioGeneral        = isset($_SESSION[$siglaSistema.'_rut']) ? $_SESSION[$siglaSistema.'_rut'] : null;
   $dvUsuarioGeneral         = isset($_SESSION[$siglaSistema.'_dv']) ? $_SESSION[$siglaSistema.'_dv'] : null;
+
   $type = $_GET['type'];
   if($type == ''){
     $type= $_POST['type'];
@@ -227,7 +226,7 @@ switch ($type){
       $_SESSION[$siglaSistema.'_rut']          = $limpiaCaracteresEmail;
     $campos_ingreso = "rutUsuario"; 
     $datos_ingreso="'{$limpiaCaracteresEmail}'";
-    $ejecuta_ingreso = $ClassTodas->insertCosasVarias('ingresosSistema',$campos_ingreso,$limpiaCaracteresEmail);
+    $ejecuta_ingreso = $ClassTodas->insertCosasVarias('ingresos_sistema',$campos_ingreso,$limpiaCaracteresEmail);
       echo 1;
     } else {
       echo 0;
@@ -288,6 +287,7 @@ switch ($type){
       $eliminarCredenciales = $ClassTodas->eliminarLinea('credenciales_equipos','id_credencial',$idLinea);
       $eliminarLinea_ejecuta = $ClassTodas->eliminarLinea($tabla,'id',$idLinea);
     }elseif($tabla == 'equipos') {      
+      $eliminarJugadores = $ClassTodas->eliminarLinea('jugadores_equipos','id_equipo',$idLinea);
       $eliminarJugadores = $ClassTodas->eliminarLinea('jugadores','id_equipo',$idLinea);
       $eliminarLinea_ejecuta = $ClassTodas->eliminarLinea($tabla,'id',$idLinea);
     }elseif($tabla == 'jugadores'){
@@ -296,6 +296,7 @@ switch ($type){
       if($aseguradoCheck == 1){
         $eliminarLinea_ejecuta = $ClassTodas->actualizaCosasVariasSetWhere($tabla,'activo=0','id='.$idLinea);
       } else {
+        $eliminarJugadores = $ClassTodas->eliminarLinea('jugadores_equipos','id_jugador',$idLinea);
         $eliminarLinea_ejecuta = $ClassTodas->eliminarLinea($tabla,'id',$idLinea);
       }
     } else {
@@ -848,19 +849,25 @@ switch ($type){
 
   case 'cargaDashBoard':
     $edadMinima = '';
-    $competInactivas = '<li><strong>Ninguna por el momento</strong></li>';
-    $competicionesActivas = $ClassTodas->get_datoVariosWhereOrder('competiciones','','');
-    if($competicionesActivas){
+    $competInactivas = '';
+    $competicionesActivas = $ClassTodas->get_datoVariosWhereOrder('competiciones','WHERE activo = 1','');
+    if(empty($competicionesActivas)){
+      $competInactivas = '<li><strong>Ninguna por el momento</strong></li>';
+    } else {
       foreach($competicionesActivas as $row){
+        $competInactivas .='<li><strong>'.$row['nombre'].'</strong>';
+      }
+    } 
+
+    $competicionesTodas = $ClassTodas->get_datoVariosWhereOrder('competiciones','','');
+    if($competicionesTodas){
+      foreach($competicionesTodas as $row){
         $nombre_compet = $row['nombre'];
         $activo_compet = $row['activo'];
         $edadMinima_compet = $row['edadMinima'];
 
         $anio = date('Y');
         $añoMenos = $anio - $edadMinima_compet;
-        if($activo_compet == 1){
-          $competInactivas .='<li><strong>'.$nombre_compet.'</strong>';
-        }
         $edadMinima .='<li><strong>'.$nombre_compet.'</strong> - '.$añoMenos.' ('.$edadMinima_compet.'+)';
       }
     } 
@@ -889,9 +896,9 @@ switch ($type){
   break;
 
   case 'listarJugadores':
-    $idUsuario              = $_GET['idUsuario'];
-    $idModulo               = $_GET['idModulo'];
-    $countSubModulo         = $_GET['countSubModulo'];
+    $idUsuario              = isset($_GET['idUsuario']) ? $_GET['idUsuario'] : null;
+    $idModulo               = isset($_GET['idModulo']) ? $_GET['idModulo'] : null;
+    $countSubModulo         = isset($_GET['countSubModulo']) ? $_GET['countSubModulo'] : null;
     $cantity                = ($_GET['cantity'] == 'Todos') ? '' : $cantity = 'LIMIT '.$_GET['cantity'];
     $datosTabla             = '';
     $foto                   = '';
@@ -901,6 +908,11 @@ switch ($type){
     $trEquiposParaElegir    = '';
     $thAsegurado            = '';
     $optionTodosEquipos     = '';
+
+    if (!$idUsuario || !$idModulo || !$countSubModulo){
+      echo '<h5 class="text-danger mb-0">Error en los datos enviados para la consulta</h5>';
+      exit;
+    }
     
     if ($_SESSION[$siglaSistema.'_botonVer_'.$idModulo.'_'.$countSubModulo] == 1) {$classVer = "";} else {$classVer="hidden";}
     if ($_SESSION[$siglaSistema.'_botonEditar_'.$idModulo.'_'.$countSubModulo] == 1) {$classEditar = "";} else {$classEditar="hidden";}
@@ -934,7 +946,7 @@ switch ($type){
     if (empty($buscaDatosEquipos)) {
       $datosTabla =<<<EOD
         <tr>              
-          <td colspan="12" class="text-center py-3">No hay datos para mostrar en la tabla.</td>
+          <td colspan="100" class="text-center py-3">No hay datos para mostrar en la tabla Filtrada.</td>
         </tr>
       EOD;
     } else {
@@ -1133,6 +1145,13 @@ switch ($type){
     $trEquiposParaElegir     = '';
     $thAsegurado             = '';
     $optionTodosEquipos      = '';
+
+    if ($idEquipoFiltrado >= 0){
+    
+    } else {
+      echo '<h5 class="text-danger mb-0">Error en los datos enviados para la consulta</h5>';
+      exit;
+    }
     
     if ($_SESSION[$siglaSistema.'_botonVer_'.$idModulo.'_'.$countSubModulo] == 1) {$classVer = "";} else {$classVer="hidden";}
     if ($_SESSION[$siglaSistema.'_botonEditar_'.$idModulo.'_'.$countSubModulo] == 1) {$classEditar = "";} else {$classEditar="hidden";}
@@ -1155,7 +1174,7 @@ switch ($type){
       $equiposUsuario = "'" . $equiposUsuario . "'";
     }
     
-    if($idEquipoFiltrado == '0'){
+    if($idEquipoFiltrado == '0') {
       $buscaDatosEquipos = $ClassTodas->get_datoVariosWhereOrder('equipos','','');
       $buscaDatosJugadores = $ClassTodas->get_datoVariosWhereOrder('jugadores','WHERE activo = 1','');
       $optionTodosEquipos = '<option value="0">Todos los equipos</option>';
@@ -1369,7 +1388,7 @@ switch ($type){
 
     if ($tipo == 'editarJugadores') {
       $disabled = 'disabled';
-      $buscaDatosJugadores = $ClassTodas->get_datoVariosWhereOrder($tabla, 'WHERE id='.$id.'','ORDER BY id asc');
+      $buscaDatosJugadores = $ClassTodas->get_datoVariosWhereOrder($tabla, 'WHERE id='.$id,'ORDER BY id asc');
       foreach ($buscaDatosJugadores as $value) {
         $id_jg                  = $value['id'];
         $nombre                 = $value['nombre'];
@@ -1397,15 +1416,15 @@ switch ($type){
           $equiposUsuario = "'" . $equiposUsuario . "'";
         }
 
-        if($equiposUsuario == '0') {
+        if(empty($equiposUsuario)) {
           $gp2 = $ClassTodas->get_datoVariosWhereOrder('equipos','','ORDER BY nombre ASC');
         } else {
           $gp2 = $ClassTodas->get_datoVariosWhereOrder('equipos','WHERE id IN('.$equiposUsuario.')','');
         }
         
         $arrayEquiposJugador = array();
-        $datosEquiposJugador = $ClassTodas->get_datoVariosWhereOrder('jugadores_equipos','WHERE id_jugador='.$id_jg,'');
-        if($datosEquiposJugador){
+        $datosEquiposJugador = $ClassTodas->get_datoVariosWhereOrder('jugadores_equipos','WHERE id_jugador='.$id,'');
+        if(!empty($datosEquiposJugador)){
           foreach($datosEquiposJugador as $row){
             array_push($arrayEquiposJugador, $row['id_equipo']);
           }
@@ -1419,20 +1438,19 @@ switch ($type){
 
           if(in_array($id_gp2, $arrayEquipos)){
             if(in_array($id_gp2, $arrayEquiposJugador)){
-              
-              $datosCompet = $ClassTodas->get_datoVariosWhereOrder('equipos','WHERE id ='.$id_gp2,'LIMIT 1');
-              foreach($datosCompet as $dcompet){
-                $activo_compet = $dcompet['activo'];
-              }
-              if($activo_compet == 1){
-                $valoresOptEquiposSel .=<<<EOD
-                  <option value="$id_gp2" selected disabled>$nombre_gp2 $activo_compet</option>
-                EOD;
-              } else {                
-                $valoresOptEquiposSel .=<<<EOD
-                  <option value="$id_gp2" selected>$nombre_gp2</option>
-                EOD;
-              }
+              $valoresOptEquiposSel .=<<<EOD
+                <option value="$id_gp2" selected>$nombre_gp2</option>
+              EOD;
+            } else {
+              $valoresOptEquipos .=<<<EOD
+                <option value="$id_gp2">$nombre_gp2</option>
+              EOD;
+            }
+          } else {
+            if(in_array($id_gp2, $arrayEquiposJugador)){
+              $valoresOptEquiposSel .=<<<EOD
+                <option value="$id_gp2" selected>$nombre_gp2</option>
+              EOD;
             } else {
               $valoresOptEquipos .=<<<EOD
                 <option value="$id_gp2">$nombre_gp2</option>
@@ -1451,6 +1469,7 @@ switch ($type){
         
 
       }
+      
       $traeNacionalidades    = $ClassTodas->get_datoVariosWhereOrder('nacionalidades', '', 'ORDER BY nombre');
       foreach ($traeNacionalidades as $value) {
         $idNacion                  = $value['id'];
@@ -1520,6 +1539,10 @@ switch ($type){
         $nombre_gp2 = $gprow['nombre'];
 
         if(in_array($id_gp2, $arrayEquipos)){
+          $valoresOptEquipos .=<<<EOD
+            <option value="$id_gp2">$nombre_gp2</option>
+          EOD;
+        } else {
           $valoresOptEquipos .=<<<EOD
             <option value="$id_gp2">$nombre_gp2</option>
           EOD;
@@ -1714,369 +1737,6 @@ switch ($type){
     echo $formJugadores;
   break;
 
-  case 'formJugadores':
-    $tipo                      = $_GET['tipo'];
-    $id                        = $_GET['id'];
-    $tabla                     = $_GET['tabla'];
-    $valoresOptEquipos         = '';
-    $datosFooterJugadores      = '';
-    $formJugadores             = '';
-    $disabled                  = '';
-    $valoresOptEquiposSel      = '';
-    $valoresOptEquipos         = '';
-    $valoresOptionNacion       = '';
-    $valoresOptionPosicion     = '';
-    $valoresOptTipo            = '';
-    $equiposUsuario            = '0';
-    $arrayTipoDoc              = array("Rut","Pasaporte","Identidad");
-
-    if ($tipo == 'editarJugadores') {
-      $disabled = 'disabled';
-      $buscaDatosJugadores = $ClassTodas->get_datoVariosWhereOrder($tabla, 'WHERE id='.$id.'','ORDER BY id asc');
-      foreach ($buscaDatosJugadores as $value) {
-        $id_jg                  = $value['id'];
-        $nombre                 = $value['nombre'];
-        $apellido               = $value['apellido'];
-        $tipoDoc                = $value['tipoDoc'];
-        $documento              = $value['documento'];
-        $fnacimiento            = $value['fnacimiento'];
-        $posicion               = $value['posicion'];        
-        $nacionalidad           = $value['nacionalidad'];
-        $email                  = $value['email'];
-        $celular                = $value['celular'];
-        $foto                   = $value['foto'];
-        $fecha_creacion         = $value['fecha_creacion'];
-        $asegurado              = $value['asegurado'];
-        $selectAsegurado0       = ($asegurado == 0) ? 'selected' : '';
-        $selectAsegurado1       = ($asegurado == 1) ? 'selected' : '';
-        
-        $arrayEquipos = array();
-        $datosEquipos = $ClassTodas->get_datoVariosWhereOrder('credenciales_equipos','WHERE id_credencial='.$idUsuarioGeneral,'');
-        if($datosEquipos){
-          foreach($datosEquipos as $row){
-            array_push($arrayEquipos, $row['id_equipo']);
-          }
-          $equiposUsuario = implode("', '", $arrayEquipos);
-          $equiposUsuario = "'" . $equiposUsuario . "'";
-        }
-
-        if($equiposUsuario == '0') {
-          $gp2 = $ClassTodas->get_datoVariosWhereOrder('equipos','','ORDER BY nombre ASC');
-        } else {
-          $gp2 = $ClassTodas->get_datoVariosWhereOrder('equipos','WHERE id IN('.$equiposUsuario.')','');
-        }
-        
-        $arrayEquiposJugador = array();
-        $datosEquiposJugador = $ClassTodas->get_datoVariosWhereOrder('jugadores_equipos','WHERE id_jugador='.$id_jg,'');
-        if($datosEquiposJugador){
-          foreach($datosEquiposJugador as $row){
-            array_push($arrayEquiposJugador, $row['id_equipo']);
-          }
-          $equiposJugador = implode("', '", $arrayEquiposJugador);
-          $equiposJugador = "'" . $equiposJugador . "'";
-        }
-
-        foreach($gp2 as $gprow){
-          $id_gp2     = $gprow['id'];
-          $nombre_gp2 = $gprow['nombre'];
-
-          if(in_array($id_gp2, $arrayEquipos)){
-            if(in_array($id_gp2, $arrayEquiposJugador)){
-              
-              $datosCompet = $ClassTodas->get_datoVariosWhereOrder('equipos','WHERE id ='.$id_gp2,'LIMIT 1');
-              foreach($datosCompet as $dcompet){
-                $activo_compet = $dcompet['activo'];
-              }
-              if($activo_compet == 1){
-                $valoresOptEquiposSel .=<<<EOD
-                  <option value="$id_gp2" selected disabled>$nombre_gp2 $activo_compet</option>
-                EOD;
-              } else {                
-                $valoresOptEquiposSel .=<<<EOD
-                  <option value="$id_gp2" selected>$nombre_gp2</option>
-                EOD;
-              }
-            } else {
-              $valoresOptEquipos .=<<<EOD
-                <option value="$id_gp2">$nombre_gp2</option>
-              EOD;
-            }
-          }
-        }
-        foreach($arrayTipoDoc as $row){
-          if($row == $tipoDoc) {
-            $valoresOptTipo .= '<option value="'.$row.'" selected>'.$row.'</option>';
-
-          } else {
-            $valoresOptTipo .= '<option value="'.$row.'">'.$row.'</option>';
-          }          
-        }
-        
-
-      }
-      $traeNacionalidades    = $ClassTodas->get_datoVariosWhereOrder('nacionalidades', '', 'ORDER BY nombre');
-      foreach ($traeNacionalidades as $value) {
-        $idNacion                  = $value['id'];
-        $nacionNombre              = $value['nombre']; 
-        if ($nacionalidad == $idNacion) {            
-          $nacionSeleccionada = "selected"; 
-        } else {
-          $nacionSeleccionada =  "";
-          $optEmptyAgrega = '<option></option>';
-        } 
-        $valoresOptionNacion .= "<option value='$idNacion' $nacionSeleccionada>$nacionNombre</option>";
-      }
-      $traePosiciones    = $ClassTodas->get_datoVariosWhereOrder('posiciones', '', 'ORDER BY id');
-      foreach ($traePosiciones as $value) {
-        $idPosicion                  = $value['id'];
-        $nombrePosicion              = $value['nombre']; 
-        if ($posicion == $idPosicion) {            
-          $posicionSeleccionada = "selected"; 
-        } else {
-          $posicionSeleccionada =  "";
-          $optEmptyAgrega = '<option></option>';
-        } 
-        $valoresOptionPosicion .= "<option value='$idPosicion' $posicionSeleccionada>$nombrePosicion</option>";
-      }
-      $datosFotoJugadores =<<<EOD
-        <h6>Editar Foto Documento</h6>
-        <div id="imagesOld" class="form-row my-3">
-          <div class="card card-figure col-6 col-md-2 mx-md-2">
-            <figure class="figure">
-              <img class="img-fluid" src="images/jugadores/$foto" title="$foto">
-              <figcaption class="figure-caption">
-                <h6 class="figure-title text-center mb-2">$foto</h6>
-                <input type="hidden" name="fotoID" id="fotoID" value="$foto"> 
-              </figcaption>
-            </figure>
-            <button type="button" class="btn btn-secondary font-size-sm" onclick="modalCambiaFoto('$id_jg','Cambiar Imagen','foto');"> Cambiar Imagen</button>
-            <a id="eliminaFotoBtn" class="text-center font-weight-bold mt-2" type="button" onclick="eliminaFoto('$id_jg','foto','$foto');"><u>Eliminar</u></a>
-          </div>
-        </div>
-      EOD;
-      $datosFooterJugadores =<<<EOD
-          <button type="button" class="btn btn-primary btn-block" onclick="guardarEditaJugadores('$id_jg','jugadores','editarJugadores')"><i class="far fa-save"></i> Guardar</button>
-      EOD;
-    } 
-    if ($tipo == 'agregarJugadores') {
-      $optEmptyAgrega = '<option></option>';
-
-      $arrayEquipos = array();
-      $datosEquipos = $ClassTodas->get_datoVariosWhereOrder('credenciales_equipos','WHERE id_credencial='.$idUsuarioGeneral,'');
-      if($datosEquipos){
-        foreach($datosEquipos as $row){
-          array_push($arrayEquipos, $row['id_equipo']);
-        }
-        $equiposUsuario = implode("', '", $arrayEquipos);
-        $equiposUsuario = "'" . $equiposUsuario . "'";
-      }
-
-      if($equiposUsuario == '0') {
-        $gp2 = $ClassTodas->get_datoVariosWhereOrder('equipos','','ORDER BY nombre ASC');
-      } else {
-        $gp2 = $ClassTodas->get_datoVariosWhereOrder('equipos','WHERE id IN('.$equiposUsuario.')','');
-      }
-
-      foreach($gp2 as $gprow){
-        $id_gp2     = $gprow['id'];
-        $nombre_gp2 = $gprow['nombre'];
-
-        if(in_array($id_gp2, $arrayEquipos)){
-          $valoresOptEquipos .=<<<EOD
-            <option value="$id_gp2">$nombre_gp2</option>
-          EOD;
-        }
-      }
-
-      $traeNacionalidades    = $ClassTodas->get_datoVariosWhereOrder('nacionalidades', '', 'ORDER BY nombre');
-      foreach ($traeNacionalidades as $value) {
-        $idNacion                  = $value['id'];
-        $nombreNacion              = $value['nombre']; 
-        $valoresOptionNacion .= "<option value='$idNacion'>$nombreNacion</option>";
-      }
-      $traePosiciones    = $ClassTodas->get_datoVariosWhereOrder('posiciones', '', 'ORDER BY id');
-      foreach ($traePosiciones as $value) {
-        $idPosicion                  = $value['id'];
-        $nombrePosicion              = $value['nombre']; 
-        $valoresOptionPosicion .= "<option value='$idPosicion'>$nombrePosicion</option>";
-      }
-
-      foreach($arrayTipoDoc as $row){
-        $valoresOptTipo .= '<option value="'.$row.'">'.$row.'</option>';
-      }
-
-      $datosFotoJugadores =<<<EOD
-        <div id="imagesNew" class="form-row my-3">
-          <div class="col-12 col-md-12">
-            <div class="form-group">
-              <h6>Foto Documento</h6>
-              <form action="upload.php" class="dropzone fileinput-dropzone border-info mb-3" id="dropzonewidget"></form> 
-              <div id="inputNames"></div>          
-            </div> 
-          </div>
-        </div>
-        <script>  
-          Dropzone.autoDiscover = false;
-            var myDropzone = new Dropzone(".dropzone", { 
-             autoProcessQueue: true,
-             dictDefaultMessage:"<h5>Haga clic o arrastre aquí su documento</h5>",
-             dictInvalidFileType:"Extensión Incorrecta",
-             uploadMultiple: false,
-             paramName: "file",
-             maxFilesize: 0.5,
-             parallelUploads: 1,
-             acceptedFiles: "image/*",              
-             init: function ()  {
-               this.on("error", function (file, message) {
-                   notifica('error','El archivo pesa más que el maximo permitido de 500kb.');
-                   this.removeFile(file);
-               }); 
-             },              
-             renameFile: function (file) {
-               let newName = new Date().getTime() + '_' + file.name.replace(/ /g, "_");
-               $('#inputNames').append('<input type="hidden" class="form-control mb-1" id="fotoID" name="" disabled value="' + newName + '">');
-               return newName;
-             },
-           });
-       </script>
-      EOD;
-      $datosFooterJugadores =<<<EOD
-        <button type="button" class="btn btn-primary btn-block" onclick="guardarEditaJugadores('','jugadores','agregarJugadores')"><i class="far fa-save"></i> Guardar</button>
-      EOD;
-    }
-    if($nivelUsuarioGeneral == 8 || $nivelUsuarioGeneral == 9){
-      $adminPartOfForm =<<<EOD
-      <hr>
-        <h5>Solo Administración</h5><hr>
-        <div class="form-row" id="aseguradoIDContainer">
-          <div class="col-12 col-md-4">
-            <div class="form-group">
-              <label>Asegurado <abbr title="Required">*</abbr></label>
-              <select class="form-control custom-select" id="aseguradoID" name="aseguradoID">
-                  <option value="0" $selectAsegurado0>No</option>
-                  <option value="1" $selectAsegurado1>Sí</option>
-              </select>
-              <small id="" class="form-text text-muted">Indique si jugador tiene seguro.</small>
-              <div class="invalid-feedback"> Ingrese este Campo. </div>
-            </div>
-          </div>           
-        </div>
-        <div id="containerJugadoresSeguros"></div>
-      EOD;
-    } else {
-      $adminPartOfForm = '';
-    }   
-    $formJugadores =<<<EOD
-      <form class="form-horizontal pt-2 needs-validation" role="form" id="formContratoID">
-        <div class="form-row">
-            <div class="col-12 col-md-4">
-              <div class="form-group">
-                <label>Nombre <abbr title="Required">*</abbr></label>
-                <input class="form-control" type="text" id="nombreID" name="nombreID" placeholder="" value="$nombre" required>
-                <small id="" class="form-text text-muted">Indique el nombre.</small>
-                <div class="invalid-feedback"> Ingrese este Campo. </div>
-              </div> 
-            </div>
-            <div class="col-12 col-md-4">
-              <div class="form-group">
-                <label>Apellido <abbr title="Required">*</abbr></label>
-                <input class="form-control" type="text" id="apellidoID" name="apellidoID" placeholder="" value="$apellido" required>
-                <small id="" class="form-text text-muted">Indique el apellido.</small>
-                <div class="invalid-feedback"> Ingrese este Campo. </div>
-              </div> 
-            </div>
-            <div class="col-12 col-md-4">
-              <div class="form-group mb-2">
-                <label>Fecha Nacimiento <abbr title="Required">*</abbr></label>
-                <input class="form-control" type="date" id="fnacimientoID" name="fnacimientoID" placeholder="" value="$fnacimiento" required>
-                <small id="" class="form-text text-muted">Indique la fecha de nacimiento.</small>
-                <div class="invalid-feedback"> Ingrese este Campo. </div>
-              </div> 
-            </div>
-          </div>
-        <div class="form-row">
-          <div class="col-12 col-md-4">              
-            <div class="form-group">
-              <label>Tipo Doc. (Rut, Pass., Identidad) <abbr title="Required">*</abbr></label>
-              <select class="form-control" id="tipoDocumentoID" name="tipoDocumentoID" required="" $disabled>
-                {$optEmptyAgrega}
-                $valoresOptTipo
-              </select>
-              <small id="" class="form-text text-muted">Indique el tipo de documento.</small>
-              <div class="invalid-feedback"> Ingrese este Campo. </div>                       
-            </div>
-          </div>
-          <div class="col-12 col-md-4">              
-            <div class="form-group">
-              <label>Documento (Rut, Pass., DNI) <abbr title="Required">*</abbr></label>
-              <input maxlength="9" class="form-control" type="text" id="documentoID" name="documentoID" value="$documento" required="" onkeypress="return permite(event, 'num_car_vip');" $disabled>
-              <small id="" class="form-text text-muted">Indique un Rut, Pasaporte, DNI válido.</small>
-              <div class="invalid-feedback"> Ingrese este Campo. </div>                       
-            </div>
-          </div>
-          <div class="col-12 col-md-4">
-            <div class="form-group">
-              <label>Equipo(s) <abbr title="Required">*</abbr></label>
-              <select class="form-control custom-select" id="equipoID" name="equipoID[]" multiple="multiple" required>
-                  {$optEmptyAgrega}
-                  $valoresOptEquiposSel
-                  $valoresOptEquipos
-              </select>
-              <small id="" class="form-text text-muted">Indique uno o más equipos.</small>
-              <div class="invalid-feedback"> Ingrese este Campo. </div>
-            </div> 
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="col-12 col-md-4">
-            <div class="form-group">
-              <label>Posición <abbr title="Required">*</abbr></label>
-              <select class="form-control custom-select" id="posicionID" name="posicionID" required>
-                  {$optEmptyAgrega}
-                  $valoresOptionPosicion
-              </select>
-              <small id="" class="form-text text-muted">Indique la posición.</small>
-              <div class="invalid-feedback"> Ingrese este Campo. </div>
-            </div> 
-          </div>
-          <div class="col-12 col-md-4">
-            <div class="form-group">
-              <label>Nacionalidad <abbr title="Required">*</abbr></label>
-              <select class="form-control custom-select" id="nacionalidadID" name="nacionalidadID" required>
-                  {$optEmptyAgrega}
-                  $valoresOptionNacion
-              </select>
-              <small id="" class="form-text text-muted">Indique la nacionalidad.</small>
-              <div class="invalid-feedback"> Ingrese este Campo. </div>
-            </div> 
-          </div>
-          <div class="col-12 col-md-4">
-            <div class="form-group">
-              <label>E-mail</label>
-              <input class="form-control" type="email" id="emailID" name="emailID" placeholder="" value="$email">
-              <small id="" class="form-text text-muted">Indique el e-mail.</small>
-              <div class="invalid-feedback"> Ingrese este Campo. </div>
-            </div> 
-          </div>
-        </div> 
-        <div class="form-row">
-          <div class="col-12 col-md-4">
-            <div class="form-group">
-              <label>Celular</label>
-              <input class="form-control" type="text" id="celularID" name="celularID" placeholder="" maxlength="13" value="$celular" onkeypress="return permite(event, 'num');">
-              <small id="" class="form-text text-muted">Indique el celular, formato ej.: 56978762996.</small>
-              <div class="invalid-feedback"> Ingrese este Campo. </div>
-            </div> 
-          </div>
-        </div>
-        $adminPartOfForm  
-      </form>
-      $datosFotoJugadores
-      $datosFooterJugadores    
-    EOD;
-    echo $formJugadores;
-  break;
-
   case 'guardarEditaJugadores':
     $maxJugadores                 = 30; 
     $opcion                       = $_GET['opcion'];
@@ -2136,10 +1796,10 @@ switch ($type){
                   $añoActual = date('Y');
                   $anio = date("Y", strtotime($fnacimientoID));
                   $añoMenos = $añoActual - $anio;
-                  if($añoMenos >= $edad_ca) {//Valida si tiene la edad minima para jugar
+                  if($añoMenos >= '18') {//Valida si tiene la edad minima para jugar agregar $edad_ca si hay q volver a reglas de validación por cat.
                     $arrayRespuestas[$nombreEquipo] = "1";
                   } else {
-                    $arrayRespuestas[$nombreEquipo] = "3";
+                    $arrayRespuestas[$nombreEquipo] = "3"; //poner en 3 si hay reglas de edad
                   }
                 }
               }
@@ -2566,7 +2226,10 @@ switch ($type){
               <option value="octavos">Octavos</option>
               <option value="cuartos">Cuartos</option>
               <option value="semis">Semis</option>
+              <option value="3erOro">3er Lugar Oro</option>
+              <option value="3erPlata">3er Lugar Plata</option>
               <option value="final">Final</option>
+              <option value="amistoso">Amistoso Oficial</option>
             </select>
             <small id="" class="form-text text-muted">Elija el tipo de jornada.</small>
             <div class="invalid-feedback"> Ingrese este Campo. </div>
@@ -2619,7 +2282,7 @@ switch ($type){
     $competSumID               = $_GET['competSumID'];
     $horaPartidoSumID          = $_GET['horaPartidoSumID'];
     $tipoJornadaID             = $_GET['tipoJornadaID'];
-    $trDatosJugadores1 = $trDatosJugadores2 = $tdVazio1 = $trResta1 = $trResta2 = '';
+    $trDatosJugadores1 = $trDatosJugadores2 = $trResta1 = $trResta2 = '';
 
 
     $buscaDatosEquipos1 = $ClassTodas->get_datoVariosWhereOrder('equipos','WHERE id='.$equipo1SumID,'');
@@ -2715,7 +2378,7 @@ switch ($type){
         <tr>
           <td class="text-center">$countJugadores1</td>
           <td>&nbsp;</td>
-          $tdVazio1
+          <td>&nbsp;</td>
           <td>&nbsp;</td>
           <td>&nbsp;</td>
           <td>&nbsp;</td>
@@ -2731,7 +2394,7 @@ switch ($type){
         <tr>
           <td class="text-center">$countJugadores2</td>
           <td>&nbsp;</td>
-          $tdVazio2
+          <td>&nbsp;</td>
           <td>&nbsp;</td>
           <td>&nbsp;</td>
           <td>&nbsp;</td>
@@ -2756,22 +2419,22 @@ switch ($type){
 
     $tipoPartidoTxt = '';
     $casillerosPartidoLocalTxt =<<<EOD
-      <div class="float-right ml-3">
-        <div class="text-center font-size-sm"><strong>Penaltis</strong></div>
-        <div class="d-block mx-auto text-center" style="border: 1px solid #000;width: 70%;height: 50px;"></div>
+      <div class="float-right">
+        <div class="text-center font-size-xs"><strong>Penaltis</strong></div>
+        <div class="d-block mx-auto text-center" style="border: 1px solid #000;width: 80%;height: 50px;"></div>
       </div>
       <div class="float-right mx-1">
-        <div class="text-center font-size-sm"><strong>Resultado</strong></div>
+        <div class="text-center font-size-xs"><strong>Resultado</strong></div>
         <div class="float-left text-center" style="border: 1px solid #000;width: 98%;height: 50px;"></div>
       </div>
     EOD;
     $casillerosPartidoVisitaTxt =<<<EOD
-      <div class="float-left mr-3">
-        <div class="text-center font-size-sm"><strong>Penaltis</strong></div>
-        <div class="d-block mx-auto text-center" style="border: 1px solid #000;width: 70%;height: 50px;"></div>
+      <div class="float-left">
+        <div class="text-center font-size-xs"><strong>Penaltis</strong></div>
+        <div class="d-block mx-auto text-center" style="border: 1px solid #000;width: 80%;height: 50px;"></div>
       </div>
       <div class="float-left mx-1">
-        <div class="text-center font-size-sm"><strong>Resultado</strong></div>
+        <div class="text-center font-size-xs"><strong>Resultado</strong></div>
         <div class="float-left text-center" style="border: 1px solid #000;width: 98%;height: 50px;"></div>
       </div>
     EOD;
@@ -3217,6 +2880,7 @@ switch ($type){
 
   case 'reportesSeguros':
     $numReport = $_GET['numReport'];
+    $datosTabla = '';
     if($numReport == '1'){
       $count = 0;
       $countValorDebido = 0;
