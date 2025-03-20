@@ -1048,7 +1048,7 @@ switch ($type){
                     <span class="fa fa-caret-down"></span>
                   </div>
                   <div class="dropdown-menu" style="">
-                    <div class="dropdown-arrow"></div><a class="dropdown-item" href="#" onclick="eliminarMasivo('jugadores','')">Borrar Todos</a>
+                    <div class="dropdown-arrow"></div><a class="dropdown-item" href="#" onclick="enDesarrollo()">Borrar Todos</a>
                   </div>
                 </div>
               </th>
