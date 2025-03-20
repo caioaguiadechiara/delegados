@@ -972,12 +972,14 @@ switch ($type){
         $edadJugador            = $ClassTodas->obtener_edad_segun_fecha($fnacimiento);
 
         $equiposJugador = '';
-        $datosEquipos = $ClassTodas->get_datoVariosWhereOrderInformes("SELECT eq.nombre FROM jugadores_equipos as je LEFT JOIN equipos as eq ON eq.id = je.id_equipo WHERE je.id_jugador=$id_jg");
+        $datosEquipos = $ClassTodas->get_datoVariosWhereOrderInformes("SELECT eq.nombre, eq.id FROM jugadores_equipos as je LEFT JOIN equipos as eq ON eq.id = je.id_equipo WHERE je.id_jugador=$id_jg");
         if(empty($datosEquipos)){
           $equiposJugador = 'Sin Equipo';
         } else {
           foreach($datosEquipos as $value){
-            $equiposJugador .= '<span class="badge badge-subtle badge-primary m-1">'.$value['nombre'].'</span>';
+            if((in_array($value['id'], $equiposUsuarioGeneral) && !empty($equiposUsuarioGeneral)) || in_array($nivelUsuarioGeneral, array(8,9))){
+              $equiposJugador .= '<span class="badge badge-subtle badge-primary m-1">'.$value['nombre'].'</span>';
+            }
           }
         }
 
@@ -1538,13 +1540,13 @@ switch ($type){
       
             if($actualizaJugadores == 1){
               if(empty($equiposUsuarioGeneral)){
-              $eliminaEquipos = $ClassTodas->eliminarLinea('jugadores_equipos','id_jugador',$idRecibido);
-              foreach ($getArrayEquipos as $key => $value) {
-                $campos2 = "id_jugador,id_equipo"; 
-                $datos2 = "'{$idRecibido}','{$value}'";
-                $ejecutaCP = $ClassTodas->insertCosasVarias('jugadores_equipos',$campos2,$datos2);    
-              }
-              $arrayRespuestas[$row] = "1";
+                $eliminaEquipos = $ClassTodas->eliminarLinea('jugadores_equipos','id_jugador',$idRecibido);
+                foreach ($getArrayEquipos as $key => $value) {
+                  $campos2 = "id_jugador,id_equipo"; 
+                  $datos2 = "'{$idRecibido}','{$value}'";
+                  $ejecutaCP = $ClassTodas->insertCosasVarias('jugadores_equipos',$campos2,$datos2);    
+                }
+                $arrayRespuestas[$row] = "1";
               } else {
                 foreach ($getArrayEquipos as $key => $value) {
                   //agrega equipos a jugadores sin borrar los que ya tiene

@@ -56,9 +56,9 @@
 
   
   $equiposUsuario = [];
-  $datosEquipos = $ClassTodas->get_datoVariosWhereOrderInformes("SELECT eq.nombre FROM credenciales_equipos as ce LEFT JOIN equipos as eq ON eq.id = ce.id_equipo WHERE ce.id_credencial=$idUsuario");
+  $datosEquipos = $ClassTodas->get_datoVariosWhereOrderInformes("SELECT eq.nombre, eq.id FROM credenciales_equipos as ce LEFT JOIN equipos as eq ON eq.id = ce.id_equipo WHERE ce.id_credencial=$idUsuario");
   foreach ($datosEquipos as $value) {
-    array_push($equiposUsuario, $value['nombre']);
+    array_push($equiposUsuario, $value['id']);
   }
   
   $_SESSION[$siglaSistema.'_equipos'] = $equiposUsuario;
