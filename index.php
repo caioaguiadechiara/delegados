@@ -1,9 +1,8 @@
 <?php
   session_start();
   date_default_timezone_set('America/Santiago');
-  setlocale(LC_TIME, 'spanish');
   $date=date('Y-m-d H:i:s');
-  include 'includes/class/ClassTodas.php';
+  include __DIR__.'/includes/class/ClassTodas.php';
   $ClassTodas = new ClassTodas();
   $nombre_sistema           = $ClassTodas->title_system();
   $nombre_sistemaAbreviado  = $ClassTodas->title_abreviado();
@@ -28,7 +27,7 @@
   if (isset($_REQUEST['limpiar'])) {
       session_destroy();
   }
-  $datoUltimoIngreso = $ClassTodas->get_datoVariosWhereOrder('ingresos_sistema',' where rutUsuario='.$_SESSION[$siglaSistema.'_rut'],'');
+  $datoUltimoIngreso = $ClassTodas->get_datoVariosWhereOrder('ingresos_sistema','WHERE rutUsuario='.$_SESSION[$siglaSistema.'_rut'],'');
       foreach ($datoUltimoIngreso as $value_datoUltimoIngreso) {
         $rutUsuario_datoUltimoIngreso= $value_datoUltimoIngreso['rutUsuario'];
         $fecha_datoUltimoIngresoSinTrab = $value_datoUltimoIngreso['fecha_ingreso_tabla'];
@@ -36,7 +35,7 @@
         $timeUIngreso = date('H:i:s', strtotime($fecha_datoUltimoIngresoSinTrab));
         $fecha_datoUltimoIngreso = $dateUIngreso.' '.$timeUIngreso;
   }
-  $datosCredenciales = $ClassTodas->get_datoVariosWhereOrder('credenciales',' where rut='.$_SESSION[$siglaSistema.'_rut'],'');
+  $datosCredenciales = $ClassTodas->get_datoVariosWhereOrder('credenciales','WHERE rut='.$_SESSION[$siglaSistema.'_rut'],'');
   foreach ($datosCredenciales as $value_datosCredenciales) {
     $_SESSION[$siglaSistema.'_id']                            = $value_datosCredenciales['id'];
     $_SESSION[$siglaSistema.'_activo']                        = $value_datosCredenciales['activo'];
@@ -48,24 +47,25 @@
     $_SESSION[$siglaSistema.'_email']                         = $value_datosCredenciales['email'];   
   }
 
+
   $rutUsuario    = $_SESSION[$siglaSistema.'_rut'];
   $hashUsuario   = $_SESSION[$siglaSistema.'_hashUnico'];
   $idUsuario     = $_SESSION[$siglaSistema.'_id'];
   $nivelUsuario  = $_SESSION[$siglaSistema.'_nivel'];
   $emailUsuario  = $_SESSION[$siglaSistema.'_email'];
 
+  
+  $equiposUsuario = [];
+  $datosEquipos = $ClassTodas->get_datoVariosWhereOrderInformes("SELECT eq.nombre FROM credenciales_equipos as ce LEFT JOIN equipos as eq ON eq.id = ce.id_equipo WHERE ce.id_credencial=$idUsuario");
+  foreach ($datosEquipos as $value) {
+    array_push($equiposUsuario, $value['nombre']);
+  }
+  
+  $_SESSION[$siglaSistema.'_equipos'] = $equiposUsuario;
+
   if (!$_SESSION[$siglaSistema.'_login']== 1 && !$_SESSION[$siglaSistema.'_activo']== 1) {
     echo "<script>alert('Usted no está habilitado para usar este sistema. Por favor contacte al administrador de la liga.');location='login.php';</script>";
   }
-
-  
-  $datosEquipos = $ClassTodas->get_datoVariosWhereOrderInformes("SELECT eq.nombre FROM credenciales_equipos as ce LEFT JOIN equipos as eq ON eq.id = ce.id_equipo WHERE ce.id_credencial=$idUsuario");
-  if(empty($datosEquipos) && !in_array($nivelUsuario, array(8,9))){
-    session_destroy();
-    echo "<script>alert('Usted no está habilitado para usar este sistema. Por favor contacte al administrador de la liga.');location='login.php';</script>";
-    exit;
-  }
-  
   
   $ctx = hash_init('sha1');
   hash_update($ctx, 'SGF');

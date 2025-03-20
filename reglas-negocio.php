@@ -1,22 +1,13 @@
 <?php
-
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+session_start();
+date_default_timezone_set('America/Santiago');
+$date=date('Y-m-d H:i:s');
+include __DIR__.'/includes/class/ClassTodas.php';
+$ClassTodas = new ClassTodas();
 
 $ctx = hash_init('sha1');
 hash_update($ctx, 'SGF');
 $hash = hash_final($ctx).date('DdMYHis');
-
-session_start();
-date_default_timezone_set('America/Santiago');
-setlocale(LC_TIME, 'spanish');
-//include 'includes/admin.php';
-//$ClassAdmin = new Admin();
-
-$date=date('Y-m-d H:i:s');
-include 'includes/class/ClassTodas.php';
-$ClassTodas = new ClassTodas();
 
 $nombre_sistema           = $ClassTodas->title_system();
 $nombre_sistemaAbreviado  = $ClassTodas->title_abreviado();

@@ -1,12 +1,10 @@
 <?php
-require 'PHPMailer.php';
-require 'SMTP.php';
-require 'Exception.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
+require __DIR__ . '/../../vendor/autoload.php';
 class ClassTodas
 {
     // INICIO DATOS ADMINISTRACIÓN
@@ -909,12 +907,9 @@ class ClassTodas
             } else {
                 return 0; //Fallo
             }
-        } 
-        catch (phpmailerException $e) {
-        //echo 'e1-ERROR: '.$e->errorMessage(); //Errores de PhpMailer
-        } 
-        catch (Exception $e) {
-        //echo 'e2-ERROR: '.$e->getMessage(); //Errores de cualquier otra cosa.
+        } catch (Exception $e) {
+            echo "Error al enviar el mensaje: {$mail->ErrorInfo}";
+            return 0;
         }
     }  
           

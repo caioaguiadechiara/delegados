@@ -1,10 +1,10 @@
 <?php
+session_start();
+include __DIR__.'/includes/class/ClassTodas.php';
+$ClassTodas = new ClassTodas();
 $ctx = hash_init('sha1');
 hash_update($ctx, 'SGF');
 $hash = hash_final($ctx) . date('DdMYHis');
-session_start();
-include 'includes/class/ClassTodas.php';
-$ClassTodas = new ClassTodas();
 $nombre_sistema = $ClassTodas->title_system();
 $nombre_sistemaAbreviado = $ClassTodas->title_abreviado();
 $dominioPrincipal = $ClassTodas->dominioPrincipal();
@@ -55,7 +55,6 @@ $dominioPrincipal = $ClassTodas->dominioPrincipal();
       <h1><a href="https://delegados.ligadenaciones.cl"><img class="rounded" src="images/logo-liga-de-naciones.png" alt="" height="150"></a><span class="sr-only">Entrar</span></h1>
     </header>
     <form class="auth-form">
-      <h1 class="text-center"></h1>
       <div class="form-group">
         <div class="form-label-group">
           <input type="text" id="inputUser" class="form-control placeholder-shown" autofocus="" maxlength="9"> <label for="inputUser">RUT</label>

@@ -300,7 +300,7 @@ function sonido() {
 }
 
 function enDesarrollo() {
-  alerta('info', 'Desarrollo Pendiente', 'Estamos trabajando para usted.<br>Pronto estará disponible este Módulo. <br>Gracias.');
+  alerta('info', 'En mantenimiento', 'Estamos trabajando para usted.<br>Pronto estará disponible esta funcionalidad. <br>Gracias.');
 }
 
 function cambiaPassFromCambioContrasenaInicioSistema(id, password) {
@@ -1410,36 +1410,6 @@ function listarJugadores(title, idUsuario, idModulo, countSubModulo, cantity) {
   });
 }
 
-function listarJugadoresFiltrado(title, idUsuario, idModulo, countSubModulo) {
-  var idEquipoFiltrado = $('#equiposParaElegir').val();
-  parametros = {
-    "type": 'listarJugadoresFiltrado',
-    'idUsuario': idUsuario,
-    'idModulo': idModulo,
-    'idEquipoFiltrado': idEquipoFiltrado,
-    'countSubModulo': countSubModulo,
-  };
-  $.ajax({
-    data: parametros,
-    url: "option.php",
-    type: "get",
-    beforeSend: function () {
-      $('#opcion-title').html(title);
-    },
-    success: function (response) {
-      $('#opcion').html(response);
-    },
-    complete: function (response) {
-      $("#equiposParaElegir").val(idEquipoFiltrado);
-      ordenaSelectTodos();
-      ordenaTabla('tablaAdministraJugadoresFiltrado', '0', 'asc');
-    },
-    error: function (e) {
-      notifica('error', 'Ocurrió un error, por favor intente nuevamente o contacte el aministrador del sistema.');
-    }
-  });
-}
-
 function formJugadores(title, id, tabla, tipo) {
   parametros = {
     "type": 'formJugadores',
@@ -2399,5 +2369,117 @@ function eImgNoUsadas() {
     error: function (e) {
       notifica('error', 'Ocurrió un error, por favor intente nuevamente o contacte el aministrador del sistema.');
     }
+  });
+}
+
+function importarDB(title) {
+  $("#opcion").html(
+    '<div class="spinner-border text-primary" role="status"></div>'
+  );
+  parametros = {
+    type: "importarDB",
+  };
+  $.ajax({
+    data: parametros,
+    url: "option.php",
+    type: "get",
+    beforeSend: function () {
+      $("#opcion-title").html(title);
+    },
+    success: function (response) {
+      $("#opcion").html(response);
+    },
+    complete: function (response) {},
+    error: function (e) {
+      alerta(
+        "error",
+        "Error de Sistema",
+        "Hubo un error inesperado, intente nuevamente."
+      );
+    },
+  });
+}
+
+function cargaMasiva(tabla, modalTitle, idRendicion) {
+  $("#respuestasEnviadasAmodal").html("");
+  parametros = {
+    type: "cargaMasiva",
+    tabla: tabla,
+    idRendicion: idRendicion,
+  };
+  $.ajax({
+    data: parametros,
+    url: "option.php",
+    type: "get",
+    beforeSend: function () {
+    },
+    success: function (response) {
+      $("#modalTamano").attr("class", "modal-dialog modal-xl");
+      $("#modalTitle").html(modalTitle);
+      $("#modalBody").html(response);
+      $("#modalGeneral").modal("toggle");
+    },
+    complete: function (response) {
+      Dropzone.options.importaArchivosAbd = {
+        acceptedFiles: ".xlsx",
+        accept: function (file, done) {
+          $("#btnMuestraArchivoImportado")
+            .attr(
+              "onclick",
+              "muestraArchivoImportado('" +
+                file.name +
+                "','Archivo Importado','importaArchivosAbd');"
+            )
+            .attr("hidden", false);
+          done();
+        },
+      };
+      $(".dropzone").dropzone({
+        dictDefaultMessage: "<h5>Haga clic o Arrastre aquí su archivo</h5>",
+        dictInvalidFileType: "Extensión Incorrecta",
+      });
+    },
+    error: function (e) {
+      alerta(
+        "error",
+        "Error de Sistema",
+        "Hubo un error inesperado, intente nuevamente."
+      );
+    },
+  });
+}
+
+function muestraArchivoImportado(archivo, modalTitle, nombreForm) {
+  var tablaImportar = $("input[name=tablaImportarGrupo1]:checked").val();
+  if (tablaImportar == null) {
+    notifica("error", "", "Debe seleccionar una Tabla");
+    return false;
+  }
+
+  parametros = {
+    type: "muestraArchivoImportado",
+    archivo: archivo,
+    tablaImportar: tablaImportar,
+  };
+
+  $.ajax({
+    data: parametros,
+    url: "option.php",
+    type: "get",
+    beforeSend: function () {},
+    success: function (response) {
+      $("#modalTitle").html(modalTitle);
+      $("#modalBody").html(response);
+    },
+    complete: function (response) {
+      $("#btnMuestraArchivoImportado").attr("hidden", true);
+    },
+    error: function (e) {
+      alerta(
+        "error",
+        "Error de Sistema",
+        "Hubo un error inesperado, intente nuevamente."
+      );
+    },
   });
 }

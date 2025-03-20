@@ -1,0 +1,11 @@
+{
+    "name": "caio/delegados",
+    "description": "Paquetes sistemas de delegados",
+    "require": {
+        "dompdf/dompdf": "^3.1",
+        "phpmailer/phpmailer": "^6.9",
+        "shuchkin/simplexlsx": "^1.1"
+    },
+    "license": "MIT",
+    "minimum-stability": "stable"
+}
