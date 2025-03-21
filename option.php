@@ -946,7 +946,7 @@ switch ($type){
                 </div>
               </div>
             </div>
-            <div class="col">
+            <div class="col mb-3">
               <div class="btn-group dropright w-100" role="group">
                 <button id="btnEquipos" type="button" class="btn dropdown-toggle btn-success" data-toggle="dropdown" aria-expanded="false">Filtrar por Equipo</button>
                 <div class="dropdown-menu" aria-labelledby="btnEquipos" style="max-height: 300px; overflow-y: auto;">
@@ -999,8 +999,12 @@ switch ($type){
           $equiposJugador = 'Sin Equipo';
         } else {
           foreach($datosEquipos as $value){
-            if((in_array($value['id'], $equiposUsuarioGeneral) && !empty($equiposUsuarioGeneral)) || in_array($nivelUsuarioGeneral, array(8,9))){
-              $equiposJugador .= '<span class="badge badge-subtle badge-primary m-1">'.$value['nombre'].'</span>';
+            $id_datosEquipos = $value['id'];
+            $todosJugadores = '0';
+            if((in_array($id_datosEquipos, $equiposUsuarioGeneral) && !empty($equiposUsuarioGeneral)) || in_array($nivelUsuarioGeneral, array(8,9))){              
+              $getJugadoresTotal = $ClassTodas->get_datoVariosWhereOrderInformes("SELECT count(id_jugador) as total FROM jugadores_equipos WHERE id_equipo='$id_datosEquipos'");
+              $todosJugadores = $getJugadoresTotal[0]['total'];
+              $equiposJugador .= '<span class="badge badge-subtle badge-primary m-1" title="'.$todosJugadores.' jugadores" style="cursor: pointer">'.$value['nombre'].'</span>';
             }
           }
         }
@@ -1060,14 +1064,14 @@ switch ($type){
         <table class="table table-condensed table-bordered table-striped table-sm font-size-sm w-100" id="tablaAdministraJugadores">
           <thead>
             <tr style="height: 55px;">
-              <th>Nº</th>
+              <th class="align-middle text-center"">Nº</th>
               <th style="width: 100px;">Foto Documento</th>
-              <th>Nombre</th>
-              <th>Documento</th>
-              <th>Fecha Nacimiento</th>
-              <th>Equipo</th>
-              <th>Posición</th>
-              <th>Nacionalidad</th>
+              <th class="align-middle text-center">Nombre</th>
+              <th class="align-middle text-center">Documento</th>
+              <th class="align-middle text-center">Fecha Nacimiento</th>
+              <th class="align-middle text-center">Equipo</th>
+              <th class="align-middle text-center">Posición</th>
+              <th class="align-middle text-center">Nacionalidad</th>
               <th class="$displayJugadores">Fecha Creación</th>
               $thAsegurado
               <th>Opciones</th>
@@ -2475,7 +2479,9 @@ switch ($type){
       // do nothing
     } else {
       foreach ($buscaDatosEquipos as $value) {
-          $id_buscaEquipos             = $value['id'];
+          $id_buscaEquipos             = $value['id'];        
+          $todosJugadores = $ClassTodas->get_datoVariosWhereOrderInformes("SELECT count(id_jugador) as total FROM jugadores_equipos WHERE id_equipo='$id_buscaEquipos'");
+          $todosJugadores = empty($todosJugadores) ? '0' : $todosJugadores[0]['total'];
           $id_liga_buscaEquipos        = $value['id_competicion'];
           $nombre_buscaEquipos         = $value['nombre'];
           $fecha_creacion_buscaEquipos = $value['fecha_creacion'];
@@ -2486,11 +2492,11 @@ switch ($type){
           $datosTabla .=<<<EOD
             <tr id="tr_$id_buscaEquipos">
               <td class="align-middle">$nombre_buscaEquipos</td>
+              <td class="align-middle">$todosJugadores jugadores</td>
               <td class="align-middle">$nombre_buscaCompet</td>
               <td class="align-middle">$fecha_creacion_buscaEquipos</td>
               <td class="align-middle text-center">
                 <a id="editarLinea_$id_buscaEquipos" class="btn btn-sm btn-icon btn-secondary" onclick="formEquipos('Editar','$id_buscaEquipos','equipos','editarEquipos')"><i class="fa fa-edit"></i></a>
-               <a id="editarLinea_$id_buscaEquipos" class="btn btn-sm btn-icon btn-secondary" onclick="eliminarLinea('equipos','$id_buscaEquipos')"><i class="fa fa-trash"></i></a>
               </td>
             </tr>
           EOD;
@@ -2505,6 +2511,7 @@ switch ($type){
             <thead>
               <tr>
                 <th>Nombre</th>
+                <th>Cant. Jugadores</th>
                 <th>Competición</th>
                 <th>Fecha Creación</th>
                 <th>Opciones</th>
