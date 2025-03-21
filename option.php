@@ -889,6 +889,7 @@ switch ($type){
     $tdAsegurado            = '';
     $thAsegurado            = '';
     $filtrosPreElegidos     = '';
+    $optEquipos             = '';
 
     if (!$idUsuario || !$idModulo || !$countSubModulo){
       echo '<h5 class="text-danger mb-0">Error en los datos enviados para la consulta</h5>';
@@ -917,24 +918,43 @@ switch ($type){
     }
 
     if(empty($equiposUsuario) && in_array($nivelUsuarioGeneral, array(8,9))){
-      $buscaDatosEquipos = $ClassTodas->get_datoVariosWhereOrder('equipos','','');
+      $buscaDatosEquipos = $ClassTodas->get_datoVariosWhereOrder('equipos','','ORDER BY nombre ASC');
+      foreach($buscaDatosEquipos as $row) {
+        $nombreEquipo = $row['nombre'];
+        $optEquipos .=<<<EOD
+          <a type="button" class="dropdown-item" href="#" onclick="buscarEnDataTable('$nombreEquipo')">$nombreEquipo</a>
+        EOD;
+      }
       $buscaDatosJugadores = $ClassTodas->get_datoVariosWhereOrder('jugadores','WHERE activo=1','ORDER BY fecha_creacion DESC '.$cantity);
     } else {
-      $buscaDatosEquipos = $ClassTodas->get_datoVariosWhereOrder('equipos','WHERE id IN('.$equiposUsuario.')','');
       $buscaDatosJugadores = $ClassTodas->get_datoVariosWhereOrderInformes("SELECT jug.*,jugeqp.id_equipo FROM jugadores as jug INNER JOIN jugadores_equipos as jugeqp ON jug.id = jugeqp.id_jugador WHERE jugeqp.id_equipo IN ($equiposUsuario) AND jug.activo = 1");
     }
 
     if(in_array($nivelUsuarioGeneral, array(8,9))){
       $filtrosPreElegidos =<<<EOD
-        <div class="col-12 col-md-4 mb-3">
-          <div class="btn-group dropright" role="group">
-            <button id="btnCantities" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Filtrar por cantidad</button>
-            <div class="dropdown-menu" aria-labelledby="btnCantities" style="">
-              <div class="dropdown-arrow"></div>
-              <a type="button" class="dropdown-item" href="#" onclick="listarJugadores('Listado de Jugadores','$idUsuarioGeneral','10','2','250');">Últimos 250 creados</a>
-              <a type="button" class="dropdown-item" href="#" onclick="listarJugadores('Listado de Jugadores','$idUsuarioGeneral','10','2','500');">Últimos 500 creados</a>
-              <a type="button" class="dropdown-item" href="#" onclick="listarJugadores('Listado de Jugadores','$idUsuarioGeneral','10','2','1000');">Últimos 1000 creados</a>
-              <a type="button" class="dropdown-item" href="#" onclick="listarJugadores('Listado de Jugadores','$idUsuarioGeneral','10','2','Todos');">Todos</a>
+        <div class="col-12 col-lg-8 col-xl-5">
+          <div class="row">
+            <div class="col mb-3">
+              <div class="btn-group dropright w-100" role="group">
+                <button id="btnCantities" type="button" class="btn dropdown-toggle btn-warning" data-toggle="dropdown" aria-expanded="false">Filtrar por cantidad</button>
+                <div class="dropdown-menu" aria-labelledby="btnCantities"style="max-height: 300px; overflow-y: auto;">
+                  <div class="dropdown-arrow"></div>
+                  <a type="button" class="dropdown-item" href="#" onclick="listarJugadores('Listado de Jugadores','$idUsuarioGeneral','10','2','250');">Últimos 250 creados</a>
+                  <a type="button" class="dropdown-item" href="#" onclick="listarJugadores('Listado de Jugadores','$idUsuarioGeneral','10','2','500');">Últimos 500 creados</a>
+                  <a type="button" class="dropdown-item" href="#" onclick="listarJugadores('Listado de Jugadores','$idUsuarioGeneral','10','2','1000');">Últimos 1000 creados</a>
+                  <a type="button" class="dropdown-item" href="#" onclick="listarJugadores('Listado de Jugadores','$idUsuarioGeneral','10','2','Todos');">Todos</a>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="btn-group dropright w-100" role="group">
+                <button id="btnEquipos" type="button" class="btn dropdown-toggle btn-success" data-toggle="dropdown" aria-expanded="false">Filtrar por Equipo</button>
+                <div class="dropdown-menu" aria-labelledby="btnEquipos" style="max-height: 300px; overflow-y: auto;">
+                  <div class="dropdown-arrow"></div>
+                  <a type="button" class="dropdown-item" href="#" onclick="buscarEnDataTable('Sin Equipo')">SIN EQUIPO</a>
+                  $optEquipos
+                </div>
+              </div>
             </div>
           </div>
         </div>

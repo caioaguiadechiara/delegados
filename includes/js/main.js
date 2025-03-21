@@ -2476,3 +2476,12 @@ function muestraArchivoImportado(archivo, modalTitle, nombreForm) {
     },
   });
 }
+
+function buscarEnDataTable(keyword) {
+  if(!keyword) {
+    notifica('warning','¡Atención!', 'No hay nada configurado para buscar.');
+    return false;
+  }
+  var table = $('#tablaAdministraJugadores').DataTable();
+  table.search(keyword).draw();
+}
