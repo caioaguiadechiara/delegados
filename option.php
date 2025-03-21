@@ -2647,7 +2647,7 @@ switch ($type){
               $equipos = $ClassTodas->get_datoVariosWhereOrder('equipos','WHERE id="'.$value['id_equipo'].'"','');
               $nombresEquipos .= $equipos[0]['nombre'].',';
             }
-            $nombresEquipos = substr($nombresEquipos, 0, -1);
+            $nombresEquipos = $nombresEquipos ? substr($nombresEquipos, 0, -1) : 'Sin Equipo';
           }
           $datosTabla .=<<<EOD
             <tr id="tr_$id_jg">
@@ -2750,7 +2750,7 @@ switch ($type){
               $equipos = $ClassTodas->get_datoVariosWhereOrder('equipos','WHERE id="'.$value['id_equipo'].'"','');
               $nombresEquipos .= $equipos[0]['nombre'].',';
             }
-            $nombresEquipos = substr($nombresEquipos, 0, -1);
+            $nombresEquipos = $nombresEquipos ? substr($nombresEquipos, 0, -1) : 'Sin Equipo';
           }
           $datosTabla .=<<<EOD
             <tr id="tr_$id_jg">
@@ -2863,7 +2863,7 @@ switch ($type){
               $equipos = $ClassTodas->get_datoVariosWhereOrder('equipos','WHERE id="'.$value['id_equipo'].'"','');
               $nombresEquipos .= $equipos[0]['nombre'].',';
             }
-            $nombresEquipos = substr($nombresEquipos, 0, -1);
+            $nombresEquipos = $nombresEquipos ? substr($nombresEquipos, 0, -1) : 'Sin Equipo';
           }
           $datosTabla .=<<<EOD
             <tr id="tr_$id_jg">
