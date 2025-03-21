@@ -260,11 +260,10 @@ switch ($type){
       $eliminarLinea_ejecuta = $ClassTodas->eliminarLinea($tabla,'id',$idLinea);
     }elseif($tabla == 'equipos') {
       $eliminarJugadores = $ClassTodas->eliminarLinea('jugadores_equipos','id_equipo',$idLinea);
-      $eliminarJugadores = $ClassTodas->eliminarLinea('jugadores','id_equipo',$idLinea);
       $eliminarLinea_ejecuta = $ClassTodas->eliminarLinea($tabla,'id',$idLinea);
     } elseif($tabla == 'jugadores'){
       if(empty($equiposUsuarioGeneral) && in_array($nivelUsuarioGeneral, array(8,9))){
-        $eliminarLinea_ejecuta = $ClassTodas->actualizaCosasVariasSetWhere($tabla,'activo=0','id='.$idLinea); //inactiva jugador
+        $eliminarLinea_ejecuta = $ClassTodas->actualizaCosasVariasSetWhere($tabla,'activo=1','id='.$idLinea); //inactiva jugador
         $eliminarJugadores = $ClassTodas->eliminarLinea('jugadores_equipos','id_jugador',$idLinea); //desvincula jugador de equipos
       } else {
         if(empty($equiposUsuarioGeneral)){
@@ -275,7 +274,7 @@ switch ($type){
           }
           $checkSiSobranJugadores = $ClassTodas->get_datoVariosWhereOrderInformes("SELECT * FROM jugadores_equipos WHERE id_jugador = '$idLinea'");
           if(empty($checkSiSobranJugadores)){
-            $eliminarLinea_ejecuta = $ClassTodas->actualizaCosasVariasSetWhere('jugadores','activo=0','id='.$idLinea); //inactiva jugador
+            $eliminarLinea_ejecuta = $ClassTodas->actualizaCosasVariasSetWhere('jugadores','activo=1','id='.$idLinea); //inactiva jugador
             echo $eliminarLinea_ejecuta;
           } else {
             $eliminarLinea_ejecuta = 1; //todavía tiene equipos asociados, eliminado de sus equipos asociados con exito
