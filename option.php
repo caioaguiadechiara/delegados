@@ -2622,7 +2622,6 @@ switch ($type){
           $documento              = $value['documento'];
           $fnacimientoSinTrab     = $value['fnacimiento'];
           $fnacimiento            = $ClassTodas->cambiaf_a_normal2($fnacimientoSinTrab);
-          $id_equipo              = $value['id_equipo'];
           $email                  = $value['email'];
           $celular                = $value['celular'];
           $asegurado              = $value['asegurado'];
@@ -2641,9 +2640,14 @@ switch ($type){
           $modificadoPor          = (empty($value['modificadoPor'])) ? 'No aplica' : $value['modificadoPor'];
           $fechaModificacion      = $value['fechaModificacion'];
           $edadJugador            = $ClassTodas->obtener_edad_segun_fecha($fnacimiento);
-          $buscaDatosEquipos = $ClassTodas->get_datoVariosWhereOrder('equipos','WHERE id='.$id_equipo,'');
-          foreach ($buscaDatosEquipos as $value) {
-            $equipo         = $value['nombre'];
+          $nombresEquipos = '';
+          $buscaDatosEquipos = $ClassTodas->get_datoVariosWhereOrder('jugadores_equipos','WHERE id_jugador='.$id_jg,'');
+          if(!empty($buscaDatosEquipos)) {
+            foreach ($buscaDatosEquipos as $value) {
+              $equipos = $ClassTodas->get_datoVariosWhereOrder('equipos','WHERE id="'.$value['id_equipo'].'"','');
+              $nombresEquipos .= $equipos[0]['nombre'].',';
+            }
+            $nombresEquipos = substr($nombresEquipos, 0, -1);
           }
           $datosTabla .=<<<EOD
             <tr id="tr_$id_jg">
@@ -2651,7 +2655,7 @@ switch ($type){
               <td class="align-middle">$nombre $apellido <a href="#" tilte="Editar Jugador" onclick="formJugadores('Editar','$id_jg','jugadores','editarJugadores')"><i class="fa fa-edit"></i></a></td>
               <td class="align-middle">$documento</td>
               <td class="align-middle text-nowrap">$fnacimiento <small>(Edad: $edadJugador)</small></td>
-              <td class="align-middle">$equipo</td>
+              <td class="align-middle">$nombresEquipos</td>
               <td class="align-middle">$aseguradoTxT</td>
               <td class="align-middle">$seguimientoTxT</td>
               <td class="align-middle text-nowrap">$fechaPagoSeguro</td>
@@ -2718,7 +2722,6 @@ switch ($type){
           $documento              = $value['documento'];
           $fnacimientoSinTrab     = $value['fnacimiento'];
           $fnacimiento            = $ClassTodas->cambiaf_a_normal2($fnacimientoSinTrab);
-          $id_equipo              = $value['id_equipo'];
           $email                  = $value['email'];
           $celular                = $value['celular'];
           $asegurado              = $value['asegurado'];
@@ -2740,9 +2743,14 @@ switch ($type){
           $valorPagado            = $valorPagado * $siniestro;
           if($asegurado == 1) { $countAsegurado++; }
           $countValorP       = $countValorP + $valorPagado;
-          $buscaDatosEquipos = $ClassTodas->get_datoVariosWhereOrder('equipos','WHERE id='.$id_equipo,'');
-          foreach ($buscaDatosEquipos as $value) {
-            $equipo         = $value['nombre'];
+          $nombresEquipos = '';
+          $buscaDatosEquipos = $ClassTodas->get_datoVariosWhereOrder('jugadores_equipos','WHERE id_jugador='.$id_jg,'');
+          if(!empty($buscaDatosEquipos)) {
+            foreach ($buscaDatosEquipos as $value) {
+              $equipos = $ClassTodas->get_datoVariosWhereOrder('equipos','WHERE id="'.$value['id_equipo'].'"','');
+              $nombresEquipos .= $equipos[0]['nombre'].',';
+            }
+            $nombresEquipos = substr($nombresEquipos, 0, -1);
           }
           $datosTabla .=<<<EOD
             <tr id="tr_$id_jg">
@@ -2750,7 +2758,7 @@ switch ($type){
               <td class="align-middle">$nombre $apellido <i class="fa fa-edit cursor-pointer" onclick="formJugadores('Editar','$id_jg','jugadores','editarJugadores')"></i></td>
               <td class="align-middle">$documento</td>
               <td class="align-middle text-nowrap">$fnacimiento <small>(Edad: $edadJugador)</small></td>
-              <td class="align-middle">$equipo</td>
+              <td class="align-middle">$nombresEquipos</td>
               <td class="align-middle">$aseguradoTxT</td>
               <td class="align-middle">$seguimientoTxT</td>
               <td class="align-middle text-nowrap">$fechaPagoSeguro</td>
@@ -2821,7 +2829,6 @@ switch ($type){
           $documento                      = $value['documento'];
           $fnacimientoSinTrab             = $value['fnacimiento'];
           $fnacimiento                    = $ClassTodas->cambiaf_a_normal2($fnacimientoSinTrab);
-          $id_equipo                      = $value['id_equipo'];
           $email                          = $value['email'];
           $celular                        = $value['celular'];
           $asegurado                      = $value['asegurado'];
@@ -2849,16 +2856,22 @@ switch ($type){
           if ($valorPagado !== null && is_numeric($valorPagado)) {
             $countValorP                    = $countValorP + $valorPagado;
           }
-          $gEquipos                       = $ClassTodas->get_datoVariosWhereOrder('equipos','WHERE id='.$id_equipo,'');
-          foreach ($gEquipos as $value) { $equipo = $value['nombre']; }
-          // if($valorPagado == 0) { $valorPagado = '-'.$valorSeguroFijado;}
+          $nombresEquipos = '';
+          $buscaDatosEquipos = $ClassTodas->get_datoVariosWhereOrder('jugadores_equipos','WHERE id_jugador='.$id_jg,'');
+          if(!empty($buscaDatosEquipos)) {
+            foreach ($buscaDatosEquipos as $value) {
+              $equipos = $ClassTodas->get_datoVariosWhereOrder('equipos','WHERE id="'.$value['id_equipo'].'"','');
+              $nombresEquipos .= $equipos[0]['nombre'].',';
+            }
+            $nombresEquipos = substr($nombresEquipos, 0, -1);
+          }
           $datosTabla .=<<<EOD
             <tr id="tr_$id_jg">
               <td class="align-middle">$count</td>
               <td class="align-middle">$nombre $apellido <i class="fa fa-edit cursor-pointer" onclick="formJugadores('Editar','$id_jg','jugadores','editarJugadores')"></i></td>
               <td class="align-middle">$documento</td>
               <td class="align-middle text-nowrap">$fnacimiento <small>(Edad: $edadJugador)</small></td>
-              <td class="align-middle">$equipo</td>
+              <td class="align-middle">$nombresEquipos</td>
               <td class="align-middle">$aseguradoTxT</td>
               <td class="align-middle">$seguimientoTxT</td>
               <td class="align-middle text-nowrap">$fechaPagoSeguro</td>
