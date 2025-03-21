@@ -270,7 +270,8 @@
   <script src="assets/javascript/theme.min.js"></script>
   <script src="includes/js/main.js?v=<?php echo $hash?>"></script>
   <script>
-    $(document).ready(function(){      
+    $(document).ready(function(){
+      muestraAccesosUsuario('<?php echo $idUsuario; ?>','10');
       cargaMenu("<?php echo $idUsuario; ?>");
       <?php if(in_array($nivelUsuario, array(8,9))) { ?>
         listarJugadores('Listado de Jugadores','<?php echo $idUsuario; ?>','10','2','500');
