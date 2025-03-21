@@ -268,16 +268,25 @@ switch ($type){
       $eliminarJugadores = $ClassTodas->eliminarLinea('jugadores_equipos','id_equipo',$idLinea);
       $eliminarJugadores = $ClassTodas->eliminarLinea('jugadores','id_equipo',$idLinea);
       $eliminarLinea_ejecuta = $ClassTodas->eliminarLinea($tabla,'id',$idLinea);
-    }elseif($tabla == 'jugadores'){
-      $checkSiAsegurado = $ClassTodas->get_datoVariosWhereOrder($tabla,'WHERE id='.$idLinea,'');
-      foreach($checkSiAsegurado as $row) { $aseguradoCheck = $row['asegurado']; }
-      if($aseguradoCheck == 1){
-        $checkJugEqp = $ClassTodas->get_datoVariosWhereOrderInformes("SELECT count(id) as total FROM jugadores_equipos WHERE id_jugador='$idLinea'");
-        $totalEquipos = $checkJugEqp[0]['total'];
-        $eliminarLinea_ejecuta = $ClassTodas->actualizaCosasVariasSetWhere($tabla,'activo=0','id='.$idLinea);
+    } elseif($tabla == 'jugadores'){
+      if(empty($equiposUsuarioGeneral) && in_array($nivelUsuarioGeneral, array(8,9))){
+        $eliminarLinea_ejecuta = $ClassTodas->actualizaCosasVariasSetWhere($tabla,'activo=0','id='.$idLinea); //inactiva jugador
+        $eliminarJugadores = $ClassTodas->eliminarLinea('jugadores_equipos','id_jugador',$idLinea); //desvincula jugador de equipos
       } else {
-        $eliminarJugadores = $ClassTodas->eliminarLinea('jugadores_equipos','id_jugador',$idLinea);
-        $eliminarLinea_ejecuta = $ClassTodas->eliminarLinea($tabla,'id',$idLinea);
+        if(empty($equiposUsuarioGeneral)){
+          $eliminarLinea_ejecuta = 0; //Usuario no tiene equipos asociados, no puede eliminar jugador
+        } else {
+          foreach($equiposUsuarioGeneral as $value){
+            $ClassTodas->eliminarLineaQuery("DELETE FROM jugadores_equipos WHERE id_jugador ='$idLinea' AND id_equipo = '$value'"); //desvincula jugador de equipos
+          }
+          $checkSiSobranJugadores = $ClassTodas->get_datoVariosWhereOrderInformes("SELECT * FROM jugadores_equipos WHERE id_jugador = '$idLinea'");
+          if(empty($checkSiSobranJugadores)){
+            $eliminarLinea_ejecuta = $ClassTodas->actualizaCosasVariasSetWhere('jugadores','activo=0','id='.$idLinea); //inactiva jugador
+            echo $eliminarLinea_ejecuta;
+          } else {
+            $eliminarLinea_ejecuta = 1; //todavía tiene equipos asociados, eliminado de sus equipos asociados con exito
+          }
+        }
       }
     } else {
       $eliminarLinea_ejecuta = $ClassTodas->eliminarLinea($tabla,'id',$idLinea);
@@ -1014,11 +1023,6 @@ switch ($type){
         }
         $datosTabla .=<<<EOD
           <tr id="tr_$id_jg">  
-            <td class="align-middle text-center col-checker">
-              <div class="custom-control custom-control-nolabel custom-checkbox">
-                <input type="checkbox" class="custom-control-input" name="jugadoresCheck" id="$id_jg"> <label class="custom-control-label" for="$id_jg"></label>
-              </div>
-            </td>
             <td class="align-middle text-center">$count</td>
             <td class="align-middle text-center"><img id="fotoJugador_$id_jg" class="img-fluid" src="images/jugadores/$foto" alt="$foto" style="height: 70px;"></td>
             <td class="align-middle text-left">$nombre $apellido</td>
@@ -1031,7 +1035,7 @@ switch ($type){
             $tdAsegurado
             <td class="align-middle text-center"> 
               <a id="editarLinea_$id_jg" class="btn btn-sm btn-icon btn-secondary" onclick="formJugadores('Editar','$id_jg','jugadores','editarJugadores')" $classEditar><i class="fa fa-edit"></i></a>
-              <a class="btn btn-sm btn-icon btn-secondary" onclick="enDesarrollo()" $classEliminar><i class="far fa-trash-alt"></i></a>
+              <a class="btn btn-sm btn-icon btn-secondary" onclick="eliminarLinea('jugadores','$id_jg')" $classEliminar><i class="far fa-trash-alt"></i></a>
             </td>
           </tr>
         EOD;
@@ -1043,17 +1047,6 @@ switch ($type){
         <table class="table  table-condensed table-bordered table-sm table-striped font-size-sm" id="tablaAdministraJugadores">
           <thead>
             <tr style="height: 55px;">
-              <th class="text-center" style="min-width: 50px;">
-                <div class="thead-dd dropdown">
-                  <span class="custom-control custom-control-nolabel custom-checkbox"><input type="checkbox" class="custom-control-input" id="check-handle"> <label class="custom-control-label" for="check-handle"></label></span>
-                  <div class="thead-btn" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <span class="fa fa-caret-down"></span>
-                  </div>
-                  <div class="dropdown-menu" style="">
-                    <div class="dropdown-arrow"></div><a class="dropdown-item" href="#" onclick="enDesarrollo()">Borrar Todos</a>
-                  </div>
-                </div>
-              </th>
               <th>Nº</th>
               <th style="width: 100px;">Foto Documento</th>
               <th>Nombre</th>

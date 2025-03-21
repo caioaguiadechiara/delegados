@@ -498,6 +498,16 @@ class ClassTodas
         }
     }
 
+    public function eliminarLineaQuery($queryEnviado){
+        $query = "$queryEnviado";
+        $qry = mysqli_query($this->myconn, $query) or die('Error eliminarLineaQuery(): ' . mysqli_error($this->myconn));
+        if ($qry) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
     public function eliminarLineaTodas($tabla, $idLinea, $nombreCampo){
         $query = '';
         mysqli_query($this->myconn, "SET NAMES 'utf8'");
