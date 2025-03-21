@@ -1,12 +1,12 @@
-document.addEventListener('contextmenu', (e) => e.preventDefault());
-document.addEventListener('keydown', (e) => {
-  if (e.key === "F12" || 
-      (e.ctrlKey && e.shiftKey && e.key === "I") || 
-      (e.ctrlKey && e.shiftKey && e.key === "C") || 
-      (e.ctrlKey && e.key === "U")) {
-      e.preventDefault();
-  }
-});
+// document.addEventListener('contextmenu', (e) => e.preventDefault());
+// document.addEventListener('keydown', (e) => {
+//   if (e.key === "F12" ||
+//       (e.ctrlKey && e.shiftKey && e.key === "I") ||
+//       (e.ctrlKey && e.shiftKey && e.key === "C") ||
+//       (e.ctrlKey && e.key === "U")) {
+//       e.preventDefault();
+//   }
+// });
 
 function verPassword() {
   var estadoVerPass = $('#inputPass').attr('type');
@@ -120,14 +120,16 @@ function notifica(tipo, titulo, texto) {
     "onclick": null,
     "showDuration": "300",
     "hideDuration": "1000",
-    "timeOut": "4000",
+    "timeOut": "5000",
     "extendedTimeOut": "1000",
     "showEasing": "swing",
     "hideEasing": "linear",
     "showMethod": "fadeIn",
     "hideMethod": "fadeOut"
   }
-  toastr[tipo](texto, titulo)
+  titulo = (!titulo) ? 'Alerta Sistema' : titulo;
+  var contenido = `<strong>${titulo}</strong>&nbsp;${texto}`;
+  toastr[tipo](contenido);
 }
 
 function alerta(tipo, titulo, texto) {
@@ -365,7 +367,7 @@ function permite(elEvento, permitidos) {
       permitidos = numeros_k;
       break;
   }
-  // Obtener la tecla pulsada 
+  // Obtener la tecla pulsada
   var evento = elEvento || window.event;
   var codigoCaracter = evento.charCode || evento.keyCode;
   var caracter = String.fromCharCode(codigoCaracter);
@@ -402,7 +404,7 @@ function permiteDV(elEvento, permitidos) {
       permitidos = numeros_caracteres;
       break;
   }
-  // Obtener la tecla pulsada 
+  // Obtener la tecla pulsada
   var evento = elEvento || window.event;
   var codigoCaracter = evento.charCode || evento.keyCode;
   var caracter = String.fromCharCode(codigoCaracter);
@@ -853,7 +855,6 @@ function credencialesInicio(idUsuario, idModulo) {
 }
 
 function credenciales_nuevo(tabla, modalTitle) {
-  $('#respuestasEnviadasAmodal').empty();
   parametros = {
     "type": 'credenciales_nuevo',
     "tabla": tabla,
@@ -951,7 +952,6 @@ function credenciales_nuevoEjecuta(tabla) {
 }
 
 function credenciales_editar(tabla, modalTitle, idUsuario) {
-  $('#respuestasEnviadasAmodal').empty();
   parametros = {
     "type": 'credenciales_editar',
     "tabla": tabla,
@@ -1246,7 +1246,8 @@ function cargaDashBoard() {
     success: function (response) {
       $('#opcion').html(response);
     },
-    complete: function (response) { },
+    complete: function (response) {
+    },
     error: function (e) {
       notifica('error', 'Ocurrió un error, por favor intente nuevamente o contacte el aministrador del sistema.');
     }
@@ -1268,7 +1269,7 @@ function cargaMenu(idUsuario) {
       $('#stacked-menu').html(response);
     },
     complete: function (response) {
-      new StackedMenu();
+      new StackedMenu();      
     },
     error: function (e) {
       notifica('error', 'Ocurrió un error, por favor intente nuevamente o contacte el aministrador del sistema.');
@@ -1300,7 +1301,6 @@ function muestraAccesosUsuario(idUsuario, idModulo) {
 }
 
 function modalEditarDatosUsuarioSistema(modalTitle, tabla, idDeLaTabla, tipo) {
-  //$('#respuestasEnviadasAmodal').empty();
   parametros = {
     "type": 'modalEditarDatosUsuarioSistema',
     "tabla": tabla,
@@ -2130,22 +2130,22 @@ function guardarSeguroJugador(idRecibido, tabla, opcion) {
       data: parametros,
       url: "option.php",
       type: "get",
-      beforeSend: function () { 
+      beforeSend: function () {
       },
       success: function (response) {
         if (response == 1) {
           if(opcion == 'agregar'){
-            notifica('success', 'Registro agregado con éxito.', '');               
+            notifica('success', 'Registro agregado con éxito.', '');
           } else if (opcion == 'editar'){
-            notifica('success', 'Registro actualizado con éxito.', '');              
-          } 
+            notifica('success', 'Registro actualizado con éxito.', '');
+          }
           $('#modalGeneral_otro').modal('toggle');
         } else if (response == 0) {
           notifica('error', 'Algo ha fallado. Intente Nuevamente.');
-        }        
+        }
       },
       complete: function (response) {
-        $('#listarJugadoresSeguro').click(); 
+        $('#listarJugadoresSeguro').click();
       },
       error: function (e) {
           alert(e);
@@ -2410,12 +2410,10 @@ function importarDB(title) {
   });
 }
 
-function cargaMasiva(tabla, modalTitle, idRendicion) {
-  $("#respuestasEnviadasAmodal").html("");
+function cargaMasiva(tabla) {
   parametros = {
-    type: "cargaMasiva",
-    tabla: tabla,
-    idRendicion: idRendicion,
+    "type": "cargaMasiva",
+    "tabla": tabla,
   };
   $.ajax({
     data: parametros,
@@ -2425,7 +2423,7 @@ function cargaMasiva(tabla, modalTitle, idRendicion) {
     },
     success: function (response) {
       $("#modalTamano").attr("class", "modal-dialog modal-xl");
-      $("#modalTitle").html(modalTitle);
+      $("#modalTitle").html('Carga Masiva de ' + tabla);
       $("#modalBody").html(response);
       $("#modalGeneral").modal("toggle");
     },
@@ -2433,14 +2431,7 @@ function cargaMasiva(tabla, modalTitle, idRendicion) {
       Dropzone.options.importaArchivosAbd = {
         acceptedFiles: ".xlsx",
         accept: function (file, done) {
-          $("#btnMuestraArchivoImportado")
-            .attr(
-              "onclick",
-              "muestraArchivoImportado('" +
-                file.name +
-                "','Archivo Importado','importaArchivosAbd');"
-            )
-            .attr("hidden", false);
+          $("#btnMuestraArchivoImportado").attr("onclick", "muestraArchivoImportado('" + file.name + "','Archivo Importado','importaArchivosAbd');").attr("style", 'display: block;');
           done();
         },
       };
@@ -2450,26 +2441,22 @@ function cargaMasiva(tabla, modalTitle, idRendicion) {
       });
     },
     error: function (e) {
-      alerta(
-        "error",
-        "Error de Sistema",
-        "Hubo un error inesperado, intente nuevamente."
-      );
+      alerta("error","Error de Sistema","Hubo un error inesperado, intente nuevamente.");
     },
   });
 }
 
 function muestraArchivoImportado(archivo, modalTitle, nombreForm) {
-  var tablaImportar = $("input[name=tablaImportarGrupo1]:checked").val();
+  var tablaImportar = $("#tablaImportar").val();
   if (tablaImportar == null) {
-    notifica("error", "", "Debe seleccionar una Tabla");
+    notifica("error", "Error", "Debe seleccionar una tabla valida.");
     return false;
   }
 
   parametros = {
-    type: "muestraArchivoImportado",
-    archivo: archivo,
-    tablaImportar: tablaImportar,
+    "type" : "muestraArchivoImportado",
+    "archivo" : archivo,
+    "tablaImportar" : tablaImportar,
   };
 
   $.ajax({
@@ -2482,14 +2469,10 @@ function muestraArchivoImportado(archivo, modalTitle, nombreForm) {
       $("#modalBody").html(response);
     },
     complete: function (response) {
-      $("#btnMuestraArchivoImportado").attr("hidden", true);
+      $("#btnMuestraArchivoImportado").attr("style", 'display: none;');
     },
     error: function (e) {
-      alerta(
-        "error",
-        "Error de Sistema",
-        "Hubo un error inesperado, intente nuevamente."
-      );
+      alerta("error","Error de Sistema","Hubo un error inesperado, intente nuevamente.");
     },
   });
 }

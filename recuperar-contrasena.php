@@ -95,18 +95,18 @@ $nombre_sistemaAbreviado = $ClassTodas->title_abreviado();
       </div><!-- /.form-group -->
     </form><!-- /.auth-form -->
     <!-- copyright -->
-    <footer class="auth-footer"> 
+    <footer class="auth-footer">
       © 2022 Todos los derechos reservados <a target="_blank" href="https://www.ligadenaciones.cl">Liga de Naciones</a>
     </footer>
   </main>
   <!-- BEGIN BASE JS -->
   <script src="assets/vendor/jquery/jquery.min.js"></script>
   <script src="assets/vendor/bootstrap/js/popper.min.js"></script>
-  <script src="assets/vendor/bootstrap/js/bootstrap.min.js"></script> <!-- END BASE JS -->   
+  <script src="assets/vendor/bootstrap/js/bootstrap.min.js"></script> <!-- END BASE JS -->
 
     <!-- END PLUGINS JS -->
     <!-- BEGIN THEME JS -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8.18.0/dist/sweetalert2.all.min.js"></script> 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8.18.0/dist/sweetalert2.all.min.js"></script>
 
     <script src="assets/javascript/theme.min.js"></script>
     <script src="includes/js/main.js?v=<?php echo $hash?>"></script>

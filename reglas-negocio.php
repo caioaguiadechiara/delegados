@@ -23,13 +23,13 @@ $siglaSistema             = $ClassTodas->siglaSistema();
 if (isset($_REQUEST['logout'])) {
     session_destroy();
     echo '<script>location="login.php";</script>';
-    exit;  
+    exit;
 }
 
 if(!isset($_SESSION[$siglaSistema.'_login'])){
     session_destroy();
     echo '<script>location="login.php";</script>';
-    exit; 
+    exit;
 }
 
 if (isset($_REQUEST['limpiar'])) {
@@ -49,7 +49,7 @@ switch ($type){
 
         if (empty($buscaReglas)) {
             $datosTabla =<<<EOD
-            <tr>              
+            <tr>
                 <td colspan="4" class="text-center py-3">No hay datos para mostrar en la tabla.</td>
             </tr>
             EOD;
@@ -73,7 +73,7 @@ switch ($type){
         }
 
         $table =<<<EOD
-            <!--<div class="col-12 d-flex mb-3 justify-content-end">       
+            <!--<div class="col-12 d-flex mb-3 justify-content-end">
                 <button type="button" class="btn btn-primary btn-lg" title="Agregar" onclick=""><i class="fas fa-plus pr-1"></i>Agregar Regla</button>
             </div>-->
             <div class="table-responsive-lg mt-3">
@@ -98,4 +98,4 @@ switch ($type){
     break;
 
 
-} /* Fin Switch */?> 
+} /* Fin Switch */?>

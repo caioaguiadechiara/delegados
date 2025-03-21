@@ -17,12 +17,12 @@
   if (isset($_REQUEST['logout'])) {
       session_destroy();
       echo '<script>location="login.php";</script>';
-      exit;  
+      exit;
   }
   if(!isset($_SESSION[$siglaSistema.'_login'])){
       session_destroy();
       echo '<script>location="login.php";</script>';
-      exit; 
+      exit;
   }
   if (isset($_REQUEST['limpiar'])) {
       session_destroy();
@@ -44,7 +44,7 @@
     $_SESSION[$siglaSistema.'_nombreProveedor']               = $value_datosCredenciales['nombre'];
     $_SESSION[$siglaSistema.'_hashUnico']                     = $value_datosCredenciales['hashUnico'];
     $_SESSION[$siglaSistema.'_nivel']                         = $value_datosCredenciales['nivel'];
-    $_SESSION[$siglaSistema.'_email']                         = $value_datosCredenciales['email'];   
+    $_SESSION[$siglaSistema.'_email']                         = $value_datosCredenciales['email'];
   }
 
 
@@ -54,19 +54,19 @@
   $nivelUsuario  = $_SESSION[$siglaSistema.'_nivel'];
   $emailUsuario  = $_SESSION[$siglaSistema.'_email'];
 
-  
+
   $equiposUsuario = [];
   $datosEquipos = $ClassTodas->get_datoVariosWhereOrderInformes("SELECT eq.nombre, eq.id FROM credenciales_equipos as ce LEFT JOIN equipos as eq ON eq.id = ce.id_equipo WHERE ce.id_credencial=$idUsuario");
   foreach ($datosEquipos as $value) {
     array_push($equiposUsuario, $value['id']);
   }
-  
+
   $_SESSION[$siglaSistema.'_equipos'] = $equiposUsuario;
 
   if (!$_SESSION[$siglaSistema.'_login']== 1 && !$_SESSION[$siglaSistema.'_activo']== 1) {
     echo "<script>alert('Usted no está habilitado para usar este sistema. Por favor contacte al administrador de la liga.');location='login.php';</script>";
   }
-  
+
   $ctx = hash_init('sha1');
   hash_update($ctx, 'SGF');
   $hash = hash_final($ctx).date('DdMYHis');
@@ -122,12 +122,12 @@
       <header class="app-header app-header-dark bg-dark">
         <div class="top-bar">
           <div class="top-bar-brand">
-            <button class="hamburger hamburger-squeeze mr-2" type="button" data-toggle="aside-menu" aria-label="toggle aside menu"><span class="hamburger-box"><span class="hamburger-inner"></span></span></button> 
+            <button class="hamburger hamburger-squeeze mr-2" type="button" data-toggle="aside-menu" aria-label="toggle aside menu"><span class="hamburger-box"><span class="hamburger-inner"></span></span></button>
             <a href="index.php"><img src="images/logo-liga-de-naciones.png" alt="Liga de Naciones" height="50"></a>
           </div>
           <div class="top-bar-list">
             <div class="top-bar-item px-2 d-md-none d-lg-none d-xl-none">
-              <button class="hamburger hamburger-squeeze" type="button" data-toggle="aside" aria-label="toggle menu"><span class="hamburger-box"><span class="hamburger-inner"></span></span></button> 
+              <button class="hamburger hamburger-squeeze" type="button" data-toggle="aside" aria-label="toggle menu"><span class="hamburger-box"><span class="hamburger-inner"></span></span></button>
               <a href="index.php" class="navbar-brand ml-3"><img src="images/logo-liga-de-naciones.png" alt="Liga de Naciones" height="50"></a>
             </div>
             <div class="top-bar-item top-bar-item-right px-0 d-flex">
@@ -140,13 +140,13 @@
                 </li>
               </ul>
               <div class="dropdown d-none d-md-flex">
-                <button class="btn-account" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="user-avatar user-avatar-md"><img src="assets/images/avatars/unknown-profile.jpg" alt=""></span> <span class="account-summary pr-lg-4 d-none d-lg-block"><span class="account-name">Hola, <?php echo strtok(ucfirst(strtolower($_SESSION[$siglaSistema.'_nombreProveedor'])), ' '); ?>!</span> <span class="account-description"><?php echo $_SESSION[$siglaSistema.'_rut']."-". $_SESSION[$siglaSistema.'_dv']; ?></span></span></button> 
+                <button class="btn-account" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="user-avatar user-avatar-md"><img src="assets/images/avatars/unknown-profile.jpg" alt=""></span> <span class="account-summary pr-lg-4 d-none d-lg-block"><span class="account-name">Hola, <?php echo strtok(ucfirst(strtolower($_SESSION[$siglaSistema.'_nombreProveedor'])), ' '); ?>!</span> <span class="account-description"><?php echo $_SESSION[$siglaSistema.'_rut']."-". $_SESSION[$siglaSistema.'_dv']; ?></span></span></button>
                 <div class="dropdown-menu">
                   <div class="dropdown-arrow d-lg-none" x-arrow=""></div>
                   <div class="dropdown-arrow ml-3 d-none d-lg-block"></div>
                   <h6 class="dropdown-header d-none d-md-block d-lg-none"> <?php echo $_SESSION[$siglaSistema.'_nombreProveedor']; ?> </h6>
                   <a class="dropdown-item" onclick="alertCambiaPass('credenciales','Debe ingresar una Contraseña numérica de hasta 12 dígitos','<?php echo $idUsuario; ?>')" href="#"><span class="dropdown-icon fa fa-lock"></span> Cambiar Contraseña</a>
-                  <a class="dropdown-item" href="?logout"><span class="dropdown-icon oi oi-account-logout"></span> Salir</a> 
+                  <a class="dropdown-item" href="?logout"><span class="dropdown-icon oi oi-account-logout"></span> Salir</a>
                 </div>
               </div>
             </div>
@@ -156,7 +156,7 @@
       <aside class="app-aside app-aside-expand-md app-aside-light">
         <div class="aside-content">
           <header class="aside-header d-block d-md-none">
-            <button class="btn-account" type="button" data-toggle="collapse" data-target="#dropdown-aside"><span class="user-avatar user-avatar-lg"><img src="assets/images/avatars/unknown-profile.jpg" alt=""></span> <span class="account-icon"><span class="fa fa-caret-down fa-lg"></span></span> <span class="account-summary"><span class="account-name">Hola, <?php echo strtok(ucfirst(strtolower($_SESSION[$siglaSistema.'_nombreProveedor'])), ' '); ?>!</span> <span class="account-description"><?php echo $_SESSION[$siglaSistema.'_rut']."-". $_SESSION[$siglaSistema.'_dv']; ?></span></span></button> 
+            <button class="btn-account" type="button" data-toggle="collapse" data-target="#dropdown-aside"><span class="user-avatar user-avatar-lg"><img src="assets/images/avatars/unknown-profile.jpg" alt=""></span> <span class="account-icon"><span class="fa fa-caret-down fa-lg"></span></span> <span class="account-summary"><span class="account-name">Hola, <?php echo strtok(ucfirst(strtolower($_SESSION[$siglaSistema.'_nombreProveedor'])), ' '); ?>!</span> <span class="account-description"><?php echo $_SESSION[$siglaSistema.'_rut']."-". $_SESSION[$siglaSistema.'_dv']; ?></span></span></button>
             <div id="dropdown-aside" class="dropdown-aside collapse">
               <div class="pb-3">
                 <a class="dropdown-item" onclick="alertCambiaPass('credenciales','Debe ingresar una Contraseña numérica de hasta 12 dígitos','<?php echo $idUsuario; ?>')" href="#"><span class="dropdown-icon fa fa-lock"></span> Cambiar Contraseña</a>
@@ -212,7 +212,7 @@
                       <p  id="sidebar-body"><?php include('includes/debug.php'); ?></p>
                     </div>
                     <footer class="aside-footer border-top p-3">
-                      <button class="btn btn-info btn-block" onclick="btnAsideOpenClose();">Cerrar</button>                      
+                      <button class="btn btn-info btn-block" onclick="btnAsideOpenClose();">Cerrar</button>
                     </footer>
                   </div>
                 </div>
@@ -220,7 +220,7 @@
             </div>
           </div>
         </div>
-      </main> 
+      </main>
     </div>
 
     <div class="modal modal-alert pr-0" id="modalGeneral" tabindex="-1" role="dialog" style="overflow-y: scroll;">
@@ -254,38 +254,32 @@
   </body>
   <script src="assets/vendor/jquery/jquery.min.js"></script>
   <script src="assets/vendor/popper.js/umd/popper.min.js"></script>
-  <script src="assets/vendor/bootstrap/js/bootstrap.min.js"></script> 
+  <script src="assets/vendor/bootstrap/js/bootstrap.min.js"></script>
   <script src="assets/vendor/pace-progress/pace.min.js"></script>
   <script src="assets/vendor/stacked-menu/js/stacked-menu.min.js"></script>
   <script src="assets/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
   <script src="assets/vendor/select2/js/select2.min.js"></script>
   <script src="assets/vendor/select2/js/i18n/es.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8.18.0/dist/sweetalert2.all.min.js"></script> 
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8.18.0/dist/sweetalert2.all.min.js"></script>
   <script src="assets/vendor/moment/min/moment.min.js"></script>
   <script src="https://cdn.datatables.net/w/bs4/jszip-2.5.0/dt-1.10.18/b-1.5.6/b-colvis-1.5.6/b-flash-1.5.6/b-html5-1.5.6/b-print-1.5.6/datatables.min.js"></script>
   <script src="assets/vendor/toastr/build/toastr.min.js"></script>
   <script src="assets/vendor/bootstrap-session-timeout/bootstrap-session-timeout.js"></script>
-  <script src="https://rawgit.com/enyo/dropzone/master/dist/dropzone.js"></script> 
+  <script src="https://rawgit.com/enyo/dropzone/master/dist/dropzone.js"></script>
   <script src="assets/vendor/html2pdf.js/html2pdf.bundle.min.js"></script>
-  <script src="assets/javascript/theme.min.js"></script> 
+  <script src="assets/javascript/theme.min.js"></script>
   <script src="includes/js/main.js?v=<?php echo $hash?>"></script>
   <script>
-    $(document).ready(function(){ 
-      muestraAccesosUsuario("<?php echo $idUsuario; ?>","10");
-      muestraAccesosUsuario("<?php echo $idUsuario; ?>","20");
-      muestraAccesosUsuario("<?php echo $idUsuario; ?>","30");
-      muestraAccesosUsuario("<?php echo $idUsuario; ?>","40");
-      muestraAccesosUsuario("<?php echo $idUsuario; ?>","50");
-      muestraAccesosUsuario("<?php echo $idUsuario; ?>","60");
-      muestraAccesosUsuario("<?php echo $idUsuario; ?>","70");
-      muestraAccesosUsuario("<?php echo $idUsuario; ?>","80");
-      muestraAccesosUsuario("<?php echo $idUsuario; ?>","90");
-      muestraAccesosUsuario("<?php echo $idUsuario; ?>","100");
+    $(document).ready(function(){      
       cargaMenu("<?php echo $idUsuario; ?>");
-      cargaDashBoard();
-    });      
+      <?php if(in_array($nivelUsuario, array(8,9))) { ?>
+        listarJugadores('Listado de Jugadores','<?php echo $idUsuario; ?>','10','2','500');
+      <?php } else { ?>
+        listarJugadores('Listado de Jugadores','<?php echo $idUsuario; ?>','10','2','100');
+      <?php } ?>
+    });
   </script>
-  <?php 
+  <?php
   if ($keepAlive==0) {
   } else {
     $showAlive =<<<EOD

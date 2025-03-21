@@ -153,7 +153,7 @@ class ClassTodas
         $output = preg_replace($search, '', $input);
         return $output;
     }
-    
+
     public function cleanInput_otro($input){
 
         $search = array(
@@ -165,7 +165,7 @@ class ClassTodas
             '@°@si',
             '@`@si',
             '@¬@si'
-            
+
         );
 
         $output = preg_replace($search, '', $input);
@@ -235,7 +235,7 @@ class ClassTodas
 
         $return = false;
         $query = '';
-        //$query = "INSERT INTO $table (id_proceso, rut, sec) VALUES ('$id_proceso','$rut','$sec')";            
+        //$query = "INSERT INTO $table (id_proceso, rut, sec) VALUES ('$id_proceso','$rut','$sec')";
         $query = "SELECT rut, password  FROM $table WHERE rut='$username' and password='$password' and activo=1";
         //echo $query;
         $qry = mysqli_query($this->myconn, $query) or die('Query: ' . $query . '<br>Error validaUserEnter(): ' . mysqli_error($this->myconn));
@@ -315,14 +315,14 @@ class ClassTodas
         return $results;
     }
 
-    public function get_contador($tabla,$where,$order){ 
+    public function get_contador($tabla,$where,$order){
         mysqli_query($this->myconn,"SET NAMES 'utf8'");
         $query = "SELECT COUNT(*) as total FROM $tabla $where $order";
         //$query.='<br>';
         //echo $query.'<br>';
         $qry = mysqli_query($this->myconn,$query);
         $result = mysqli_fetch_array($qry);
-        return $result[0];        
+        return $result[0];
     }
 
     public function get_datoVariosWhereOrder($tabla, $where, $order){
@@ -377,17 +377,17 @@ class ClassTodas
 
     public function actualizaCosasVarias($tabla,$ValorCampoDelId,$campoAcambiar,$nuevoValor,$cualCampoTabla1){
         mysqli_query($this->myconn, "SET NAMES 'utf8'");
-        if (!$cualCampoTabla1) { 
-            $query = "UPDATE  $tabla SET  $campoAcambiar = '$nuevoValor' WHERE id = $ValorCampoDelId"; 
+        if (!$cualCampoTabla1) {
+            $query = "UPDATE  $tabla SET  $campoAcambiar = '$nuevoValor' WHERE id = $ValorCampoDelId";
         } else {
-            $query = "UPDATE  $tabla SET  $campoAcambiar = '$nuevoValor' WHERE idUsuario = $ValorCampoDelId and idModulo='$cualCampoTabla1'"; 
+            $query = "UPDATE  $tabla SET  $campoAcambiar = '$nuevoValor' WHERE idUsuario = $ValorCampoDelId and idModulo='$cualCampoTabla1'";
         }
-              
+
         mysqli_query($this->myconn, "SET NAMES 'utf8'");
         //echo $query.'<br>';
-        $qry = mysqli_query($this->myconn, $query) or die('Error actualizaCosasVarias(): ' . mysqli_error($this->myconn) . "<br> SQL: " . $query); 
+        $qry = mysqli_query($this->myconn, $query) or die('Error actualizaCosasVarias(): ' . mysqli_error($this->myconn) . "<br> SQL: " . $query);
         if($qry){
-            return 1;  
+            return 1;
         } else {
             return 0;
         }
@@ -397,7 +397,7 @@ class ClassTodas
         mysqli_query($this->myconn, "SET NAMES 'utf8'");
         $query = "UPDATE  $tabla SET  $set WHERE $where";
         //echo $query;
-        //return false;      
+        //return false;
         mysqli_query($this->myconn, "SET NAMES 'utf8'");
         $qry = mysqli_query($this->myconn, $query) or die('Error actualizaCosasVariasSetWhere(): ' . mysqli_error($this->myconn) . "<br> SQL: " . $query);
 
@@ -411,7 +411,7 @@ class ClassTodas
     public function insertCosasVarias($tabla, $camposEnTabla, $camposEnviado) {
         mysqli_query($this->myconn, "SET NAMES 'utf8'");
         $query = "INSERT INTO  $tabla ($camposEnTabla) VALUES ($camposEnviado)";
-        //echo $query;      
+        //echo $query;
         mysqli_query($this->myconn, "SET NAMES 'utf8'");
         $qry = mysqli_query($this->myconn, $query) or die('Error insertCosasVarias(): ' . mysqli_error($this->myconn) . "<br> SQL: " . $query);
         if ($qry) {
@@ -424,7 +424,7 @@ class ClassTodas
     public function insertCosasVariasDevuelveId($tabla, $camposEnTabla, $camposEnviado){
         mysqli_query($this->myconn, "SET NAMES 'utf8'");
         $query = "INSERT INTO  $tabla ($camposEnTabla) VALUES ($camposEnviado)";
-        //echo $query;      
+        //echo $query;
         mysqli_query($this->myconn, "SET NAMES 'utf8'");
         $qry = mysqli_query($this->myconn, $query);
         //return mysqli_insert_id($this->myconn);
@@ -474,7 +474,7 @@ class ClassTodas
         $query = '';
         mysqli_query($this->myconn, "SET NAMES 'utf8'");
         $query = "UPDATE $tabla SET  password = $nuevaPass WHERE id = $idUsuario ";
-        //echo $query;      
+        //echo $query;
         $qry = mysqli_query($this->myconn, $query) or die('Error cambiaPassFromCambioContrasenaInicioSistema(): ' . mysqli_error($this->myconn));
         if ($qry) {
             //echo $nuevoValor;
@@ -488,7 +488,7 @@ class ClassTodas
         $query = '';
         mysqli_query($this->myconn, "SET NAMES 'utf8'");
         $query = "DELETE FROM $tabla WHERE $param = $idLinea ";
-        //echo $query;      
+        //echo $query;
         $qry = mysqli_query($this->myconn, $query) or die('Error eliminarLinea(): ' . mysqli_error($this->myconn));
         if ($qry) {
             //echo $nuevoValor;
@@ -516,7 +516,7 @@ class ClassTodas
         } else {
             $query = "DELETE FROM $tabla WHERE $nombreCampo = $idLinea ";
         }
-        //echo $query;      
+        //echo $query;
         $qry = mysqli_query($this->myconn, $query) or die('Error eliminarLinea(): ' . mysqli_error($this->myconn));
         if ($qry) {
             //echo $nuevoValor;
@@ -575,14 +575,14 @@ class ClassTodas
 
     public function CambiaPassword($tabla, $nuevaPass, $idUsuario, $solicitaCambioPass){
         $query = '';
-        mysqli_query($this->myconn, "SET NAMES 'utf8'"); 
+        mysqli_query($this->myconn, "SET NAMES 'utf8'");
         if ($solicitaCambioPass == 1) {
             $query = "UPDATE  $tabla SET  password = '$nuevaPass', pideCambioPass = 1 WHERE  id = '$idUsuario' LIMIT 1 ;";
         } else {
             $query = "UPDATE  $tabla SET  password = '$nuevaPass' WHERE  id = '$idUsuario' LIMIT 1 ;";
         }
-        //echo $query;      
-        mysqli_query($this->myconn, "SET NAMES 'utf8'"); 
+        //echo $query;
+        mysqli_query($this->myconn, "SET NAMES 'utf8'");
         $qry = mysqli_query($this->myconn, $query) or die('Error CambiaPassword - Query: ' . $query . '<br> Error SQL:' . mysqli_error($this->myconn));
         if ($qry) {
             //echo $nuevoValor;
@@ -685,12 +685,12 @@ class ClassTodas
         readfile($fichero);
         exit;
     }
-    
+
     public function verificaRut($table, $rutenviado){
 
         $return = false;
         $query = '';
-        //$query = "INSERT INTO $table (id_proceso, rut, sec) VALUES ('$id_proceso','$rut','$sec')";            
+        //$query = "INSERT INTO $table (id_proceso, rut, sec) VALUES ('$id_proceso','$rut','$sec')";
         $query = "SELECT rut  FROM $table WHERE rut='$rutenviado'";
         //echo $query;
         $qry = mysqli_query($this->myconn, $query); // or die('Error: '.$query.'<br> Error SQL:'.mysqli_error($this->myconn))
@@ -704,13 +704,13 @@ class ClassTodas
             return 0;
         }
     }
-    
+
     public function eliminarArchivosGeneral($nombreArchivo,$directorio){
-        $qry = unlink($directorio.'/'.$nombreArchivo);       
+        $qry = unlink($directorio.'/'.$nombreArchivo);
         if($qry)
         {
           return 1;
-          
+
         } else {
           return 0;
         }
@@ -741,8 +741,8 @@ class ClassTodas
         $dv = $dv == 11 ? 0 : ($dv == 10 ? "K" : $dv);
         return $dv;
     }
-    
-    public function obtener_edad_segun_fecha($fecha_nacimiento){ 
+
+    public function obtener_edad_segun_fecha($fecha_nacimiento){
         $nacimiento = new DateTime($fecha_nacimiento);
         $ahora = new DateTime(date("Y-m-d"));
         $diferencia = $ahora->diff($nacimiento);
@@ -750,7 +750,7 @@ class ClassTodas
         return $diferencia->format("%y");
     }
 
-    public function cambiaf_a_normal($fecha){ 
+    public function cambiaf_a_normal($fecha){
         $dia = substr($fecha, -10, 2);
         $mes = substr($fecha, -7, 2);
         $ano = substr($fecha, -4, 4);
@@ -766,76 +766,76 @@ class ClassTodas
         if ($mes == "10"){ $mes = "Octubre";    }
         if ($mes == "11"){ $mes = "Noviembre";  }
         if ($mes == "12"){ $mes = "Diciembre";  }
-        $lafecha = $dia." de ".$mes." de ".$ano; 
-        return $lafecha; 
-    } 
+        $lafecha = $dia." de ".$mes." de ".$ano;
+        return $lafecha;
+    }
 
-    public function cambiaf_a_normal1($fecha){ 
+    public function cambiaf_a_normal1($fecha){
         $dia = substr($fecha, -2, 2);
         $mes = substr($fecha, -5, 2);
         $ano = substr($fecha, -10, 4);
 
         if ($mes=="01") {
             $mes="Enero";
-        } 
+        }
 
         if ($mes=="02"){
             $mes="Febrero";
-        } 
+        }
         if ($mes=="03"){
             $mes="Marzo";
-        } 
+        }
         if ($mes=="04"){
             $mes="Abril";
-        } 
+        }
         if ($mes=="05"){
             $mes="Mayo";
-        } 
+        }
         if ($mes=="06"){
             $mes="Junio";
-        } 
+        }
         if ($mes=="07"){
             $mes="Julio";
-        } 
+        }
         if ($mes=="08"){
             $mes="Agosto";
-        } 
+        }
         if ($mes=="09"){
             $mes="Septiembre";
-        } 
+        }
         if ($mes=="10"){
             $mes="Octubre";
-        } 
+        }
         if ($mes=="11"){
             $mes="Noviembre";
-        } 
+        }
         if ($mes=="12"){
             $mes="Diciembre";
-        } 
-        $lafecha=$dia." de ".$mes." de ".$ano; 
-        return $lafecha; 
-    } 
+        }
+        $lafecha=$dia." de ".$mes." de ".$ano;
+        return $lafecha;
+    }
 
-    public function cambiaf_a_normal2($fecha){ 
+    public function cambiaf_a_normal2($fecha){
         $lafecha = '';
         if ($fecha !== null) {
             $dia = substr($fecha, -2, 2);
             $mes = substr($fecha, -5, 2);
             $ano = substr($fecha, -10, 4);
-            $lafecha = $dia."-".$mes."-".$ano; 
+            $lafecha = $dia."-".$mes."-".$ano;
         }
 
         return $lafecha;
     }
-    
+
     public function eliminaDatosEnTabla($table,$campoid,$id) {
         $return = false;
         $query = '';
-        $query = "DELETE FROM $table WHERE $campoid='$id' ";            
+        $query = "DELETE FROM $table WHERE $campoid='$id' ";
         $qry = mysqli_query($this->myconn,$query);
-        if($qry){   
+        if($qry){
             return 1;
-        } else {            
+        } else {
             return 0;
         }
     }
@@ -844,7 +844,7 @@ class ClassTodas
 
         $return = false;
         $query = '';
-        //$query = "INSERT INTO $table (id_proceso, rut, sec) VALUES ('$id_proceso','$rut','$sec')";            
+        //$query = "INSERT INTO $table (id_proceso, rut, sec) VALUES ('$id_proceso','$rut','$sec')";
         $query = "SELECT documento FROM $table WHERE documento='$documento'";
         //echo $query;
         $qry = mysqli_query($this->myconn, $query) or die('Query: ' . $query . '<br>Error validaJugador(): ' . mysqli_error($this->myconn));
@@ -857,18 +857,18 @@ class ClassTodas
     }
 
     public function cambiaDiaSemanaAEspanol($DiaSemana) {
-        $find = array('Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'); 
-        $replace = array('Lunes','Martes','Mi&eacute;rcoles','Jueves','Viernes','S&aacute;bado','Domingo'); 
-        return str_replace($find, $replace, $DiaSemana);   
-    } 
+        $find = array('Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday');
+        $replace = array('Lunes','Martes','Mi&eacute;rcoles','Jueves','Viernes','S&aacute;bado','Domingo');
+        return str_replace($find, $replace, $DiaSemana);
+    }
 
-    public function strReplaceAssoc(array $replace, $subject) { 
-        return str_replace(array_keys($replace), array_values($replace), $subject);    
-    } 
+    public function strReplaceAssoc(array $replace, $subject) {
+        return str_replace(array_keys($replace), array_values($replace), $subject);
+    }
 
     public function generaAccesosSistemaFinal($idUsuario){
-        mysqli_query($this->myconn, "SET NAMES 'utf8'"); 
-        $query1 = "INSERT INTO `credenciales_acciones` (`idUsuario`, `idModulo`, `idModuloNombre`, `idModuloSub`, `modulo`, `activo`, `botonVer`, `botonEditar`, `botonAgregar`, `botonEliminar`, `botonImprimir`, `fecha_ingreso_tabla`) VALUES 
+        mysqli_query($this->myconn, "SET NAMES 'utf8'");
+        $query1 = "INSERT INTO `credenciales_acciones` (`idUsuario`, `idModulo`, `idModuloNombre`, `idModuloSub`, `modulo`, `activo`, `botonVer`, `botonEditar`, `botonAgregar`, `botonEliminar`, `botonImprimir`, `fecha_ingreso_tabla`) VALUES
         ('$idUsuario','10', 'Jugadores', '10', 'Jugadores', '1','1', '1', '1', '1', '1', now()),
         ('$idUsuario','10', 'Jugadores', '11', 'Listar Jugadores', '1','1', '1', '1', '1', '1', now()),
         ('$idUsuario','10', 'Jugadores', '12', 'Agregar Jugadores', '1','1', '1', '1', '1', '1', now())
@@ -882,32 +882,32 @@ class ClassTodas
             return 0;
         }
     }
-    
+
     public function enviaCorreoVariosTipos($tipoEnvio,$emailEnviadoUnico,$asuntoEnviado,$bodyEnviado){
-        
+
         $mail = new PHPMailer(true);
 
         if ($tipoEnvio=='recuperarContrasena' || $tipoEnvio=='enviaUsuarioPass') {
             $Subject = $asuntoEnviado;
             $body=$bodyEnviado;
             $mail->AddAddress($emailEnviadoUnico);
-        } 
+        }
 
-        $mail->IsSMTP();  
-        $mail->Subject = $Subject; 
+        $mail->IsSMTP();
+        $mail->Subject = $Subject;
 
         /* SMTP CONFIG */
         try {
-            $mail->CharSet      = "utf8"; 
+            $mail->CharSet      = "utf8";
             $nombre_emisor      = "Liga de Naciones";
-            $correo_emisor      = "no-responder@ligadenaciones.cl";   
+            $correo_emisor      = "no-responder@ligadenaciones.cl";
             $mail->SMTPAuth     = true;
             $mail->SMTPSecure   = "ssl";
             $mail->Host         = "ligadenaciones.cl";
             $mail->Port         = 465;
             $mail->Username     = "no-responder@ligadenaciones.cl";
             $mail->Password     = '?v_A]4z*OaMW';
-            
+
             $mail->SetFrom($correo_emisor, $nombre_emisor);
             $mail->Body = $body;
             $mail->IsHTML(true);
@@ -921,6 +921,6 @@ class ClassTodas
             echo "Error al enviar el mensaje: {$mail->ErrorInfo}";
             return 0;
         }
-    }  
-          
+    }
+
 }

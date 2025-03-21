@@ -1,6 +1,6 @@
 <?php
-  session_start(); 
-  setlocale(LC_TIME, 'spanish');  
+  session_start();
+  setlocale(LC_TIME, 'spanish');
   date_default_timezone_set('America/Santiago');
   $date = date('Y-m-d H:i:s');
   $SOLOdate = date('Y-m-d');
@@ -34,10 +34,10 @@
     }
   $hashUsuario = isset($_SESSION[$siglaSistema.'_hashUnico']) ? $_SESSION[$siglaSistema.'_hashUnico'] : null;
 
-  
+
 // Iniciar Switch
 switch ($type){
-  
+
   default:
     $defaultSistema = <<<EOD
       <!-- PANEL DEFAULT -->
@@ -53,7 +53,7 @@ switch ($type){
     EOD;
     echo $defaultSistema;
   break;
-  
+
   case 'cargaMenu':
     $idUsuario =$_GET['idUsuario'];
     /* RESTRICCIONES DE MENUS */
@@ -80,61 +80,50 @@ switch ($type){
     $admin01='';
     if ($_SESSION[$siglaSistema.'_activo_10_2']=='1') {
       $btnSistema11=<<<EOD
-        <li class="menu-item"> 
+        <li class="menu-item">
           <a href="#" id="listarJugadores" class="menu-link" onclick="listarJugadores('Listado de Jugadores','$idUsuarioGeneral','10','2','100');"> Listado de Jugadores </a>
         </li>
       EOD;
     }
-    if ($_SESSION[$siglaSistema.'_activo_10_3']=='1' && (!empty($equiposUsuarioGeneral) || in_array($nivelUsuarioGeneral, array(8,9)))) {	
+    if ($_SESSION[$siglaSistema.'_activo_10_3']=='1' && (!empty($equiposUsuarioGeneral) || in_array($nivelUsuarioGeneral, array(8,9)))) {
       $btnSistema12=<<<EOD
         <li class="menu-item">
           <a href="#" class="menu-link" onclick="formJugadores('Agregar Jugador', '', 'jugadores', 'agregarJugadores');"> Agregar Jugador</a>
         </li>
       EOD;
-    } 
+    }
     if ($_SESSION[$siglaSistema.'_activo_10_1']=='1') {
       $btnSistema1 =<<<EOD
-        <li id="modulo1" class="menu-item has-child">
+        <li id="modulo1" class="menu-item has-child has-open">
           <a href="#" class="menu-link"><span class="menu-icon fas fa-running"></span><span class="menu-text"> Jugadores</span></a>
           <ul class="menu">
             $btnSistema11
             $btnSistema12
           </ul>
-        </li>   
+        </li>
       EOD;
     }
     if ($_SESSION[$siglaSistema.'_nivel'] == 9 || $_SESSION[$siglaSistema.'_nivel'] == 8) {
       $admin01=<<<EOD
         <li class="menu-header">Administrar </li>
         <li class="menu-item has-child">
-          <a href="#" class="menu-link"><span class="menu-icon fa fa-cog"></span></span> <span class="menu-text"> Ajustes</span></a>
+          <a href="#" class="menu-link" ><span class="menu-icon fa fa-user"></span></span> <span class="menu-text"> Usuarios</span></a>
           <ul class="menu">
-            <li class="menu-item"> 
-              <a href="#" id="opcSeguros" class="menu-link" onclick="opcionesSeguro('Opciones Generales','Todas');">Valor Seguro</span></a>
-            </li> 
-            <li class="menu-item"> 
-              <a href="#" id="reglasnegocio" class="menu-link" onclick="reglasNegocio('Reglas de Negócio');">Reglas de Negócio</a>
-            </li> 
+            <li class="menu-item">
+              <a href="#" id="listarUsuarios" class="menu-link" onclick="credencialesInicio();">Listar Usuarios</a>
+            </li>
+            <li class="menu-item">
+              <a href="#" id="agregarUsuarios" class="menu-link" onclick="credenciales_nuevo('credenciales','Agregar Usuario de Sistema');">Agregar Usuario</a>
+            </li>
           </ul>
         </li>
         <li class="menu-item has-child">
-          <a href="#" class="menu-link" ><span class="menu-icon fa fa-user"></span></span> <span class="menu-text"> Usuarios</span></a>
-          <ul class="menu">
-            <li class="menu-item"> 
-              <a href="#" id="listarUsuarios" class="menu-link" onclick="credencialesInicio();">Listar Usuarios</a>
-            </li> 
-            <li class="menu-item"> 
-              <a href="#" id="agregarUsuarios" class="menu-link" onclick="credenciales_nuevo('credenciales','Agregar Usuario de Sistema');">Agregar Usuario</a>
-            </li> 
-          </ul>
-        </li> 
-        <li class="menu-item has-child">
           <a href="#" class="menu-link"><span class="menu-icon fas fa-futbol"></span></span> <span class="menu-text"> Competiciones</span></a>
           <ul class="menu">
-            <li class="menu-item"> 
+            <li class="menu-item">
               <a href="#" id="listarCompeticiones" class="menu-link" onclick="listarCompeticiones('Listado de Competiciones','$idUsuarioGeneral','','');">Listar Competiciones</a>
             </li>
-            <li class="menu-item"> 
+            <li class="menu-item">
               <a href="#"  class="menu-link" onclick="formCompeticiones('Agregar','','competiciones','agregarCompeticiones');">Agregar Competición</a>
             </li>
           </ul>
@@ -142,30 +131,33 @@ switch ($type){
         <li class="menu-item has-child">
           <a href="#" class="menu-link"><span class="menu-icon fas fa-user-shield"></span></span> <span class="menu-text"> Equipos</span></a>
           <ul class="menu">
-            <li class="menu-item"> 
+            <li class="menu-item">
               <a href="#" id="listarEquipos" class="menu-link" onclick="listarEquipos('Listado de Equipos','$idUsuarioGeneral','','');">Listar Equipos</a>
             </li>
-            <li class="menu-item"> 
+            <li class="menu-item">
               <a href="#" class="menu-link" onclick="formEquipos('Agregar','','equipos','agregarEquipos');">Agregar Equipo</a>
             </li>
           </ul>
         </li>
-        <li class="menu-item"> 
-          <a href="#" class="menu-link" onclick="formSumula('Generar Hoja del Partido');"><span class="menu-icon fa fa-file-excel"></span></span> <span class="menu-text"> Hoja del Partido</span></a>
-        </li> 
         <li class="menu-item has-child">
           <a class="menu-link"><span class="menu-icon fas fa-chart-line"></span></span> <span class="menu-text"> Reportes</span></a>
-          <ul class="menu">           
-            <li class="menu-item"> 
+          <ul class="menu">
+            <li class="menu-item">
+              <a href="#" id="opcSeguros" class="menu-link" onclick="opcionesSeguro('Opciones Generales','Todas');">Valor Seguro</span></a>
+            </li>
+            <li class="menu-item">
               <a href="#" id="reporteInscritos" class="menu-link" onclick="reportesSeguros('Inscritos sin pagos efectuados','1');">Seguro Inscritos</a>
-            </li>  
-            <li class="menu-item"> 
+            </li>
+            <li class="menu-item">
               <a href="#" id="reporteSegurosPagados" class="menu-link" onclick="reportesSeguros('Total de seguros pagados','2');">Seguro Pagados</a>
-            </li> 
-            <li class="menu-item"> 
+            </li>
+            <li class="menu-item">
               <a href="#" id="reporteSaldoSeguro" class="menu-link" onclick="reportesSeguros('Saldo financiero asegurados','3');">Seguro Saldo Financiero </a>
-            </li> 
+            </li>
           </ul>
+        </li>
+        <li class="menu-item">
+          <a href="#" class="menu-link" onclick="formSumula('Generar Hoja del Partido');"><span class="menu-icon fa fa-file-excel"></span></span> <span class="menu-text"> Hoja del Partido</span></a>
         </li>
         <li class="menu-item">
           <a class="menu-link" onclick="importarDB('Importar Jugadores')"><span class="menu-icon fa fa-upload"></span></span> <span class="menu-text"> Carga Masiva</span></a>
@@ -202,9 +194,11 @@ switch ($type){
       $_SESSION[$siglaSistema.'_login']        = 1;
       $_SESSION[$siglaSistema.'_tipoUsuario']  = 0; // 1: interno o 0:externo
       $_SESSION[$siglaSistema.'_rut']          = $limpiaCaracteresEmail;
-      $campos_ingreso = "rutUsuario"; 
+      
+      $campos_ingreso = "rutUsuario";
       $datos_ingreso="'{$limpiaCaracteresEmail}'";
       $ejecuta_ingreso = $ClassTodas->insertCosasVarias('ingresos_sistema',$campos_ingreso,$limpiaCaracteresEmail);
+
       echo 1;
     } else {
       echo 0;
@@ -234,7 +228,7 @@ switch ($type){
       } else {
         $returnRecuperarContrasena = 'yes';
       }
-    }   
+    }
     echo $returnRecuperarContrasena;
   break;
 
@@ -264,7 +258,7 @@ switch ($type){
       $eliminarCredenciales = $ClassTodas->eliminarLinea('credenciales_acciones','idUsuario',$idLinea);
       $eliminarCredenciales = $ClassTodas->eliminarLinea('credenciales_equipos','id_credencial',$idLinea);
       $eliminarLinea_ejecuta = $ClassTodas->eliminarLinea($tabla,'id',$idLinea);
-    }elseif($tabla == 'equipos') {      
+    }elseif($tabla == 'equipos') {
       $eliminarJugadores = $ClassTodas->eliminarLinea('jugadores_equipos','id_equipo',$idLinea);
       $eliminarJugadores = $ClassTodas->eliminarLinea('jugadores','id_equipo',$idLinea);
       $eliminarLinea_ejecuta = $ClassTodas->eliminarLinea($tabla,'id',$idLinea);
@@ -303,7 +297,7 @@ switch ($type){
       $ejSuma = $ejSuma + $ej;
       $count++;
     }
-    if($ejSuma === $count){      
+    if($ejSuma === $count){
       echo 1;
     } else {
       echo 0;
@@ -324,7 +318,7 @@ switch ($type){
     $idLinea = $_GET['idLinea'];
     $valorCheckbox = $_GET['valorCheckbox'];
     if ($valorCheckbox=="true") {$valorCheckbox_num="1";}
-    if ($valorCheckbox=="false") {$valorCheckbox_num="0";} 
+    if ($valorCheckbox=="false") {$valorCheckbox_num="0";}
     $set="{$campoAcambiar}={$valorCheckbox_num}";
     $where="id={$idLinea}";
     $cambioCheckbox_ejecutaResp   = $ClassTodas->actualizaCosasVariasSetWhere($tabla,$set,$where);
@@ -349,7 +343,7 @@ switch ($type){
         if ($nivel == "8") {$nivelTXT='<span class="badge badge-subtle badge-success">Usuario Administrador</span>';}
         if ($nivel == "9") {$nivelTXT='<span class="badge badge-subtle badge-warning">Super Admin</span>';}
         $activo      = $value['activo'];
-        $accesoCreado     = $value['accesoCreado'];    
+        $accesoCreado     = $value['accesoCreado'];
         if ($activo == 1) {
           $imprime_activo=<<<EOD
             <div class="custom-control custom-switch" style="padding-top:5px;">
@@ -387,9 +381,9 @@ switch ($type){
           $showGeneraAccesos =<<<EOD
             <a class="btn btn-sm btn-warning" title="Agregar acceso usuario" alt="Agregar acceso usuario" onclick="generaAccesosSistemaFinal('$id')"><i class="fas fa-lock"></i> Generar Accesos</a>
           EOD;
-        } else { 
+        } else {
           $showGeneraAccesos =<<<EOD
-            <a class="btn btn-sm btn-icon btn-secondary" title="Editar acceso usuario" alt="Editar acceso usuario" onclick="modalEditarDatosUsuarioSistema('Editar acceso usuario','credenciales','$id','accesosUsuarios')"><i class="fas fa-lock"></i></a> 
+            <a class="btn btn-sm btn-icon btn-secondary" title="Editar acceso usuario" alt="Editar acceso usuario" onclick="modalEditarDatosUsuarioSistema('Editar acceso usuario','credenciales','$id','accesosUsuarios')"><i class="fas fa-lock"></i></a>
             <a class="btn btn-sm btn-icon btn-secondary" title="Enviar Contraseña" alt="Enviar Contraseña" onclick="enviarCorreoVarios('credenciales',$id,'$email','deCredenciales')"><i class="far fa-paper-plane"></i></a>
             <a class="btn btn-sm btn-icon btn-secondary" title="Editar usuario" alt="Editar usuario" onclick="credenciales_editar('credenciales','Editar Usuarios del Sistema','$id')"><i class="fa fa-edit"></i></a>
             <a class="btn btn-sm btn-icon btn-secondary" title="Eliminar línea usuario" alt="Eliminar línea usuario" title="ELIMINAR" onclick="eliminarLinea('credenciales','$id');"><i class="far fa-trash-alt"></i></a>
@@ -414,7 +408,7 @@ switch ($type){
             <td>$equiposUsuario</td>
             <td>$nivelTXT</td>
             <td nowrap class="text-center">$imprime_activo</td>
-            <td nowrap class="text-center">   
+            <td nowrap class="text-center">
               $showGeneraAccesos
             </td>
           </tr>
@@ -422,11 +416,11 @@ switch ($type){
       }
     }
     $tabla_credencialesInicio =<<<EOD
-      <div class="col-12 d-flex mb-3 justify-content-end">       
+      <div class="col-12 d-flex mb-3 justify-content-end">
         <button type="button" class="btn btn-primary btn-lg" title="Agregar" onclick="credenciales_nuevo('credenciales','Agregar Usuarios del Sistema');"><i class="fas fa-plus pr-1"></i>Agregar Usuario</button>
       </div>
       <div class="table-responsive-lg">
-        <table class="table  table-condensed table-bordered table-sm table-striped input-group-reflow no-footer" id="tablacredencialesInicio">
+        <table class="table table-condensed table-bordered table-striped table-sm font-size-sm w-100" id="tablacredencialesInicio">
               <thead>
                 <tr>
                   <th hidden>Id</th>
@@ -518,11 +512,11 @@ switch ($type){
       $buscaDatosEquipos = $ClassTodas->get_datoVariosWhereOrder('equipos','','ORDER BY nombre ASC');
       foreach ($buscaDatosEquipos as $value) {
         $id_equipo            = $value['id'];
-        $nombreEquipo         = $value['nombre']; 
-        $id_compet            = $value['id_competicion']; 
+        $nombreEquipo         = $value['nombre'];
+        $id_compet            = $value['id_competicion'];
         $buscaDatosCompet = $ClassTodas->get_datoVariosWhereOrder('competiciones','WHERE id='.$id_compet,'ORDER BY nombre ASC');
         foreach ($buscaDatosCompet as $value) {
-          $nombreCompet         = $value['nombre']; 
+          $nombreCompet         = $value['nombre'];
         }
         $valoresOptEquipos .= "<option value='$id_equipo'>$nombreEquipo ($nombreCompet)</option>";
       }
@@ -545,7 +539,7 @@ switch ($type){
             <input type="text" class="form-control text-uppercase" id="inputNuevo_nombre" name="inputNuevo_nombre" placeholder="Nombre completo" disabled>
             <div class="custom-control custom-checkbox pt-1">
               <input type="checkbox" class="custom-control-input" id="desbloqueaNombre"> <label class="custom-control-label" for="desbloqueaNombre"> Desbloquear</label>
-            </div>        
+            </div>
             </div>
           </div>
         </div>
@@ -557,7 +551,7 @@ switch ($type){
           <div class="col-12 col-md-6 mb-3">
             <label>Contraseña (12 dígitos) <abbr title="Required">*</abbr></label>
             <input type="text" class="form-control" id="inputNuevo_pass" placeholder="Contraseña" required maxlength="12" onkeypress="return permite(event, 'num');" value="$passwordInicial">
-          </div> 
+          </div>
         </div>
         <div class="form-row">
           <div class="col-12 col-md-6 mb-3">
@@ -607,7 +601,7 @@ switch ($type){
     $verificaRUTCred      = $ClassTodas->verificaRut('credenciales',$inputNuevo_rut);
 
     if($verificaRUTCred == 0) {
-      $campos = "rut,dv,nombre,email,password,nivel,hashUnico,pideCambioPass"; 
+      $campos = "rut,dv,nombre,email,password,nivel,hashUnico,pideCambioPass";
       $datos="'{$inputNuevo_rut}','{$inputNuevo_dv}','{$inputNuevo_nombre}','{$inputNuevo_email}','{$inputNuevo_pass}','{$inputNuevo_nivel}','{$inputNuevo_hash}','1'";
       $getIDadded = $ClassTodas->insertCosasVariasDevuelveId($tabla,$campos,$datos);
 
@@ -618,10 +612,10 @@ switch ($type){
           $ejecutaCP = 1;
         } else {
           foreach ($getArrayEquipos as $key => $value) {
-            $campos2 = "id_credencial,id_equipo"; 
+            $campos2 = "id_credencial,id_equipo";
             $datos2 = "'{$getIDadded}','{$value}'";
-            $ejecutaCP = $ClassTodas->insertCosasVarias('credenciales_equipos',$campos2,$datos2);    
-          } 
+            $ejecutaCP = $ClassTodas->insertCosasVarias('credenciales_equipos',$campos2,$datos2);
+          }
         }
         echo $ejecutaCP;
       }
@@ -669,7 +663,7 @@ switch ($type){
             $optEmptyAgrega = '<option></option>';
           }
           $option_nivel_getAN .=<<<EOD
-            <option value="$key" $nivelSeleccionado>$key - $valueNiveles</option>        
+            <option value="$key" $nivelSeleccionado>$key - $valueNiveles</option>
           EOD;
         }
       }
@@ -691,7 +685,7 @@ switch ($type){
           $valoresOptEquiposSel .=<<<EOD
             <option value="$id_gp2" selected>$nombre_gp2</option>
           EOD;
-        } 
+        }
         $valoresOptEquipos .=<<<EOD
           <option value="$id_gp2">$nombre_gp2</option>
         EOD;
@@ -727,7 +721,7 @@ switch ($type){
             </div>
             <div class="col-12 col-md-6 mb-3">
               <label>Nombre</label>
-                <input type="text" class="form-control text-uppercase" id="inputNuevo_nombre" name="inputNuevo_nombre" placeholder="Nombre completo" disabled value="$nombre_get">       
+                <input type="text" class="form-control text-uppercase" id="inputNuevo_nombre" name="inputNuevo_nombre" placeholder="Nombre completo" disabled value="$nombre_get">
               </div>
             </div>
           </div>
@@ -739,9 +733,9 @@ switch ($type){
             <div class="col-12 col-md-6 mb-3">
               <label>Contraseña (12 dígitos) <abbr title="Required">*</abbr></label>
               <input type="text" class="form-control" id="inputNuevo_pass" placeholder="Contraseña" required maxlength="12" onkeypress="return permite(event, 'num');" value="$password_get">
-            </div>  
+            </div>
           </div>
-          <div class="form-row">  
+          <div class="form-row">
             <div class="col-12 col-12 col-md-6 mb-3">
               <label>Nivel <abbr title="Required">*</abbr></label>
                 <select class="form-control custom-select" id="inputNuevo_nivel" name="inputNuevo_nivel" required="">
@@ -773,7 +767,7 @@ switch ($type){
     }
     echo $imprime_credenciales_nuevo;
   break;
-  
+
   case 'credenciales_editarEjecuta':
     $tabla              = $_GET['tabla'];
     $inputNuevo_rut     = $_GET['inputNuevo_rut'];
@@ -793,10 +787,10 @@ switch ($type){
     if($ejecutaCE == 1){
       $eliminaEquipos = $ClassTodas->eliminarLinea('credenciales_equipos','id_credencial',$idUsuario);
       foreach ($getArrayEquipos as $key => $value) {
-        $campos2 = "id_credencial,id_equipo"; 
+        $campos2 = "id_credencial,id_equipo";
         $datos2 = "'{$idUsuario}','{$value}'";
-        $ejecutaCP = $ClassTodas->insertCosasVarias('credenciales_equipos',$campos2,$datos2);    
-      } 
+        $ejecutaCP = $ClassTodas->insertCosasVarias('credenciales_equipos',$campos2,$datos2);
+      }
       echo 1;
     } else {
       echo 0;
@@ -846,7 +840,7 @@ switch ($type){
       foreach($competicionesActivas as $row){
         $competInactivas .='<li><strong>'.$row['nombre'].'</strong>';
       }
-    } 
+    }
 
     $competicionesTodas = $ClassTodas->get_datoVariosWhereOrder('competiciones','','');
     if($competicionesTodas){
@@ -859,7 +853,7 @@ switch ($type){
         $añoMenos = $anio - $edadMinima_compet;
         $edadMinima .='<li><strong>'.$nombre_compet.'</strong> - '.$añoMenos.' ('.$edadMinima_compet.'+)';
       }
-    } 
+    }
 
     $resumenDashboard =<<<EOD
       <div class="row">
@@ -901,7 +895,7 @@ switch ($type){
       echo '<h5 class="text-danger mb-0">Error en los datos enviados para la consulta</h5>';
       exit;
     }
-    
+
     if ($_SESSION[$siglaSistema.'_botonVer_'.$idModulo.'_'.$countSubModulo] == 1) {$classVer = "";} else {$classVer="hidden";}
     if ($_SESSION[$siglaSistema.'_botonEditar_'.$idModulo.'_'.$countSubModulo] == 1) {$classEditar = "";} else {$classEditar="hidden";}
     if ($_SESSION[$siglaSistema.'_botonAgregar_'.$idModulo.'_'.$countSubModulo] == 1) {$classAgregar = "";} else {$classAgregar="hidden";}
@@ -918,7 +912,7 @@ switch ($type){
       foreach($datosEquipos as $value){
         array_push($arrayEquipos, $value['id_equipo']);
       }
-      //Prepara array para SQL    
+      //Prepara array para SQL
       $equiposUsuario = implode("', '", $arrayEquipos);
       $equiposUsuario = "'" . $equiposUsuario . "'";
     }
@@ -938,10 +932,10 @@ switch ($type){
             <button id="btnCantities" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Filtrar por cantidad</button>
             <div class="dropdown-menu" aria-labelledby="btnCantities" style="">
               <div class="dropdown-arrow"></div>
-              <a type="button" class="dropdown-item" href="#" onclick="listarJugadores('Listado de Jugadores','$idUsuarioGeneral','10','2','250');">Últimos 250 creados</a> 
-              <a type="button" class="dropdown-item" href="#" onclick="listarJugadores('Listado de Jugadores','$idUsuarioGeneral','10','2','500');">Últimos 500 creados</a> 
-              <a type="button" class="dropdown-item" href="#" onclick="listarJugadores('Listado de Jugadores','$idUsuarioGeneral','10','2','1000');">Últimos 1000 creados</a> 
-              <a type="button" class="dropdown-item" href="#" onclick="listarJugadores('Listado de Jugadores','$idUsuarioGeneral','10','2','Todos');">Todos</a> 
+              <a type="button" class="dropdown-item" href="#" onclick="listarJugadores('Listado de Jugadores','$idUsuarioGeneral','10','2','250');">Últimos 250 creados</a>
+              <a type="button" class="dropdown-item" href="#" onclick="listarJugadores('Listado de Jugadores','$idUsuarioGeneral','10','2','500');">Últimos 500 creados</a>
+              <a type="button" class="dropdown-item" href="#" onclick="listarJugadores('Listado de Jugadores','$idUsuarioGeneral','10','2','1000');">Últimos 1000 creados</a>
+              <a type="button" class="dropdown-item" href="#" onclick="listarJugadores('Listado de Jugadores','$idUsuarioGeneral','10','2','Todos');">Todos</a>
             </div>
           </div>
         </div>
@@ -971,12 +965,12 @@ switch ($type){
         $asegurado              = $value['asegurado'];
         $segModPor              = $value['segModPor'];
         $fechaSegMod            = $value['fechaSegMod'];
-        if($asegurado == 0){ 
-          $aseguradoSelected0 = 'selected'; 
-          $aseguradoSelected1 = ''; 
-        } elseif($asegurado == 1) { 
-          $aseguradoSelected0 = ''; 
-          $aseguradoSelected1 = 'selected'; 
+        if($asegurado == 0){
+          $aseguradoSelected0 = 'selected';
+          $aseguradoSelected1 = '';
+        } elseif($asegurado == 1) {
+          $aseguradoSelected0 = '';
+          $aseguradoSelected1 = 'selected';
         }
         $edadJugador            = $ClassTodas->obtener_edad_segun_fecha($fnacimiento);
 
@@ -1005,10 +999,10 @@ switch ($type){
           $tdAsegurado =<<<EOD
             <td class="align-middle">$segModPor</td>
             <td class="align-middle">$fechaSegMod</td>
-            <td class="align-middle">  
+            <td class="align-middle">
               <div class="flex-nowrap input-group input-group-alt">
-              
-                <select id="aseguradoValue_$id_jg" class="form-control custom-select" style="width:60px" disabled>              
+
+                <select id="aseguradoValue_$id_jg" class="form-control custom-select" style="width:60px" disabled>
                   <option value="1" $aseguradoSelected1>Sí</option>
                   <option value="0" $aseguradoSelected0>No</option>
                 </select>
@@ -1016,13 +1010,13 @@ switch ($type){
                   <span class="input-group-text cursor-pointer bg-primary text-white" id="btnEditarAsegurado_$id_jg" onclick="habilitaGuardarAsegurado('$id_jg')"><i class="fa fa-edit"></i></span>
                   <span class="input-group-text cursor-pointer bg-primary text-white" id="btnGuardarAsegurado_$id_jg" onclick="guardarAseguradoDato('$id_jg')" style="display: none;"><i class="fa fa fa-save"></i></span>
                 </div>
-              </div>   
+              </div>
             </td>
           EOD;
           $thAsegurado = '<th style="width: 100px;">Modif. Por</th><th style="width: 100px;">Fecha modif.</th><th style="width: 100px;">Asegurado?</th>';
         }
         $datosTabla .=<<<EOD
-          <tr id="tr_$id_jg">  
+          <tr id="tr_$id_jg">
             <td class="align-middle text-center">$count</td>
             <td class="align-middle text-center"><img id="fotoJugador_$id_jg" class="img-fluid" src="images/jugadores/$foto" alt="$foto" style="height: 70px;"></td>
             <td class="align-middle text-left">$nombre $apellido</td>
@@ -1033,7 +1027,7 @@ switch ($type){
             <td class="align-middle text-center">$nombreNacion</td>
             <td class="align-middle text-center $displayJugadores">$fecha_creacion</td>
             $tdAsegurado
-            <td class="align-middle text-center"> 
+            <td class="align-middle text-center">
               <a id="editarLinea_$id_jg" class="btn btn-sm btn-icon btn-secondary" onclick="formJugadores('Editar','$id_jg','jugadores','editarJugadores')" $classEditar><i class="fa fa-edit"></i></a>
               <a class="btn btn-sm btn-icon btn-secondary" onclick="eliminarLinea('jugadores','$id_jg')" $classEliminar><i class="far fa-trash-alt"></i></a>
             </td>
@@ -1044,14 +1038,14 @@ switch ($type){
     $tablaDatosJugadores =<<<EOD
       $filtrosPreElegidos
       <div class="table-responsive">
-        <table class="table  table-condensed table-bordered table-sm table-striped font-size-sm" id="tablaAdministraJugadores">
+        <table class="table table-condensed table-bordered table-striped table-sm font-size-sm w-100" id="tablaAdministraJugadores">
           <thead>
             <tr style="height: 55px;">
               <th>Nº</th>
               <th style="width: 100px;">Foto Documento</th>
               <th>Nombre</th>
               <th>Documento</th>
-              <th>Fecha Nacimiento</th>                
+              <th>Fecha Nacimiento</th>
               <th>Equipo</th>
               <th>Posición</th>
               <th>Nacionalidad</th>
@@ -1066,7 +1060,7 @@ switch ($type){
         </table>
       </div>
     EOD;
-    echo $tablaDatosJugadores;  
+    echo $tablaDatosJugadores;
   break;
 
   case 'formJugadores':
@@ -1097,7 +1091,7 @@ switch ($type){
         $tipoDoc                = $value['tipoDoc'];
         $documento              = $value['documento'];
         $fnacimiento            = $value['fnacimiento'];
-        $posicion               = $value['posicion'];        
+        $posicion               = $value['posicion'];
         $nacionalidad           = $value['nacionalidad'];
         $email                  = $value['email'];
         $celular                = $value['celular'];
@@ -1106,7 +1100,7 @@ switch ($type){
         $asegurado              = $value['asegurado'];
         $selectAsegurado0       = ($asegurado == 0) ? 'selected' : '';
         $selectAsegurado1       = ($asegurado == 1) ? 'selected' : '';
-        
+
         $arrayEquipos = array();
         $datosEquipos = $ClassTodas->get_datoVariosWhereOrder('credenciales_equipos','WHERE id_credencial='.$idUsuarioGeneral,'');
         if($datosEquipos){
@@ -1122,7 +1116,7 @@ switch ($type){
         } else {
           $gp2 = $ClassTodas->get_datoVariosWhereOrder('equipos','WHERE id IN('.$equiposUsuario.')','');
         }
-        
+
         $arrayEquiposJugador = array();
         $datosEquiposJugador = $ClassTodas->get_datoVariosWhereOrder('jugadores_equipos','WHERE id_jugador='.$id,'');
         if(!empty($datosEquiposJugador)){
@@ -1165,34 +1159,34 @@ switch ($type){
 
           } else {
             $valoresOptTipo .= '<option value="'.$row.'">'.$row.'</option>';
-          }          
+          }
         }
-        
+
 
       }
-      
+
       $traeNacionalidades    = $ClassTodas->get_datoVariosWhereOrder('nacionalidades', '', 'ORDER BY nombre');
       foreach ($traeNacionalidades as $value) {
         $idNacion                  = $value['id'];
-        $nacionNombre              = $value['nombre']; 
-        if ($nacionalidad == $idNacion) {            
-          $nacionSeleccionada = "selected"; 
+        $nacionNombre              = $value['nombre'];
+        if ($nacionalidad == $idNacion) {
+          $nacionSeleccionada = "selected";
         } else {
           $nacionSeleccionada =  "";
           $optEmptyAgrega = '<option></option>';
-        } 
+        }
         $valoresOptionNacion .= "<option value='$idNacion' $nacionSeleccionada>$nacionNombre</option>";
       }
       $traePosiciones    = $ClassTodas->get_datoVariosWhereOrder('posiciones', '', 'ORDER BY id');
       foreach ($traePosiciones as $value) {
         $idPosicion                  = $value['id'];
-        $nombrePosicion              = $value['nombre']; 
-        if ($posicion == $idPosicion) {            
-          $posicionSeleccionada = "selected"; 
+        $nombrePosicion              = $value['nombre'];
+        if ($posicion == $idPosicion) {
+          $posicionSeleccionada = "selected";
         } else {
           $posicionSeleccionada =  "";
           $optEmptyAgrega = '<option></option>';
-        } 
+        }
         $valoresOptionPosicion .= "<option value='$idPosicion' $posicionSeleccionada>$nombrePosicion</option>";
       }
       $datosFotoJugadores =<<<EOD
@@ -1203,7 +1197,7 @@ switch ($type){
               <img class="img-fluid" src="images/jugadores/$foto" title="$foto">
               <figcaption class="figure-caption">
                 <h6 class="figure-title text-center mb-2">$foto</h6>
-                <input type="hidden" name="fotoID" id="fotoID" value="$foto"> 
+                <input type="hidden" name="fotoID" id="fotoID" value="$foto">
               </figcaption>
             </figure>
             <button type="button" class="btn btn-secondary font-size-sm" onclick="modalCambiaFoto('$id_jg','Cambiar Imagen','foto');"> Cambiar Imagen</button>
@@ -1214,7 +1208,7 @@ switch ($type){
       $datosFooterJugadores =<<<EOD
           <button type="button" class="btn btn-primary btn-block" onclick="guardarEditaJugadores('$id_jg','jugadores','editarJugadores')"><i class="far fa-save"></i> Guardar</button>
       EOD;
-    } 
+    }
     if ($tipo == 'agregarJugadores') {
       $nombre = $apellido = $fnacimiento = $documento = $email = $celular = '';
       $optEmptyAgrega = '<option></option>';
@@ -1253,13 +1247,13 @@ switch ($type){
       $traeNacionalidades    = $ClassTodas->get_datoVariosWhereOrder('nacionalidades', '', 'ORDER BY nombre');
       foreach ($traeNacionalidades as $value) {
         $idNacion                  = $value['id'];
-        $nombreNacion              = $value['nombre']; 
+        $nombreNacion              = $value['nombre'];
         $valoresOptionNacion .= "<option value='$idNacion'>$nombreNacion</option>";
       }
       $traePosiciones    = $ClassTodas->get_datoVariosWhereOrder('posiciones', '', 'ORDER BY id');
       foreach ($traePosiciones as $value) {
         $idPosicion                  = $value['id'];
-        $nombrePosicion              = $value['nombre']; 
+        $nombrePosicion              = $value['nombre'];
         $valoresOptionPosicion .= "<option value='$idPosicion'>$nombrePosicion</option>";
       }
 
@@ -1272,14 +1266,14 @@ switch ($type){
           <div class="col-12 col-md-12">
             <div class="form-group">
               <h6>Foto Documento</h6>
-              <form action="upload.php" class="dropzone fileinput-dropzone border-info mb-3" id="dropzonewidget"></form> 
-              <div id="inputNames"></div>          
-            </div> 
+              <form action="upload.php?type=fotoJugador" class="dropzone fileinput-dropzone border-info mb-3" id="dropzonewidget"></form>
+              <div id="inputNames"></div>
+            </div>
           </div>
         </div>
-        <script>  
+        <script>
           Dropzone.autoDiscover = false;
-            var myDropzone = new Dropzone(".dropzone", { 
+            var myDropzone = new Dropzone(".dropzone", {
              autoProcessQueue: true,
              dictDefaultMessage:"<h5>Haga clic o arrastre aquí su documento</h5>",
              dictInvalidFileType:"Extensión Incorrecta",
@@ -1287,13 +1281,13 @@ switch ($type){
              paramName: "file",
              maxFilesize: 0.5,
              parallelUploads: 1,
-             acceptedFiles: "image/*",              
+             acceptedFiles: "image/*",
              init: function ()  {
                this.on("error", function (file, message) {
                    notifica('error','El archivo pesa más que el maximo permitido de 500kb.');
                    this.removeFile(file);
-               }); 
-             },              
+               });
+             },
              renameFile: function (file) {
                let newName = new Date().getTime() + '_' + file.name.replace(/ /g, "_");
                $('#inputNames').append('<input type="hidden" class="form-control mb-1" id="fotoID" name="" disabled value="' + newName + '">');
@@ -1321,13 +1315,13 @@ switch ($type){
               <small id="" class="form-text text-muted">Indique si jugador tiene seguro.</small>
               <div class="invalid-feedback"> Ingrese este Campo. </div>
             </div>
-          </div>           
+          </div>
         </div>
         <div id="containerJugadoresSeguros"></div>
       EOD;
     } else {
       $adminPartOfForm = '';
-    }   
+    }
     $formJugadores =<<<EOD
       <form class="form-horizontal pt-2 needs-validation" role="form" id="formContratoID">
         <div class="form-row">
@@ -1337,7 +1331,7 @@ switch ($type){
                 <input class="form-control" type="text" id="nombreID" name="nombreID" placeholder="" value="$nombre" required>
                 <small id="" class="form-text text-muted">Indique el nombre.</small>
                 <div class="invalid-feedback"> Ingrese este Campo. </div>
-              </div> 
+              </div>
             </div>
             <div class="col-12 col-md-4">
               <div class="form-group">
@@ -1345,7 +1339,7 @@ switch ($type){
                 <input class="form-control" type="text" id="apellidoID" name="apellidoID" placeholder="" value="$apellido" required>
                 <small id="" class="form-text text-muted">Indique el apellido.</small>
                 <div class="invalid-feedback"> Ingrese este Campo. </div>
-              </div> 
+              </div>
             </div>
             <div class="col-12 col-md-4">
               <div class="form-group mb-2">
@@ -1353,26 +1347,26 @@ switch ($type){
                 <input class="form-control" type="date" id="fnacimientoID" name="fnacimientoID" placeholder="" value="$fnacimiento" required>
                 <small id="" class="form-text text-muted">Indique la fecha de nacimiento.</small>
                 <div class="invalid-feedback"> Ingrese este Campo. </div>
-              </div> 
+              </div>
             </div>
           </div>
         <div class="form-row">
-          <div class="col-12 col-md-4">              
+          <div class="col-12 col-md-4">
             <div class="form-group">
               <label>Tipo Doc. (Rut, Pass., Identidad) <abbr title="Required">*</abbr></label>
               <select class="form-control" id="tipoDocumentoID" name="tipoDocumentoID" onchange="formatearDocumento()" required="" $disabled>
                 $valoresOptTipo
               </select>
               <small id="" class="form-text text-muted">Indique el tipo de documento.</small>
-              <div class="invalid-feedback"> Ingrese este Campo. </div>                       
+              <div class="invalid-feedback"> Ingrese este Campo. </div>
             </div>
           </div>
-          <div class="col-12 col-md-4">              
+          <div class="col-12 col-md-4">
             <div class="form-group">
               <label>Documento (Rut, Pass., DNI) <abbr title="Required">*</abbr></label>
               <input maxlength="9" class="form-control" type="text" id="documentoID" name="documentoID" value="$documento" required="" onkeypress="return permite(event, 'num_car_vip');" onblur="formatearDocumento()" $disabled>
               <small id="" class="form-text text-muted">Indique un Rut, Pasaporte, DNI válido.</small>
-              <div class="invalid-feedback"> Ingrese este Campo. </div>                       
+              <div class="invalid-feedback"> Ingrese este Campo. </div>
             </div>
           </div>
           <div class="col-12 col-md-4">
@@ -1385,7 +1379,7 @@ switch ($type){
               </select>
               <small id="" class="form-text text-muted">Indique uno o más equipos.</small>
               <div class="invalid-feedback"> Ingrese este Campo. </div>
-            </div> 
+            </div>
           </div>
         </div>
         <div class="form-row">
@@ -1398,7 +1392,7 @@ switch ($type){
               </select>
               <small id="" class="form-text text-muted">Indique la posición.</small>
               <div class="invalid-feedback"> Ingrese este Campo. </div>
-            </div> 
+            </div>
           </div>
           <div class="col-12 col-md-4">
             <div class="form-group">
@@ -1409,7 +1403,7 @@ switch ($type){
               </select>
               <small id="" class="form-text text-muted">Indique la nacionalidad.</small>
               <div class="invalid-feedback"> Ingrese este Campo. </div>
-            </div> 
+            </div>
           </div>
           <div class="col-12 col-md-4">
             <div class="form-group">
@@ -1417,9 +1411,9 @@ switch ($type){
               <input class="form-control" type="email" id="emailID" name="emailID" placeholder="" value="$email">
               <small id="" class="form-text text-muted">Indique el e-mail.</small>
               <div class="invalid-feedback"> Ingrese este Campo. </div>
-            </div> 
+            </div>
           </div>
-        </div> 
+        </div>
         <div class="form-row">
           <div class="col-12 col-md-4">
             <div class="form-group">
@@ -1427,19 +1421,19 @@ switch ($type){
               <input class="form-control" type="text" id="celularID" name="celularID" placeholder="" maxlength="13" value="$celular" onkeypress="return permite(event, 'num');">
               <small id="" class="form-text text-muted">Indique el celular, formato ej.: 56978762996.</small>
               <div class="invalid-feedback"> Ingrese este Campo. </div>
-            </div> 
+            </div>
           </div>
         </div>
-        $adminPartOfForm  
+        $adminPartOfForm
       </form>
       $datosFotoJugadores
-      $datosFooterJugadores    
+      $datosFooterJugadores
     EOD;
     echo $formJugadores;
   break;
 
   case 'guardarEditaJugadores':
-    $maxJugadores                 = 30; 
+    $maxJugadores                 = 30;
     $opcion                       = $_GET['opcion'];
     $tabla                        = $_GET['tabla'];
     $idRecibido                   = $_GET['idRecibido'];
@@ -1453,9 +1447,10 @@ switch ($type){
     $nacionalidadID               = mb_strtoupper($_GET['nacionalidadID']);
     $fotoID                       = $_GET['fotoID'];
     $emailID                      = $_GET['emailID'];
-    $celularID                    = $_GET['celularID'];   
-    $aseguradoID                  = isset($_GET['aseguradoID']) ?? null; 
+    $celularID                    = $_GET['celularID'];
+    $aseguradoID                  = isset($_GET['aseguradoID']) ?? null;
     $arrayRespuestas              = array();
+    $equiposAgregados = '';
 
     if($opcion == 'editarJugadores'){
       $verificaDoc = 0;
@@ -1468,7 +1463,7 @@ switch ($type){
         $documentoID = $prefixNacion.'I'.$documentoID;
         $documentoID = mb_strtoupper($documentoID);
       }
-      $verificaDoc = $ClassTodas->validaJugador('jugadores',$documentoID); 
+      $verificaDoc = $ClassTodas->validaJugador('jugadores',$documentoID);
     }
     //Verifica si jugador existe en BD
     if($verificaDoc == 1){
@@ -1476,7 +1471,7 @@ switch ($type){
     } else {
       //Validación Competición, Maximo Jugador, Edad Minima
       if(!empty($getArrayEquipos)) {
-        foreach($getArrayEquipos as $row) {      
+        foreach($getArrayEquipos as $row) {
           $buscaEq = $ClassTodas->get_datoVariosWhereOrder('equipos','WHERE id='.$row,'');
           $nombreEquipo = $buscaEq[0][2];
           $totalJugadores = $ClassTodas->get_contador('jugadores as jg','LEFT JOIN jugadores_equipos as jge ON jg.id = jge.id_jugador WHERE jge.id_equipo='.$row.' AND jg.activo = 1','');
@@ -1492,8 +1487,8 @@ switch ($type){
               } else {
                 $maxJugadores = ($id_compet == 3) ? 16 : 30; //Si Competición igual Futbolito(3), maximo es 16 jugadores
                 if($totalJugadores >= $maxJugadores){//Valida maximo jugadores por equipo
-                  $arrayRespuestas[$nombreEquipo] = "0"; 
-                } else {                  
+                  $arrayRespuestas[$nombreEquipo] = "0";
+                } else {
                   $añoActual = date('Y');
                   $anio = date("Y", strtotime($fnacimientoID));
                   $añoMenos = $añoActual - $anio;
@@ -1512,32 +1507,32 @@ switch ($type){
       //Verifica Validación y confirma cambios
       $arrayParaEnviar = array();
       $sonTodosUnos = true; // Asumimos que todos los valores son 1 inicialmente
-  
+
       foreach ($arrayRespuestas as $clave => $valor) {
         if ($valor !== '1') {
           $sonTodosUnos = false; // Si encontramos un valor que no es 1, cambiamos la bandera
           break; // No es necesario seguir comprobando el resto del array
         }
       }
-      
+
       if ($sonTodosUnos) {
-          $equiposAgregados = '';
           foreach($arrayRespuestas as $key => $value){
             $equiposAgregados .= $key.', ';
           }
           $equiposAgregados = substr($equiposAgregados, 0, -2);
+          
           if($opcion == 'editarJugadores'){
             $setJugadores = "nombre='{$nombreID}',apellido='{$apellidoID}',fnacimiento='{$fnacimientoID}',posicion='{$posicionID}',nacionalidad='{$nacionalidadID}',email='{$emailID}',celular='{$celularID}',foto='{$fotoID}',modificadoPor='{$nombreUsuarioGeneral}',fechaModificacion='{$date}'";
             $whereJugadores = "id={$idRecibido}";
             $actualizaJugadores = $ClassTodas->actualizaCosasVariasSetWhere($tabla,$setJugadores,$whereJugadores);
-      
+
             if($actualizaJugadores == 1){
               if(empty($equiposUsuarioGeneral)){
                 $eliminaEquipos = $ClassTodas->eliminarLinea('jugadores_equipos','id_jugador',$idRecibido);
                 foreach ($getArrayEquipos as $key => $value) {
-                  $campos2 = "id_jugador,id_equipo"; 
+                  $campos2 = "id_jugador,id_equipo";
                   $datos2 = "'{$idRecibido}','{$value}'";
-                  $ejecutaCP = $ClassTodas->insertCosasVarias('jugadores_equipos',$campos2,$datos2);    
+                  $ejecutaCP = $ClassTodas->insertCosasVarias('jugadores_equipos',$campos2,$datos2);
                 }
                 $arrayRespuestas[$row] = "1";
               } else {
@@ -1545,25 +1540,29 @@ switch ($type){
                   //agrega equipos a jugadores sin borrar los que ya tiene
                   $getEquiposJugador = $ClassTodas->get_datoVariosWhereOrder('jugadores_equipos','WHERE id_jugador="'.$idRecibido.'" AND id_equipo="'.$value.'"','');
                   if(empty($getEquiposJugador)){
-                    $campos2 = "id_jugador,id_equipo"; 
+                    $campos2 = "id_jugador,id_equipo";
                     $datos2 = "'{$idRecibido}','{$value}'";
-                    $ejecutaCP = $ClassTodas->insertCosasVarias('jugadores_equipos',$campos2,$datos2);  
-                  }  
+                    $ejecutaCP = $ClassTodas->insertCosasVarias('jugadores_equipos',$campos2,$datos2);
+                  }
                 }
                 $arrayRespuestas[$row] = "1";
               }
             }
-            $arrayParaEnviar['mensaje'] = "Jugador actualizado en:<br>$equiposAgregados";          
+            if(in_array($nivelUsuarioGeneral, array(8,9))){              
+              $arrayParaEnviar['mensaje'] = "Jugador actualizado.";
+            } else {              
+              $arrayParaEnviar['mensaje'] = "Jugador actualizado en:<br>$equiposAgregados";
+            }
             $arrayParaEnviar['tipo'] = 'success';
             $arrayParaEnviar['principal'] = '¡Éxito!';
-  
-          } elseif($opcion == 'agregarJugadores'){          
+
+          } elseif($opcion == 'agregarJugadores'){
             if($aseguradoID == 1) {
-              $camposIngresaJugadores = "nombre,apellido,tipoDoc,documento,fnacimiento,posicion,nacionalidad,email,celular,foto,asegurado,modificadoPor,fechaModificacion,segModPor,fechaSegMod"; 
-              $datosIngresaJugadores  = "'{$nombreID}','{$apellidoID}','{$tipoDocumentoID}','{$documentoID}','{$fnacimientoID}','{$posicionID}','{$nacionalidadID}','{$emailID}','{$celularID}','{$fotoID}','{$aseguradoID}','{$nombreUsuarioGeneral}','{$date}','{$nombreUsuarioGeneral}','{$date}'"; 
+              $camposIngresaJugadores = "nombre,apellido,tipoDoc,documento,fnacimiento,posicion,nacionalidad,email,celular,foto,asegurado,modificadoPor,fechaModificacion,segModPor,fechaSegMod";
+              $datosIngresaJugadores  = "'{$nombreID}','{$apellidoID}','{$tipoDocumentoID}','{$documentoID}','{$fnacimientoID}','{$posicionID}','{$nacionalidadID}','{$emailID}','{$celularID}','{$fotoID}','{$aseguradoID}','{$nombreUsuarioGeneral}','{$date}','{$nombreUsuarioGeneral}','{$date}'";
             } else {
-              $camposIngresaJugadores = "nombre,apellido,tipoDoc,documento,fnacimiento,posicion,nacionalidad,email,celular,foto,asegurado,modificadoPor,fechaModificacion"; 
-              $datosIngresaJugadores  = "'{$nombreID}','{$apellidoID}','{$tipoDocumentoID}','{$documentoID}','{$fnacimientoID}','{$posicionID}','{$nacionalidadID}','{$emailID}','{$celularID}','{$fotoID}','{$aseguradoID}','{$nombreUsuarioGeneral}','{$date}'"; 
+              $camposIngresaJugadores = "nombre,apellido,tipoDoc,documento,fnacimiento,posicion,nacionalidad,email,celular,foto,asegurado,modificadoPor,fechaModificacion";
+              $datosIngresaJugadores  = "'{$nombreID}','{$apellidoID}','{$tipoDocumentoID}','{$documentoID}','{$fnacimientoID}','{$posicionID}','{$nacionalidadID}','{$emailID}','{$celularID}','{$fotoID}','{$aseguradoID}','{$nombreUsuarioGeneral}','{$date}'";
             }
             if(empty($getArrayEquipos)){
               $arrayParaEnviar['mensaje'] = "Ocurrió un problema al agregar, por favor agregar el jugador a al menos un equipo.";
@@ -1573,9 +1572,9 @@ switch ($type){
               $ingresaJugadores = $ClassTodas->insertCosasVariasDevuelveId($tabla,$camposIngresaJugadores,$datosIngresaJugadores);
               if($ingresaJugadores >= 1){
                 foreach ($getArrayEquipos as $key => $value) {
-                  $campos2 = "id_jugador,id_equipo"; 
+                  $campos2 = "id_jugador,id_equipo";
                   $datos2 = "'{$ingresaJugadores}','{$value}'";
-                  $ejecutaCP = $ClassTodas->insertCosasVarias('jugadores_equipos',$campos2,$datos2);    
+                  $ejecutaCP = $ClassTodas->insertCosasVarias('jugadores_equipos',$campos2,$datos2);
                 }
                 $arrayRespuestas[$row] = "1";
               }
@@ -1598,10 +1597,10 @@ switch ($type){
           }
         }
         if($opcion == 'editarJugadores'){
-          $arrayParaEnviar['mensaje'] = "Ocurrió un problema al editar, por favor verificar el mensaje abajo:<br>$equiposAgregados";          
+          $arrayParaEnviar['mensaje'] = "Ocurrió un problema al editar, por favor verificar el mensaje abajo:<br>$equiposAgregados";
           $arrayParaEnviar['tipo'] = 'error';
           $arrayParaEnviar['principal'] = 'Error';
-  
+
         } elseif($opcion == 'agregarJugadores'){
           $arrayParaEnviar['mensaje'] = "Ocurrió un problema al agregar, por favor verificar el mensaje abajo:<br>$equiposAgregados";
           $arrayParaEnviar['tipo'] = 'error';
@@ -1610,7 +1609,7 @@ switch ($type){
       }
       header('Content-Type: application/json');
       echo json_encode($arrayParaEnviar);
-    }  
+    }
   break;
 
   case 'modalEditarDatosUsuarioSistema':
@@ -1626,7 +1625,7 @@ switch ($type){
       $dv                   = $value['dv'];
       $nombre               = $value['nombre'];
       $password             = $value['password'];
-      $email                = $value['email'];  
+      $email                = $value['email'];
       $nivel                = $value['nivel'];
       $estado               = $value['activo'];
     }
@@ -1666,37 +1665,37 @@ switch ($type){
               <td>$idModuloSub: $modulo <span style="float: right;" id="respuestaCambiaAccesosChkbox"></span></td>
               <td class="text-center">
                 <label class="switcher-control switcher-control-success">
-                  <input type="checkbox" class="switcher-input" id="botonHabilitar_$idLinea001" name="activo" title="Activar/Desactivar" alt="Activar/Desactivar" onChange="cambiaStateCheckbox('cambiaAccesos','#botonHabilitar_$idLinea001','credenciales_acciones','$idLinea001','activo')" $botonActivoChk> 
+                  <input type="checkbox" class="switcher-input" id="botonHabilitar_$idLinea001" name="activo" title="Activar/Desactivar" alt="Activar/Desactivar" onChange="cambiaStateCheckbox('cambiaAccesos','#botonHabilitar_$idLinea001','credenciales_acciones','$idLinea001','activo')" $botonActivoChk>
                   <span class="switcher-indicator"></span>
                 </label>
               </td>
               <td class="text-center">
                 <label class="switcher-control switcher-control-success">
-                  <input type="checkbox" class="switcher-input" id="botonVer_{$idLinea001}" name="botonVer" title="Activar/Desactivar" alt="Activar/Desactivar" onChange="cambiaStateCheckbox('cambiaAccesos','#botonVer_{$idLinea001}','credenciales_acciones','$idLinea001','botonVer')" $botonVerChk> 
+                  <input type="checkbox" class="switcher-input" id="botonVer_{$idLinea001}" name="botonVer" title="Activar/Desactivar" alt="Activar/Desactivar" onChange="cambiaStateCheckbox('cambiaAccesos','#botonVer_{$idLinea001}','credenciales_acciones','$idLinea001','botonVer')" $botonVerChk>
                   <span class="switcher-indicator"></span>
                 </label>
               </td>
               <td class="text-center">
                 <label class="switcher-control switcher-control-success">
-                  <input type="checkbox" class="switcher-input" id="botonEditar_{$idLinea001}" name="botonEditar" title="Activar/Desactivar" alt="Activar/Desactivar" onChange="cambiaStateCheckbox('cambiaAccesos','#botonEditar_{$idLinea001}','credenciales_acciones','$idLinea001','botonEditar')" $botonEditarChk> 
+                  <input type="checkbox" class="switcher-input" id="botonEditar_{$idLinea001}" name="botonEditar" title="Activar/Desactivar" alt="Activar/Desactivar" onChange="cambiaStateCheckbox('cambiaAccesos','#botonEditar_{$idLinea001}','credenciales_acciones','$idLinea001','botonEditar')" $botonEditarChk>
                   <span class="switcher-indicator"></span>
                 </label>
               </td>
               <td class="text-center">
                 <label class="switcher-control switcher-control-success">
-                  <input type="checkbox" class="switcher-input" id="botonAgregar_{$idLinea001}" name="botonAgregar" title="Activar/Desactivar" alt="Activar/Desactivar" onChange="cambiaStateCheckbox('cambiaAccesos','#botonAgregar_{$idLinea001}','credenciales_acciones','$idLinea001','botonAgregar')" $botonAgregarChk> 
+                  <input type="checkbox" class="switcher-input" id="botonAgregar_{$idLinea001}" name="botonAgregar" title="Activar/Desactivar" alt="Activar/Desactivar" onChange="cambiaStateCheckbox('cambiaAccesos','#botonAgregar_{$idLinea001}','credenciales_acciones','$idLinea001','botonAgregar')" $botonAgregarChk>
                   <span class="switcher-indicator"></span>
                 </label>
               </td>
               <td class="text-center">
                 <label class="switcher-control switcher-control-success">
-                  <input type="checkbox" class="switcher-input" id="botonEliminar_{$idLinea001}" name="botonEliminar" title="Activar/Desactivar" alt="Activar/Desactivar" onChange="cambiaStateCheckbox('cambiaAccesos','#botonEliminar_{$idLinea001}','credenciales_acciones','$idLinea001','botonEliminar')" $botonEliminarChk> 
+                  <input type="checkbox" class="switcher-input" id="botonEliminar_{$idLinea001}" name="botonEliminar" title="Activar/Desactivar" alt="Activar/Desactivar" onChange="cambiaStateCheckbox('cambiaAccesos','#botonEliminar_{$idLinea001}','credenciales_acciones','$idLinea001','botonEliminar')" $botonEliminarChk>
                   <span class="switcher-indicator"></span>
                 </label>
               </td>
               <td class="text-center">
                 <label class="switcher-control switcher-control-success">
-                  <input type="checkbox" class="switcher-input" id="botonImprimir_{$idLinea001}" name="botonImprimir" title="Activar/Desactivar" alt="Activar/Desactivar" onChange="cambiaStateCheckbox('cambiaAccesos','#botonImprimir_{$idLinea001}','credenciales_acciones','$idLinea001','botonImprimir')" $botonImprimirChk> 
+                  <input type="checkbox" class="switcher-input" id="botonImprimir_{$idLinea001}" name="botonImprimir" title="Activar/Desactivar" alt="Activar/Desactivar" onChange="cambiaStateCheckbox('cambiaAccesos','#botonImprimir_{$idLinea001}','credenciales_acciones','$idLinea001','botonImprimir')" $botonImprimirChk>
                   <span class="switcher-indicator"></span>
                 </label>
               </td>
@@ -1707,7 +1706,7 @@ switch ($type){
       $tablaResumenAccesosSistemas =<<<EOD
         <h6 class="py-3">ID: <span class="font-weight-normal"> $idDeLaTabla</span><br>Nombre: <span class="font-weight-normal"> $nombre</span></h6>
         <div class="table-responsive">
-          <table class="table table-condensed table-sm table-bordered table-striped input-group-reflow no-footer" id="tablaResumenAccesosSistemas">
+          <table class="table table-condensed table-bordered table-striped table-sm font-size-sm w-100" id="tablaResumenAccesosSistemas">
             <thead>
               <tr>
                 <th>ID</th>
@@ -1715,37 +1714,37 @@ switch ($type){
                 <th>SubMenú</th>
                 <th class="text-center">
                   <label class="list-group-item custom-control custom-checkbox">
-                    <input id="marcaTodos_activo" type="checkbox" class="custom-control-input" onChange="marcaTodos('#marcaTodos_activo','Activo','{$id_acceso}','activo')"> 
+                    <input id="marcaTodos_activo" type="checkbox" class="custom-control-input" onChange="marcaTodos('#marcaTodos_activo','Activo','{$id_acceso}','activo')">
                     <span class="custom-control-label"><br>Todos</span>
                   </label> Activo
                 </th>
                 <th class="text-center">
                   <label class="list-group-item custom-control custom-checkbox">
-                    <input id="marcaTodos_ver" type="checkbox" class="custom-control-input" onChange="marcaTodos('#marcaTodos_ver','Ver','{$id_acceso}','botonVer')"> 
+                    <input id="marcaTodos_ver" type="checkbox" class="custom-control-input" onChange="marcaTodos('#marcaTodos_ver','Ver','{$id_acceso}','botonVer')">
                     <span class="custom-control-label"><br>Todos</span>
                   </label> Ver
                 </th>
                 <th class="text-center">
                   <label class="list-group-item custom-control custom-checkbox">
-                    <input id="marcaTodos_editar" type="checkbox" class="custom-control-input" onChange="marcaTodos('#marcaTodos_editar','Editar','{$id_acceso}','botonEditar')"> 
+                    <input id="marcaTodos_editar" type="checkbox" class="custom-control-input" onChange="marcaTodos('#marcaTodos_editar','Editar','{$id_acceso}','botonEditar')">
                     <span class="custom-control-label"><br>Todos</span>
                   </label> Editar
                 </th>
                 <th class="text-center">
                   <label class="list-group-item custom-control custom-checkbox">
-                    <input id="marcaTodos_agregar" type="checkbox" class="custom-control-input" onChange="marcaTodos('#marcaTodos_agregar','Agregar','{$id_acceso}','botonAgregar')"> 
+                    <input id="marcaTodos_agregar" type="checkbox" class="custom-control-input" onChange="marcaTodos('#marcaTodos_agregar','Agregar','{$id_acceso}','botonAgregar')">
                     <span class="custom-control-label"><br>Todos</span>
                   </label> Agregar
                 </th>
                 <th class="text-center">
                   <label class="list-group-item custom-control custom-checkbox">
-                    <input id="marcaTodos_eliminar" type="checkbox" class="custom-control-input" onChange="marcaTodos('#marcaTodos_eliminar','Eliminar','{$id_acceso}','botonEliminar')"> 
+                    <input id="marcaTodos_eliminar" type="checkbox" class="custom-control-input" onChange="marcaTodos('#marcaTodos_eliminar','Eliminar','{$id_acceso}','botonEliminar')">
                     <span class="custom-control-label"><br>Todos</span>
                   </label> Eliminar
                 </th>
                 <th class="text-center">
                   <label class="list-group-item custom-control custom-checkbox">
-                    <input id="marcaTodos_imprimir" type="checkbox" class="custom-control-input" onChange="marcaTodos('#marcaTodos_imprimir','Imprimir','{$id_acceso}','botonImprimir')"> 
+                    <input id="marcaTodos_imprimir" type="checkbox" class="custom-control-input" onChange="marcaTodos('#marcaTodos_imprimir','Imprimir','{$id_acceso}','botonImprimir')">
                     <span class="custom-control-label"><br>Todos</span>
                   </label> Imprimir
                 </th>
@@ -1780,7 +1779,7 @@ switch ($type){
     if ($tipo== 'cambiaAccesos') {
       $setCambiaChkBox          = "{$nombreCampo}='{$estadoNuevo}'";
       $whereCambiaChkBox        = "id={$idLinea}";
-      $actualizaCambiaChkBox    = $ClassTodas->actualizaCosasVariasSetWhere($tabla,$setCambiaChkBox,$whereCambiaChkBox);  
+      $actualizaCambiaChkBox    = $ClassTodas->actualizaCosasVariasSetWhere($tabla,$setCambiaChkBox,$whereCambiaChkBox);
     }
     echo $actualizaCambiaChkBox;
   break;
@@ -1793,7 +1792,7 @@ switch ($type){
     $nombreBoton = $_GET['nombreBoton'];
     $setCambiaChkBox          = "$nombreBoton='{$estadoNuevo}'";
     $whereCambiaChkBox        = "idUsuario={$idUsuario}";
-    $actualizaCambiaChkBox    = $ClassTodas->actualizaCosasVariasSetWhere('credenciales_acciones',$setCambiaChkBox,$whereCambiaChkBox);  
+    $actualizaCambiaChkBox    = $ClassTodas->actualizaCosasVariasSetWhere('credenciales_acciones',$setCambiaChkBox,$whereCambiaChkBox);
     echo $actualizaCambiaChkBox;
   break;
 
@@ -1802,13 +1801,13 @@ switch ($type){
     $numFoto = $_GET['numFoto'];
     $formCambiaFoto =<<<EOD
       <div class="col-md-12 mt-2 mb-4">
-        <h6>Subir foto documento</h6> 
-        <form action="upload.php" class="dropzone fileinput-dropzone border-info mb-3" id='importaArchivosAbd'></form>
+        <h6>Subir foto documento</h6>
+        <form action="upload.php?type=fotoJugador" class="dropzone fileinput-dropzone border-info mb-3" id='importaArchivosAbd'></form>
         <h6>Nombre:</h6>
         <div id="inputNames" class="py-2"></div>
         <script>
-        Dropzone.autoDiscover = false;      
-        var myDropzone = new Dropzone(".dropzone", { 
+        Dropzone.autoDiscover = false;
+        var myDropzone = new Dropzone(".dropzone", {
           autoProcessQueue: true,
           dictDefaultMessage:"<h5>Haga clic o arrastre aquí su documento</h5>",
           dictInvalidFileType:"Extensión Incorrecta",
@@ -1821,20 +1820,20 @@ switch ($type){
             this.on("error", function (file, message) {
                 notifica('error',message);
                 this.removeFile(file);
-            });   
+            });
           },
           renameFile: function (file) {
             let newName = new Date().getTime() + '_' + file.name.replace(/ /g, "_");
             $('#inputNames').append('<input type="text" class="form-control mb-1" id="fotoID" name="" disabled value="' + newName + '">');
             return newName;
-          },        
+          },
         });
       </script>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="far fa-times-circle"></i> Cerrar</button>
         <button type="button" class="btn btn-primary" id="btnGuardarFoto" onclick="guardaFotoCambiada('$idRecibido','foto')"><i class="far fa-save"></i> Guardar</button>
-      </div>   
+      </div>
     EOD;
     echo $formCambiaFoto;
   break;
@@ -1862,9 +1861,9 @@ switch ($type){
     echo $eliminaFotoQuery;
   break;
 
-  case 'formSumula':    
-    $optionEquipos             = ''; 
-    $optionCompeticiones       = ''; 
+  case 'formSumula':
+    $optionEquipos             = '';
+    $optionCompeticiones       = '';
     $buscaDatosEquipos = $ClassTodas->get_datoVariosWhereOrder('equipos','','');
     foreach ($buscaDatosEquipos as $value){
       $id_Equipo = $value['id'];
@@ -1890,7 +1889,7 @@ switch ($type){
             </select>
             <small id="" class="form-text text-muted">Elija la competición referente a este partido.</small>
             <div class="invalid-feedback"> Ingrese este Campo. </div>
-          </div> 
+          </div>
         </div>
       </div>
       <div class="form-row">
@@ -1903,7 +1902,7 @@ switch ($type){
             </select>
             <small id="" class="form-text text-muted">Elija el equipo casa.</small>
             <div class="invalid-feedback"> Ingrese este Campo. </div>
-          </div> 
+          </div>
         </div>
         <div class="col-12 col-md-6">
           <div class="form-group">
@@ -1914,7 +1913,7 @@ switch ($type){
             </select>
             <small id="" class="form-text text-muted">Elija el equipo visitante.</small>
             <div class="invalid-feedback"> Ingrese este Campo. </div>
-          </div> 
+          </div>
         </div>
       </div>
       <div class="form-row">
@@ -1924,9 +1923,9 @@ switch ($type){
             <input type="date" class="form-control" id="fechaSumID" name="fechaSumID" required>
             <small id="" class="form-text text-muted">Elija la fecha del partido.</small>
             <div class="invalid-feedback"> Ingrese este Campo. </div>
-          </div> 
+          </div>
         </div>
-      </div>    
+      </div>
       <div class="form-row">
         <div class="col-12 col-md-12">
           <div class="form-group">
@@ -1934,9 +1933,9 @@ switch ($type){
             <input type="number" class="form-control" id="jornadaSumID" name="jornadaSumID" required>
             <small id="" class="form-text text-muted">Elija la jornada del partido.</small>
             <div class="invalid-feedback"> Ingrese este Campo. </div>
-          </div> 
+          </div>
         </div>
-      </div> 
+      </div>
       <div class="form-row">
         <div class="col-12 col-md-12">
           <div class="form-group">
@@ -1953,9 +1952,9 @@ switch ($type){
             </select>
             <small id="" class="form-text text-muted">Elija el tipo de jornada.</small>
             <div class="invalid-feedback"> Ingrese este Campo. </div>
-          </div> 
+          </div>
         </div>
-      </div>    
+      </div>
       <div class="form-row">
         <div class="col-12 col-md-12">
           <div class="form-group">
@@ -1963,9 +1962,9 @@ switch ($type){
             <input type="number" class="form-control" id="canchaSumID" name="canchaSumID" maxlength="2" required>
             <small id="" class="form-text text-muted">Elija la cancha del partido.</small>
             <div class="invalid-feedback"> Ingrese este Campo. </div>
-          </div> 
+          </div>
         </div>
-      </div>    
+      </div>
       <div class="form-row">
         <div class="col-12 col-md-12">
           <div class="form-group">
@@ -1973,7 +1972,7 @@ switch ($type){
             <input type="time" class="form-control" id="horaPartidoSumID" name="horaPartidoSumID" required>
             <small id="" class="form-text text-muted">Elija la hora del partido.</small>
             <div class="invalid-feedback"> Ingrese este Campo. </div>
-          </div> 
+          </div>
         </div>
       </div>
       </form>
@@ -1996,7 +1995,7 @@ switch ($type){
   case 'generaSumula':
     $equipo1SumID              = $_GET['equipo1SumID'];
     $equipo2SumID              = $_GET['equipo2SumID'];
-    $fechaSumID                = $ClassTodas->cambiaf_a_normal2($_GET['fechaSumID']);  
+    $fechaSumID                = $ClassTodas->cambiaf_a_normal2($_GET['fechaSumID']);
     $jornadaSumID              = $_GET['jornadaSumID'];
     $canchaSumID               = $_GET['canchaSumID'];
     $competSumID               = $_GET['competSumID'];
@@ -2008,7 +2007,7 @@ switch ($type){
     $buscaDatosEquipos1 = $ClassTodas->get_datoVariosWhereOrder('equipos','WHERE id='.$equipo1SumID,'');
     foreach ($buscaDatosEquipos1 as $value){
       $nombre_Equipo1 = $value['nombre'];
-    }    
+    }
     $buscaDatosEquipos2 = $ClassTodas->get_datoVariosWhereOrder('equipos','WHERE id='.$equipo2SumID,'');
     foreach ($buscaDatosEquipos2 as $value){
       $nombre_Equipo2 = $value['nombre'];
@@ -2025,18 +2024,18 @@ switch ($type){
       $yearNacimiento = date('Y', strtotime($fnacimiento_Jugador1));
       $yearNow = date('Y', strtotime($SOLOdate));
       $edadNow = $yearNow - $yearNacimiento;
-      $buscaEquipo = $ClassTodas->get_datoVariosWhereOrder('equipos','WHERE id='.$equipo1SumID,'');  
+      $buscaEquipo = $ClassTodas->get_datoVariosWhereOrder('equipos','WHERE id='.$equipo1SumID,'');
       foreach ($buscaEquipo as $value1) {
         $idCompet_BE1 = $value1['id_competicion'];
       }
       $bgSeguro = '';
       $txtSeguro = '';
       $suspendidoSeguro1 = '';
-      if($asegurado_Jugador1 == 0 && $idCompet_BE1 != 3 && $idCompet_BE1 != 5 && $idCompet_BE1 != 7) {        
+      if($asegurado_Jugador1 == 0 && $idCompet_BE1 != 3 && $idCompet_BE1 != 5 && $idCompet_BE1 != 7) {
         $bgSeguro = 'background-color: #a9a9a9;';
         $txtSeguro = 'text-decoration: line-through;font-weight: bold;';
         $suspendidoSeguro1 = '<span class="font-weight: bold;">NO ASEGURADO</span>';
-      } 
+      }
       $trDatosJugadores1 .=<<<EOD
         <tr id="tr1_$countJugadores1" style="$bgSeguro">
           <td class="text-center cursor-pointer" onclick="pintaSuspendido('$countJugadores1','1');">$countJugadores1</td>
@@ -2063,18 +2062,18 @@ switch ($type){
       $yearNacimiento = date('Y', strtotime($fnacimiento_Jugador2));
       $yearNow = date('Y', strtotime($SOLOdate));
       $edadNow = $yearNow - $yearNacimiento;
-      $buscaEquipo = $ClassTodas->get_datoVariosWhereOrder('equipos','WHERE id='.$equipo2SumID,'');  
+      $buscaEquipo = $ClassTodas->get_datoVariosWhereOrder('equipos','WHERE id='.$equipo2SumID,'');
       foreach ($buscaEquipo as $value1) {
         $idCompet_BE2 = $value1['id_competicion'];
       }
       $bgSeguro2 = '';
       $txtSeguro2 = '';
       $suspendidoSeguro2 = '';
-      if($asegurado_Jugador2 == 0 && $idCompet_BE2 != 3 && $idCompet_BE2 != 5 && $idCompet_BE2 != 7) {        
+      if($asegurado_Jugador2 == 0 && $idCompet_BE2 != 3 && $idCompet_BE2 != 5 && $idCompet_BE2 != 7) {
         $bgSeguro2 = 'background-color: #a9a9a9;';
         $txtSeguro2 = 'text-decoration: line-through;font-weight: bold;';
         $suspendidoSeguro2 = '<span class="font-weight: bold;">NO ASEGURADO</span>';
-      } 
+      }
       $trDatosJugadores2 .=<<<EOD
         <tr id="tr2_$countJugadores2" style="$bgSeguro2">
           <td class="text-center cursor-pointer" onclick="pintaSuspendido('$countJugadores2','2');">$countJugadores2</td>
@@ -2128,8 +2127,8 @@ switch ($type){
     // BUSCAR JOGADORES 2 - ID, NOMBRE, NUMERO, MAX 30
     $equipo1SumID       = $_GET['equipo1SumID'];
     $equipo2SumID       = $_GET['equipo2SumID'];
-    $fechaSumIDSinTrab  = $_GET['fechaSumID'];  
-    $fechaSumID         = $ClassTodas->cambiaf_a_normal2($fechaSumIDSinTrab);  
+    $fechaSumIDSinTrab  = $_GET['fechaSumID'];
+    $fechaSumID         = $ClassTodas->cambiaf_a_normal2($fechaSumIDSinTrab);
     $jornadaSumID       = $_GET['jornadaSumID'];
     $canchaSumID        = $_GET['canchaSumID'];
     $competSumID        = $_GET['competSumID'];
@@ -2160,7 +2159,7 @@ switch ($type){
     EOD;
     if($tipoJornadaID == 'octavos'){
       $tipoPartidoTxt = '<h6 class="text-center text-uppercase mb-0 mt-2">Octavos de Final</h6>';
-      
+
     } elseif($tipoJornadaID == 'cuartos'){
       $tipoPartidoTxt = '<h6 class="text-center text-uppercase mb-0 mt-2">Cuartos de Final</h6>';
     } elseif($tipoJornadaID == 'semis'){
@@ -2202,17 +2201,17 @@ switch ($type){
             $casillerosPartidoLocalTxt
           </div>
           <div class="col-4">
-            $tipoPartidoTxt 
-            <h6 class="text-center mb-0"><b>Fecha: $fechaSumID - Horario: $horaPartidoSumID</b></h6> 
-            <h6 class="text-center mb-0"><b>Jornada: $jornadaSumID - Cancha: $canchaSumID - $competSumID</b></h6> 
+            $tipoPartidoTxt
+            <h6 class="text-center mb-0"><b>Fecha: $fechaSumID - Horario: $horaPartidoSumID</b></h6>
+            <h6 class="text-center mb-0"><b>Jornada: $jornadaSumID - Cancha: $canchaSumID - $competSumID</b></h6>
           </div>
           <div class="col-4">
             $casillerosPartidoVisitaTxt
             <img class="float-right" src="images/logo-liga-de-naciones.png" alt="" height="50">
           </div>
         </div>
-        <div class="row" style="min-width: 768px;"> 
-          <div class="col-6"> 
+        <div class="row" style="min-width: 768px;">
+          <div class="col-6">
             <table class="table font-size-xs tabla-personalizada">
               <thead class="text-uppercase text-nowrap bg-gray">
                 <tr style="border-bottom: 0 !important;">
@@ -2241,7 +2240,7 @@ switch ($type){
               </tbody>
             </table>
           </div>
-          <div class="col-6"> 
+          <div class="col-6">
             <table class="table font-size-xs tabla-personalizada">
               <thead class="text-uppercase text-nowrap bg-gray">
                 <tr style="border-bottom: 0 !important;">
@@ -2270,7 +2269,7 @@ switch ($type){
               </tbody>
             </table>
           </div>
-          <div class="col-4"> 
+          <div class="col-4">
             <table class="table font-size-xs tabla-personalizada">
               <thead class="text-uppercase text-nowrap bg-gray">
                 <tr style="border-bottom: 0 !important;">
@@ -2290,7 +2289,7 @@ switch ($type){
               </tbody>
             </table>
           </div>
-          <div class="col-8"> 
+          <div class="col-8">
             <table class="table font-size-xs tabla-personalizada">
               <thead class="text-uppercase text-nowrap bg-gray">
                 <tr style="border-bottom: 0 !important;">
@@ -2320,17 +2319,17 @@ switch ($type){
     } else {
       foreach ($buscaDatosCompeticiones as $value) {
           $id_Compet              = $value['id'];
-          $nombre_Compet          = $value['nombre'];        
-          $edadMinima_Compet      = $value['edadMinima'];        
-          $activo_Compet          = $value['activo'];        
-          $fcreacion_Compet       = $value['fecha_creacion'];   
+          $nombre_Compet          = $value['nombre'];
+          $edadMinima_Compet      = $value['edadMinima'];
+          $activo_Compet          = $value['activo'];
+          $fcreacion_Compet       = $value['fecha_creacion'];
           if ($activo_Compet == 1) {
             $checkedOrNot = 'checked';
           } else {
             $checkedOrNot = '';
           }
           $datosTabla .=<<<EOD
-            <tr id="tr_$id_Compet">              
+            <tr id="tr_$id_Compet">
               <td class="align-middle">$nombre_Compet</td>
               <td class="align-middle">
                 <div class="custom-control custom-switch">
@@ -2340,7 +2339,7 @@ switch ($type){
               </td>
               <td class="align-middle">$edadMinima_Compet</td>
               <td class="align-middle">$fcreacion_Compet</td>
-              <td class="align-middle text-center"> 
+              <td class="align-middle text-center">
                 <a id="editarLinea_$id_Compet" class="btn btn-sm btn-icon btn-secondary" onclick="formCompeticiones('Editar','$id_Compet','competiciones','editarCompeticiones')"><i class="fa fa-edit"></i></a>
               </td>
             </tr>
@@ -2348,11 +2347,11 @@ switch ($type){
           }
       }
       $tablaDatosJugadores =<<<EOD
-        <div class="col-12 d-flex mb-3 justify-content-end">       
+        <div class="col-12 d-flex mb-3 justify-content-end">
           <button type="button" class="btn btn-primary btn-lg" title="Agregar" onclick="formCompeticiones('Agregar','','competiciones','agregarCompeticiones');"><i class="fas fa-plus pr-1"></i>Agregar Competición</button>
         </div>
         <div class="table-responsive">
-          <table class="table  table-condensed table-bordered table-sm table-striped input-group-reflow no-footer" id="tablaAdministraCompeticiones">
+          <table class="table table-condensed table-bordered table-striped table-sm font-size-sm w-100" id="tablaAdministraCompeticiones">
             <thead>
               <tr>
                 <th>Nombre</th>
@@ -2368,9 +2367,9 @@ switch ($type){
           </table>
         </div>
       EOD;
-    echo $tablaDatosJugadores;  
+    echo $tablaDatosJugadores;
   break;
-  
+
   case 'formCompeticiones':
     $tipo                = $_GET['tipo'];
     $id                  = $_GET['id'];
@@ -2390,7 +2389,7 @@ switch ($type){
       $datosFooterCompet =<<<EOD
           <button type="button" class="btn btn-primary btn-block" onclick="guardarEditaCompeticiones('$id_compet','competiciones','editarCompeticiones')"><i class="far fa-save"></i> Guardar</button>
       EOD;
-    } 
+    }
     if ($tipo == 'agregarCompeticiones') {
       $datosFooterCompet =<<<EOD
         <button type="button" class="btn btn-primary btn-block" onclick="guardarEditaCompeticiones('','competiciones','agregarCompeticiones')"><i class="far fa-save"></i> Guardar</button>
@@ -2405,7 +2404,7 @@ switch ($type){
                 <input class="form-control" type="text" id="nombreCompetID" name="nombreCompetID" placeholder="" value="$nombre_compet" required>
                 <small id="" class="form-text text-muted">Indique el nombre de la competición.</small>
                 <div class="invalid-feedback"> Ingrese este Campo. </div>
-              </div> 
+              </div>
             </div>
             <div class="col-12 col-md-12">
               <div class="form-group">
@@ -2413,13 +2412,13 @@ switch ($type){
                 <input class="form-control" type="text" id="edadMinimaCompetID" name="edadMinimaCompetID" onkeypress="return permite(event, 'num')"; value="$edadMinima_compet" required>
                 <small id="" class="form-text text-muted">Indique el nombre de la competición.</small>
                 <div class="invalid-feedback"> Ingrese este Campo. </div>
-              </div> 
+              </div>
             </div>
-        </div> 
-        <p><span class="list-icon"><span class="oi oi-media-record text-pink pulse"></span></span> 
+        </div>
+        <p><span class="list-icon"><span class="oi oi-media-record text-pink pulse"></span></span>
         <small><u>Cuidado al crear, porque no es posible borrar una competición todavía.</small></u></p>
       </form>
-      $datosFooterCompet    
+      $datosFooterCompet
     EOD;
     echo $formCompeticiones;
   break;
@@ -2439,12 +2438,12 @@ switch ($type){
     }
 
     if ($opcion == 'agregarCompeticiones') {
-      $camposIngresaCompeticiones = "nombre,edadMinima"; 
-      $datosIngresaCompeticiones  = "'{$nombreCompet}','{$edadMinimaCompet}'";    
-      $IngresaCompeticiones       = $ClassTodas->insertCosasVarias($tabla,$camposIngresaCompeticiones,$datosIngresaCompeticiones);   
+      $camposIngresaCompeticiones = "nombre,edadMinima";
+      $datosIngresaCompeticiones  = "'{$nombreCompet}','{$edadMinimaCompet}'";
+      $IngresaCompeticiones       = $ClassTodas->insertCosasVarias($tabla,$camposIngresaCompeticiones,$datosIngresaCompeticiones);
       echo $IngresaCompeticiones;
     }
-    
+
   break;
 
   case 'listarEquipos':
@@ -2464,26 +2463,26 @@ switch ($type){
           $buscaDatosCompet = $ClassTodas->get_datoVariosWhereOrder('competiciones','WHERE id='.$id_liga_buscaEquipos,'');
           foreach ($buscaDatosCompet as $value) {
             $nombre_buscaCompet         = $value['nombre'];
-          }          
+          }
           $datosTabla .=<<<EOD
-            <tr id="tr_$id_buscaEquipos">              
+            <tr id="tr_$id_buscaEquipos">
               <td class="align-middle">$nombre_buscaEquipos</td>
               <td class="align-middle">$nombre_buscaCompet</td>
               <td class="align-middle">$fecha_creacion_buscaEquipos</td>
-              <td class="align-middle text-center"> 
-                <a id="editarLinea_$id_buscaEquipos" class="btn btn-sm btn-icon btn-secondary" onclick="formEquipos('Editar','$id_buscaEquipos','equipos','editarEquipos')"><i class="fa fa-edit"></i></a>              
-               <a id="editarLinea_$id_buscaEquipos" class="btn btn-sm btn-icon btn-secondary" onclick="eliminarLinea('equipos','$id_buscaEquipos')"><i class="fa fa-trash"></i></a>              
+              <td class="align-middle text-center">
+                <a id="editarLinea_$id_buscaEquipos" class="btn btn-sm btn-icon btn-secondary" onclick="formEquipos('Editar','$id_buscaEquipos','equipos','editarEquipos')"><i class="fa fa-edit"></i></a>
+               <a id="editarLinea_$id_buscaEquipos" class="btn btn-sm btn-icon btn-secondary" onclick="eliminarLinea('equipos','$id_buscaEquipos')"><i class="fa fa-trash"></i></a>
               </td>
             </tr>
           EOD;
           }
       }
       $tablaDatosEquipos =<<<EOD
-        <div class="col-12 d-flex mb-3 justify-content-end">       
+        <div class="col-12 d-flex mb-3 justify-content-end">
           <button type="button" class="btn btn-primary btn-lg" title="Agregar" onclick="formEquipos('Agregar','','equipos','agregarEquipos');"><i class="fas fa-plus pr-1"></i>Agregar Equipos</button>
         </div>
         <div class="table-responsive">
-          <table class="table  table-condensed table-bordered table-sm table-striped input-group-reflow no-footer" id="tablaAdministraEquipos">
+          <table class="table table-condensed table-bordered table-striped table-sm font-size-sm w-100" id="tablaAdministraEquipos">
             <thead>
               <tr>
                 <th>Nombre</th>
@@ -2498,7 +2497,7 @@ switch ($type){
           </table>
         </div>
       EOD;
-    echo $tablaDatosEquipos;  
+    echo $tablaDatosEquipos;
   break;
 
   case 'formEquipos':
@@ -2520,26 +2519,26 @@ switch ($type){
         $buscaDatosCompet    = $ClassTodas->get_datoVariosWhereOrder('competiciones', '', 'ORDER BY nombre');
         foreach ($buscaDatosCompet as $value) {
           $id_buscaDatosCompet        = $value['id'];
-          $nombre_buscaDatosCompet    = $value['nombre']; 
-          if ($id_buscaDatosCompet == $id_liga_busca_equipos) {            
-            $competicionSeleccionada = "selected"; 
+          $nombre_buscaDatosCompet    = $value['nombre'];
+          if ($id_buscaDatosCompet == $id_liga_busca_equipos) {
+            $competicionSeleccionada = "selected";
           } else {
             $competicionSeleccionada =  "";
             $optEmptyAgrega = '<option></option>';
-          } 
+          }
           $valoresOptionCompet .= "<option value='$id_buscaDatosCompet' $competicionSeleccionada>$nombre_buscaDatosCompet</option>";
         }
       }
       $datosFooterEquipos =<<<EOD
           <button type="button" class="btn btn-primary btn-block" onclick="guardarEditaEquipos('$id_busca_equipos','equipos','editarEquipos')"><i class="far fa-save"></i> Guardar</button>
       EOD;
-    } 
+    }
     if ($tipo == 'agregarEquipos') {
       $optEmptyAgrega = '<option></option>';
       $buscaDatosCompet    = $ClassTodas->get_datoVariosWhereOrder('competiciones', '', 'ORDER BY id');
       foreach ($buscaDatosCompet as $value) {
         $id_buscaDatosCompet     = $value['id'];
-        $nombre_buscaDatosCompet = $value['nombre']; 
+        $nombre_buscaDatosCompet = $value['nombre'];
         $valoresOptionCompet  .= "<option value='$id_buscaDatosCompet'>$nombre_buscaDatosCompet</option>";
       }
       $datosFooterEquipos =<<<EOD
@@ -2555,7 +2554,7 @@ switch ($type){
                 <input class="form-control" type="text" id="nombreEquipoID" name="nombreEquipoID" placeholder="" value="$nombre_busca_equipos" required>
                 <small id="" class="form-text text-muted">Indique el nombre.</small>
                 <div class="invalid-feedback"> Ingrese este Campo. </div>
-              </div> 
+              </div>
             </div>
         </div>
         <div class="form-row">
@@ -2568,11 +2567,11 @@ switch ($type){
                 </select>
                 <small id="" class="form-text text-muted">Indique una competición.</small>
                 <div class="invalid-feedback"> Ingrese este Campo. </div>
-              </div> 
+              </div>
             </div>
-        </div>           
+        </div>
       </form>
-      $datosFooterEquipos    
+      $datosFooterEquipos
     EOD;
     echo $formEquipos;
   break;
@@ -2589,11 +2588,11 @@ switch ($type){
       $whereJugadores     = "id={$idRecibido}";
       $actualizaJugadores = $ClassTodas->actualizaCosasVariasSetWhere($tabla,$setJugadores,$whereJugadores);
       echo $actualizaJugadores;
-    } 
+    }
     if ($opcion == 'agregarEquipos') {
-      $camposIngresaJugadores = "nombre,id_competicion"; 
-      $datosIngresaJugadores  = "'{$nombreEquipoID}','{$competicionID}'";    
-      $IngresaJugadores       = $ClassTodas->insertCosasVarias($tabla,$camposIngresaJugadores,$datosIngresaJugadores);   
+      $camposIngresaJugadores = "nombre,id_competicion";
+      $datosIngresaJugadores  = "'{$nombreEquipoID}','{$competicionID}'";
+      $IngresaJugadores       = $ClassTodas->insertCosasVarias($tabla,$camposIngresaJugadores,$datosIngresaJugadores);
       echo $IngresaJugadores;
     }
   break;
@@ -2607,7 +2606,7 @@ switch ($type){
       $buscaDatosJugadores = $ClassTodas->get_datoVariosWhereOrderInformes("SELECT  jg.*, js.valorPagado, js.fechaPagoSeguro, js.siniestro, js.modificadoPor, js.fechaLesion, js.jornadaLesion, js.competicionLesion, js.comentarios, js.seguimiento FROM jugadores as jg LEFT JOIN jugadores_seguros as js ON jg.id = js.id_jugador WHERE jg.asegurado = 1 AND js.id IS NULL");
       if (empty($buscaDatosJugadores)) {
         $datosTabla =<<<EOD
-          <tr>              
+          <tr>
             <td colspan="100" class="text-center py-3">No hay datos para mostrar en la tabla.</td>
           </tr>
         EOD;
@@ -2645,9 +2644,9 @@ switch ($type){
           $buscaDatosEquipos = $ClassTodas->get_datoVariosWhereOrder('equipos','WHERE id='.$id_equipo,'');
           foreach ($buscaDatosEquipos as $value) {
             $equipo         = $value['nombre'];
-          }  
+          }
           $datosTabla .=<<<EOD
-            <tr id="tr_$id_jg">  
+            <tr id="tr_$id_jg">
               <td class="align-middle">$count</td>
               <td class="align-middle">$nombre $apellido <a href="#" tilte="Editar Jugador" onclick="formJugadores('Editar','$id_jg','jugadores','editarJugadores')"><i class="fa fa-edit"></i></a></td>
               <td class="align-middle">$documento</td>
@@ -2697,7 +2696,7 @@ switch ($type){
             </tfoot>
           </table>
         </div>
-      EOD; 
+      EOD;
     } elseif($numReport == '2') {
       $count=0;
       $countAsegurado = 0;
@@ -2705,7 +2704,7 @@ switch ($type){
       $buscaDatosJugadores = $ClassTodas->get_datoVariosWhereOrderInformes("SELECT jg.*, js.valorPagado, js.fechaPagoSeguro, js.siniestro, js.modificadoPor, js.fechaLesion, js.jornadaLesion, js.competicionLesion, js.comentarios, js.seguimiento FROM jugadores AS jg LEFT JOIN jugadores_seguros AS js ON jg.id = js.id_jugador WHERE jg.asegurado = 1 AND js.siniestro > 0");
       if (empty($buscaDatosJugadores)) {
         $datosTabla =<<<EOD
-          <tr>              
+          <tr>
             <td colspan="100" class="text-center py-3">No hay datos para mostrar en la tabla.</td>
           </tr>
         EOD;
@@ -2744,9 +2743,9 @@ switch ($type){
           $buscaDatosEquipos = $ClassTodas->get_datoVariosWhereOrder('equipos','WHERE id='.$id_equipo,'');
           foreach ($buscaDatosEquipos as $value) {
             $equipo         = $value['nombre'];
-          }  
+          }
           $datosTabla .=<<<EOD
-            <tr id="tr_$id_jg">  
+            <tr id="tr_$id_jg">
               <td class="align-middle">$count</td>
               <td class="align-middle">$nombre $apellido <i class="fa fa-edit cursor-pointer" onclick="formJugadores('Editar','$id_jg','jugadores','editarJugadores')"></i></td>
               <td class="align-middle">$documento</td>
@@ -2756,7 +2755,7 @@ switch ($type){
               <td class="align-middle">$seguimientoTxT</td>
               <td class="align-middle text-nowrap">$fechaPagoSeguro</td>
               <td class="align-middle">$siniestro</td>
-              <td class="align-middle" title="$fechaModificacion">$modificadoPor</td>              
+              <td class="align-middle" title="$fechaModificacion">$modificadoPor</td>
               <td class="align-middle">$$valorPagado</td>
               <td class="align-middle text-nowrap">$fechaLesion</td>
               <td class="align-middle">$jornadaLesion</td>
@@ -2778,7 +2777,7 @@ switch ($type){
                 <th>Nº</th>
                 <th>Nombre</th>
                 <th>Documento</th>
-                <th>Nacimiento</th>                
+                <th>Nacimiento</th>
                 <th>Equipo</th>
                 <th>Asegurado</th>
                 <th>¿Dar Seguimiento?</th>
@@ -2797,7 +2796,7 @@ switch ($type){
             </tbody>
           </table>
         </div>
-      EOD; 
+      EOD;
     } elseif($numReport == '3') {
       $count = 0;
       $countAsegurado = 0;
@@ -2806,7 +2805,7 @@ switch ($type){
       $buscaDatosJugadores = $ClassTodas->get_datoVariosWhereOrderInformes("SELECT jg.*, js.id AS idJS, js.valorPagado, js.fechaPagoSeguro, js.siniestro, js.modificadoPor, js.fechaLesion, js.jornadaLesion, js.competicionLesion, js.comentarios, js.seguimiento FROM jugadores AS jg LEFT JOIN jugadores_seguros AS js ON jg.id = js.id_jugador WHERE jg.asegurado = 1");
       if (empty($buscaDatosJugadores)) {
         $datosTabla =<<<EOD
-          <tr>              
+          <tr>
             <td colspan="100" class="text-center py-3">No hay datos para mostrar en la tabla.</td>
           </tr>
         EOD;
@@ -2851,10 +2850,10 @@ switch ($type){
             $countValorP                    = $countValorP + $valorPagado;
           }
           $gEquipos                       = $ClassTodas->get_datoVariosWhereOrder('equipos','WHERE id='.$id_equipo,'');
-          foreach ($gEquipos as $value) { $equipo = $value['nombre']; }  
+          foreach ($gEquipos as $value) { $equipo = $value['nombre']; }
           // if($valorPagado == 0) { $valorPagado = '-'.$valorSeguroFijado;}
           $datosTabla .=<<<EOD
-            <tr id="tr_$id_jg">  
+            <tr id="tr_$id_jg">
               <td class="align-middle">$count</td>
               <td class="align-middle">$nombre $apellido <i class="fa fa-edit cursor-pointer" onclick="formJugadores('Editar','$id_jg','jugadores','editarJugadores')"></i></td>
               <td class="align-middle">$documento</td>
@@ -2888,7 +2887,7 @@ switch ($type){
                 <th>Nº</th>
                 <th>Nombre</th>
                 <th>Documento</th>
-                <th>Nacimiento</th>                
+                <th>Nacimiento</th>
                 <th>Equipo</th>
                 <th>Asegurado</th>
                 <th>¿Dar seguimiento?</th>
@@ -2907,17 +2906,17 @@ switch ($type){
             </tbody>
           </table>
         </div>
-      EOD;    
+      EOD;
     }
-    echo $tablaReportes;  
+    echo $tablaReportes;
   break;
   case 'formJugadorSeguro':
     $idRecibido = $_GET['idRecibido'];
     $opcion    = $_GET['opcion'];
     $idJugador = $_GET['idJugador'];
-    
+
     if($opcion == 'agregar'){
-      
+
       $getNombreJugador = $ClassTodas->get_datoVariosWhereOrder('jugadores','WHERE id='.$idJugador,'LIMIT 1');
       if(empty($getNombreJugador)){
       } else {
@@ -2970,7 +2969,7 @@ switch ($type){
           } else {
             $optionCompeticionesLesion .= '<option value="'.$nombre.'">'.$nombre.'</option>';
           }
-          
+
         }
       }
       $modalFooter =<<<EOD
@@ -2979,7 +2978,7 @@ switch ($type){
           <button type="button" class="btn btn-primary" onclick="guardarSeguroJugador('$idRecibido','jugadores_seguros','editar');"><i class="far fa-save"></i> Guardar</button>
         </div>
       EOD;
-    }   
+    }
     $formulario =<<<EOD
       <form class="pt-3">
         <div class="form-row">
@@ -3159,7 +3158,7 @@ switch ($type){
     $setJug = "asegurado='{$asegurado}',segModPor='{$nombreUsuarioGeneral}',fechaSegMod='{$date}'";
     $whereJug = "id='{$idRecibido}'";
     $resultadoQuery = $ClassTodas->actualizaCosasVariasSetWhere('jugadores',$setJug,$whereJug);
-    if($asegurado == 0 && $resultadoQuery == 1){      
+    if($asegurado == 0 && $resultadoQuery == 1){
       $eliminarCredenciales = $ClassTodas->eliminarLinea('jugadores_seguros','id_jugador',$idRecibido);
     }
     echo $resultadoQuery;
@@ -3181,7 +3180,7 @@ switch ($type){
         $bigPiece                = explode("-",$fecha_ingreso_tabla_opt);
         $littlePiece             = explode(' ', $bigPiece[2]);
         $fecha_ingreso_tabla_opt = $littlePiece[0].'-'.$bigPiece[1].'-'.$bigPiece[0].' '.$littlePiece[1];
-        if($tipo_opt == 'ValorSeguro') { 
+        if($tipo_opt == 'ValorSeguro') {
           $btnEliminar = '';
           $btnEditar = '';
         } else {
@@ -3207,7 +3206,7 @@ switch ($type){
       <div class="d-flex justify-content-end">
         <button type="button" id="editarOpciones" title="Editar" class="btn btn-primary my-3" onclick="formOpcSeguros('Agregar','','seguro_opciones','agregar')"><i class="fa fa-plus"></i> Agregar</button>
       </div>
-      <table class="table table-bordered table-condensed table-striped table-sm" id="tableOpcionesSeguro">
+      <table class="table table-condensed table-bordered table-striped table-sm font-size-sm w-100" id="tableOpcionesSeguro">
         <thead>
           <tr>
             <th>ID</th>
@@ -3245,7 +3244,7 @@ switch ($type){
       $datosFooter =<<<EOD
           <button type="button" class="btn btn-primary btn-block" title="Guardar" onclick="guardarEditaOpcSeguros('$id_opt','seguro_opciones','editar')"><i class="far fa-save"></i> Guardar</button>
       EOD;
-    } 
+    }
     if ($tipo == 'agregar') {
       $datosFooter =<<<EOD
         <button type="button" class="btn btn-primary btn-block" title="Agregar" onclick="guardarEditaOpcSeguros('','seguro_opciones','agregar')"><i class="far fa-save"></i> Agregar</button>
@@ -3262,7 +3261,7 @@ switch ($type){
                 </select>
                 <small id="" class="form-text text-muted">Indique el tipo de la opción.</small>
                 <div class="invalid-feedback"> Ingrese este Campo. </div>
-              </div> 
+              </div>
             </div>
             <div class="col-12 col-md-12">
               <div class="form-group">
@@ -3270,11 +3269,11 @@ switch ($type){
                 <input class="form-control" type="number" id="valorID" name="valorID" placeholder="" value="$valor_opt" required>
                 <small id="" class="form-text text-muted">Indique el valor de la opción.</small>
                 <div class="invalid-feedback"> Ingrese este Campo. </div>
-              </div> 
+              </div>
             </div>
-        </div> 
+        </div>
       </form>
-      $datosFooter   
+      $datosFooter
     EOD;
     echo $formOpcSeguros;
   break;
@@ -3283,22 +3282,22 @@ switch ($type){
     $opcion                       = $_GET['opcion'];
     $tabla                        = $_GET['tabla'];
     $idRecibido                   = $_GET['idRecibido'];
-    $tipoID                       = $_GET['tipoID'];   
-    $valorID                      = $_GET['valorID'];   
+    $tipoID                       = $_GET['tipoID'];
+    $valorID                      = $_GET['valorID'];
     if($opcion == 'editar'){
       $set_opt       = "tipo='{$tipoID}',valor='{$valorID}',modificadoPor='{$nombreUsuarioGeneral}'";
       $where_opt     = "id='{$idRecibido}'";
       $resultadoQuery = $ClassTodas->actualizaCosasVariasSetWhere($tabla,$set_opt,$where_opt);
     } elseif($opcion == 'agregar'){
-      $camposIngresa_opt = "tipo,valor,modificadoPor"; 
+      $camposIngresa_opt = "tipo,valor,modificadoPor";
       $datosIngresa_opt  = "'{$tipoID}','{$valorID}','{$nombreUsuarioGeneral}'";
-      $resultadoQuery = $ClassTodas->insertCosasVarias($tabla,$camposIngresa_opt,$datosIngresa_opt);   
+      $resultadoQuery = $ClassTodas->insertCosasVarias($tabla,$camposIngresa_opt,$datosIngresa_opt);
     }
     echo $resultadoQuery;
   break;
 
   case 'eImgNoUsadas':
-  
+
     $buscarFoto = $ClassTodas->get_datoVariosWhereOrderInformes("SELECT foto FROM jugadores WHERE foto <> '' AND foto IS NOT NULL");
     $fotos = array();
 
@@ -3310,7 +3309,7 @@ switch ($type){
     $gestor = opendir($directorio);
 
     while (false !== ($archivo = readdir($gestor))) {
-        if ($archivo != '.' && $archivo != '..') {          
+        if ($archivo != '.' && $archivo != '..') {
             if (!in_array($archivo, $fotos)) {
                 unlink($directorio . '/' . $archivo);
                 if (!file_exists($rutaCompleta)) {
@@ -3333,105 +3332,185 @@ switch ($type){
           <span class="fas fa-bullhorn"></span>
         </div><p class="mb-0">Para realizar la carga masiva, elija que tipo de base de datos quieres alimentar</p>
       </div>
-      <button type="button" class="btn btn-info btn-lg" onclick="enDesarrollo()" title="CARGAR ARCHIVO" alt="CARGAR ARCHIVO"><i class="fas fa-cloud-upload-alt"></i> Cargar Jugadores</button>
+      <button type="button" class="btn btn-info btn-lg" onclick="cargaMasiva('jugadores')" title="Cargar Jugadores"><i class="fas fa-cloud-upload-alt"></i> Cargar Jugadores</button>
     EOD;
     echo $imprimeHola;
   break;
 
   case 'cargaMasiva':
+    $tabla = $_GET['tabla'];
     $show_cargaMasiva = <<<EOD
-      <div class="form-group">
-      <input type="radio" class="custom-control-input" name="tablaImportarGrupo1" id="tablaImportar1" value="jugadores" hidden checked>
-        <label for="tf3">Envío de archivo para carga masiva</label>
-        <div id="divFormImportaArchivos">
-            <form action="upload.php" class="dropzone fileinput-dropzone" id='importaArchivosAbd'></form>
+      <div class="form-row">
+        <div class="col-12">
+          <label>Envío de archivo para carga masiva</label>
+          <div id="divFormImportaArchivos" class="mb-3">
+            <form action="upload.php?type=jugadores" class="dropzone fileinput-dropzone" id="importaArchivosAbd"></form>
+            <input type="hidden" id="tablaImportar" class="d-none" value="$tabla">
+          </div>
         </div>
-        <br>
-        <div><button id="btnMuestraArchivoImportado" type="submit" class="btn btn-primary" onclick="">Importar</button></div>
-        <div id="respuestaImportPagosEfectuados"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" title="Cerrar"><i class="far fa-times-circle"></i> Cerrar</button>
+        <button type="button" id="btnMuestraArchivoImportado" class="btn btn-primary" title="Importar"><i class="fa fa-save"></i> Importar</button>     
       </div>
     EOD;
     echo $show_cargaMasiva;
     break;
 
-  case 'muestraArchivoImportado':
-    $archivo = $_GET['archivo'];
-    $tablaImportar = $_GET['tablaImportar'];
-    $directorioUpload = 'documentos/';
-    $ClassTodas = new ClassTodas();
-
-    if ($xlsx = SimpleXLSX::parse($directorioUpload . $archivo)) {
-      $datoBntVerDatosSubidos = '';
-      if ($tablaImportar == 'informat_temp') {
-        $datoBntVerDatosSubidos = "busquedaPorRut('Listar Vacaciones', 'listavacaciones');";
-        $ClassTodas->get_datoVariosWhereOrderInformes("TRUNCATE TABLE `informat_temp`;");
+    case 'muestraArchivoImportado':
+      $archivo = $_GET['archivo'];
+      $directorioUpload = 'documentos/';
+      $tablaImportar = $_GET['tablaImportar'];
+  
+      if($tablaImportar <> 'jugadores') {
+        echo 'Hubo un error al intentar importar el archivo. Por favor, inténtelo de nuevo.';
+        exit;
       }
+      // Arrays para almacenar mensajes de éxito y error por fila
+      $successRows = [];
+      $failedRows = [];
+  
+      if ($xlsx = SimpleXLSX::parse($directorioUpload . $archivo)) {
+        $rowNumber = 0;
+        $header = [];
+  
+        foreach ($xlsx->rows() as $k => $r) {
+          // La primera fila es el header
+          if ($k === 0) {
+            $header = $r;
+            continue;
+          }
+          $rowNumber = $k; // número de fila (para mensajes)
+  
+          // Asumimos el siguiente orden de columnas:
+          // 0: Nombre, 1: Apellido, 2: Fecha Nacimiento (dd-mm-yyyy), 3: Tipo Doc,
+          // 4: Documento, 5: Equipos (valores separados por coma), 6: Posición,
+          // 7: Nacionalidad, 8: E-mail, 9: Celular, 10: Asegurado
+          $nombre         = addslashes($r[0]);
+          $apellido       = addslashes($r[1]);
+          $fechaNacimiento= addslashes($r[2]);
+          $tipoDoc        = addslashes($r[3]);
+          $documento      = addslashes($r[4]);
+          $equiposStr     = addslashes($r[5]);
+          $posicion       = addslashes($r[6]);
+          $nacionalidad   = addslashes($r[7]);
+          $email          = addslashes($r[8]);
+          $celular        = addslashes($r[9]);
+          $asegurado      = addslashes($r[10]);
+  
+          // Convertir la fecha de formato dd-mm-yyyy a yyyy-mm-dd
+          $dateParts = explode('-', $fechaNacimiento);
+          if(count($dateParts) == 3){
+            $fechaNacimientoMySQL = date("Y-m-d", strtotime($fechaNacimiento));
+          } else {
+            $failedRows[] = "Fila $rowNumber: Fecha de nacimiento inválida.";
+            continue; // omite la fila si la fecha no es válida
+          }
+  
+          // Procesar el campo Documento según Tipo Doc:
+          // - Si es "Rut": se deja tal cual.
+          // - Si es "Pasaporte" o "Identidad": se toma las 3 primeras letras de la nacionalidad,
+          //   se añade "P" o "I" según corresponda y se concatena el número ingresado.
+          if (strcasecmp($tipoDoc, 'Rut') !== 0) {
+            $prefix = substr($nacionalidad, 0, 3);
+            if (strcasecmp($tipoDoc, 'Pasaporte') === 0) {
+                $documento = $prefix . 'P' . $documento;
+            } elseif (strcasecmp($tipoDoc, 'Identidad') === 0) {
+                $documento = $prefix . 'I' . $documento;
+            }
+          }
 
-      $ver_acumulaInsert = '';
-      $acumulaInsertMayus = '';  // Inicializa la variable aquí
-      $k = '';
+          // Procesar Equipos: asumimos que vienen separados por comas
+          $equiposArray = array_map('trim', explode(',', $equiposStr));
+          $validEquipos = [];
+          $invalidEquipos = [];
+          $equiposAgregar = [];
+  
+          foreach ($equiposArray as $equipo) {
 
-      foreach ($xlsx->rows() as $k => $r) {
-        if ($k === 0) {
-          // Sanitizar los nombres de las columnas: eliminar el prefijo entre paréntesis y espacios innecesarios
-          $columnasTitulos = implode(',', array_map(function ($columna) {
-            // Eliminar cualquier texto entre paréntesis al inicio y luego eliminar espacios al principio y al final
-            $columnaSanitizada = trim(preg_replace('/^\(\d+\)\s*/', '', $columna));
-            // Escapar cada columna con comillas invertidas para manejar espacios y caracteres especiales
-            return "`" . $columnaSanitizada . "`";
-          }, $r));
-          continue;
+            $queryEquipos = "SELECT id FROM equipos WHERE nombre = '" . addslashes($equipo) . "'";
+            $getEquipos = $ClassTodas->get_datoVariosWhereOrderInformes($queryEquipos);
+
+            // Se espera que $resultEquipo[0]['count'] sea mayor que 0 si el equipo existe
+            if ($getEquipos) {
+              $validEquipos[] = $equipo;
+              $equiposAgregar[] = $getEquipos[0]['id'];
+            } else {
+              $invalidEquipos[] = $equipo;
+            }
+          }
+  
+          // Si existen equipos inválidos, se omite la fila y se registra error
+          if (!empty($invalidEquipos)) {
+            $failedRows[] = "Fila $rowNumber: Equipos inválidos - " . implode(', ', $invalidEquipos);
+            continue;
+          }
+  
+          // Codificar el arreglo de equipos válidos (puede almacenarse en formato JSON)
+          $equiposJSON = addslashes(json_encode($validEquipos));
+
+          //Obtener Nacionalidad id
+          $sqlNactions = "SELECT id FROM nacionalidades WHERE nombre = '" . $nacionalidad . "'";
+          $getNationId = $ClassTodas->get_datoVariosWhereOrderInformes($sqlNactions);
+          $nationId = $getNationId ? $getNationId[0]['id'] : '0';
+
+          //Obtener Posicion id
+          $sqlPosiciones = "SELECT id FROM posiciones WHERE nombre = '" . $posicion . "'";
+          $getPosicionId = $ClassTodas->get_datoVariosWhereOrderInformes($sqlPosiciones);
+          $posicionId = $getPosicionId ? $getPosicionId[0]['id'] : '0';
+
+          $celular = empty($celular) ? '0' : $celular;
+          
+          // Construir la consulta INSERT para la fila actual
+          // Ejecutar la consulta de inserción
+          try {
+            $campos = "nombre, apellido, fnacimiento, tipoDoc, documento, posicion, nacionalidad, email, celular, asegurado";
+            $datos="'{$nombre}','{$apellido}','{$fechaNacimientoMySQL}','{$tipoDoc}','{$documento}','{$posicionId}','{$nationId}','{$email}','{$celular}','{$asegurado}'";
+            $resultInsert = $ClassTodas->insertCosasVariasDevuelveId('jugadores',$campos,$datos);
+          } catch (Exception $e) {
+            $failedRows[] = "Fila $rowNumber: Error al insertar en la base de datos.";
+            continue;
+          }
+
+          // Acumular mensaje según el resultado
+          if ($resultInsert > 0) {
+            if(!empty($equiposAgregar)){
+              foreach($equiposAgregar as $row){
+                $campos = "id_jugador, id_equipo";
+                $datos="'{$resultInsert}','{$row}'";
+                $ClassTodas->insertCosasVariasDevuelveId('jugadores_equipos',$campos,$datos);
+              }
+            }
+            $successRows[] = "Fila $rowNumber insertada correctamente.";
+          } else {
+            $failedRows[] = "Fila $rowNumber: Error al insertar en la base de datos.";
+          }
         }
+  
+        // Generar el HTML final para mostrar los resultados al usuario
+        $htmlOutput = '<div class="alert alert-info" role="alert">';
+        $htmlOutput .= '<h4>Resumen de la Importación</h4>';
+        
+        if (!empty($successRows)) {
+          $htmlOutput .= '<div class="text-success"><h5>Filas Exitosas:</h5><ul>';
+          foreach ($successRows as $msg) {
+            $htmlOutput .= '<li>' . $msg . '</li>';
+          }
+          $htmlOutput .= '</ul></div>';
+        }
+        if (!empty($failedRows)) {
+          $htmlOutput .= '<div class="text-danger"><h5>Filas Fallidas:</h5><ul>';
+          foreach ($failedRows as $msg) {
+            $htmlOutput .= '<li>' . $msg . '</li>';
+          }
+          $htmlOutput .= '</ul></div>';
+        }
+        $htmlOutput .= '</div>';
 
-        // Escape de valores y construcción de los valores a insertar
-        $valoresFila = array_map(function ($value) {
-          return addslashes($value); // Escapa comillas y otros caracteres problemáticos
-        }, $r);
-
-        // Construye la cadena para el INSERT
-        $acumulaInsert = 'INSERT INTO ' . $tablaImportar . ' (id,' . $columnasTitulos . ') VALUES ';
-        $acumulaInsertMayus .= ' ("' . $k . '","' . implode('","', $valoresFila) . '"),';
+        echo $htmlOutput;
+      } else {
+        echo SimpleXLSX::parseError();
+        exit();
       }
-
-      if (!empty($acumulaInsertMayus)) {
-        $acumulaInsertFinal = rtrim($acumulaInsert . $acumulaInsertMayus, ',');
-        // Ejecutar la consulta final de inserción
-        $ClassTodas->get_datoVariosWhereOrderInformes($acumulaInsertFinal);
-      }
-    } else {
-      echo SimpleXLSX::parseError();
-      exit();
-    }
-
-    // Ejecutar las demás consultas
-    $deleteTable = 'DROP TABLE informat';
-    $renameTable = 'CREATE TABLE informat SELECT * FROM informat_temp';
-    $truncateTable = 'TRUNCATE informat_temp';
-    $log = 'INSERT INTO sis_historial (`accion`,`datoColumna`,`datoAntiguo`,`datoNuevo`,`modificadoPor`,`fechaModificacion`) VALUES ("i_informat","","","","' . $nombreUsuarioGeneral . '","' . $date . '")';
-
-    // Ejecutar las consultas restantes
-    $ClassTodas->get_datoVariosWhereOrderInformes($deleteTable);
-    $ClassTodas->get_datoVariosWhereOrderInformes($renameTable);
-    $ClassTodas->get_datoVariosWhereOrderInformes($truncateTable);
-    $ClassTodas->get_datoVariosWhereOrderInformes($log);
-
-    $imprimeDatosArchivoSubido = <<<EOD
-    <div class="alert alert-primary has-icon" role="alert">
-      <div class="alert-icon">
-        <span class="oi oi-info"></span>
-      </div>
-      <div class="mb-4 h4"><strong>Nombre Archivo:</strong> $archivo</div>
-      <div hidden><strong>Tabla:</strong> $tablaImportar</div>
-      <div hidden><strong>Cant. Líneas:</strong> $k</div>
-      <div class="font-size-lg text-success"><strong><i class="align-middle far fa-thumbs-up fa-3x"></i> Archivo Importado Satisfactoriamente. Se importaron: $k líneas</strong></div>
-      <br>
-
-      <div class="form-group">
-        <label class="d-block"><strong></strong></label>
-        <button type="button" class="btn btn-info" id="BtnIniciaImportar" onclick="$datoBntVerDatosSubidos $('#modalGeneral_soloCerrar').modal('toggle');"> Ir a Vacaciones</button>
-      </div>
-    </div>
-    EOD;
-    echo $imprimeDatosArchivoSubido;
     break;
-} /* Fin Switch */?> 
+  }
