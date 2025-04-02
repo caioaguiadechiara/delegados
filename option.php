@@ -2966,7 +2966,7 @@ switch ($type){
         }
       }
 
-      $getCompeticiones = $ClassTodas->get_datoVariosWhereOrder('competiciones','WHERE activo = 1','');
+      $getCompeticiones = $ClassTodas->get_datoVariosWhereOrder('competiciones','','');
       if(empty($getCompeticiones)){
       } else {
         foreach($getCompeticiones as $value){
@@ -2998,7 +2998,7 @@ switch ($type){
         }
       }
 
-      $getCompeticiones = $ClassTodas->get_datoVariosWhereOrder('competiciones','WHERE activo = 1','');
+      $getCompeticiones = $ClassTodas->get_datoVariosWhereOrder('competiciones','','');
       if(empty($getCompeticiones)){
       } else {
         foreach($getCompeticiones as $value){
