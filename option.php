@@ -1471,7 +1471,7 @@ switch ($type){
     $fotoID                       = $_GET['fotoID'];
     $emailID                      = $_GET['emailID'];
     $celularID                    = $_GET['celularID'];
-    $aseguradoID                  = isset($_GET['aseguradoID']) ?? null;
+    $aseguradoID                  = $_GET['aseguradoID'];
     $arrayRespuestas              = array();
     $equiposAgregados = '';
 

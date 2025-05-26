@@ -1465,6 +1465,8 @@ function guardarEditaJugadores(idRecibido, tabla, opcion) {
   var equipoID          = JSON.stringify(equipoID2);
 
   var aseguradoID = $('#aseguradoID').val();
+  aseguradoID = aseguradoID == '1' ? 1 : 0;
+  
   var fotoID = $('#fotoID').val();
   if (fotoID == '' || fotoID == null) {
     fotoID = 'sinimagen300x300.png';
