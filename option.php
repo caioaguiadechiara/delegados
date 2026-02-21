@@ -3425,14 +3425,14 @@ switch ($type){
           // 0: Nombre, 1: Apellido, 2: Fecha Nacimiento (dd-mm-yyyy), 3: Tipo Doc,
           // 4: Documento, 5: Equipos (valores separados por coma), 6: Posición,
           // 7: Nacionalidad, 8: E-mail, 9: Celular, 10: Asegurado
-          $nombre         = addslashes($r[0]);
-          $apellido       = addslashes($r[1]);
+          $nombre         = mb_strtoupper(addslashes($r[0]));
+          $apellido       = mb_strtoupper(addslashes($r[1]));
           $fechaNacimiento= addslashes($r[2]);
           $tipoDoc        = addslashes($r[3]);
           $documento      = addslashes($r[4]);
-          $equiposStr     = addslashes($r[5]);
-          $posicion       = addslashes($r[6]);
-          $nacionalidad   = addslashes($r[7]);
+          $equiposStr     = mb_strtoupper(addslashes($r[5]));
+          $posicion       = mb_strtoupper(addslashes($r[6]));
+          $nacionalidad   = mb_strtoupper(addslashes($r[7]));
           $email          = addslashes($r[8]);
           $celular        = addslashes($r[9]);
           $asegurado      = addslashes($r[10]);
