@@ -1,4 +1,4 @@
-# Sistema de Delegados - Liga de Naciones
+# Sistema de Delegados - Copa de Naciones
 
 Sistema desarrollado para gestionar ligas de fútbol amateur
 
