@@ -1509,7 +1509,7 @@ switch ($type){
                 $arrayRespuestas[$nombreEquipo] = "2";
               } else {
                 $maxJugadores = ($id_compet == 3) ? 16 : 30; //Si Competición igual Futbolito(3), maximo es 16 jugadores
-                if($totalJugadores >= $maxJugadores){//Valida maximo jugadores por equipo
+                if($totalJugadores > $maxJugadores){//Valida maximo jugadores por equipo
                   $arrayRespuestas[$nombreEquipo] = "0";
                 } else {
                   $añoActual = date('Y');
