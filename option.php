@@ -1456,7 +1456,7 @@ switch ($type){
   break;
 
   case 'guardarEditaJugadores':
-    $maxJugadores                 = 30;
+    $maxJugadores                 = 31;
     $opcion                       = $_GET['opcion'];
     $tabla                        = $_GET['tabla'];
     $idRecibido                   = $_GET['idRecibido'];
@@ -1508,8 +1508,8 @@ switch ($type){
               if($activo_ca == 1){//Valida si competición de este equipo está inactiva
                 $arrayRespuestas[$nombreEquipo] = "2";
               } else {
-                $maxJugadores = ($id_compet == 3) ? 16 : 30; //Si Competición igual Futbolito(3), maximo es 16 jugadores
-                if($totalJugadores > $maxJugadores){//Valida maximo jugadores por equipo
+                $maxJugadores = ($id_compet == 3) ? 16 : 31; //Si Competición igual Futbolito(3), maximo es 16 jugadores
+                if($totalJugadores >= $maxJugadores){//Valida maximo jugadores por equipo
                   $arrayRespuestas[$nombreEquipo] = "0";
                 } else {
                   $añoActual = date('Y');
