@@ -28,6 +28,8 @@ class ClassTodas
 
     private $webmaster_email;
     private $webmaster_name;
+    private $userCorreoWeb;
+    private $passCorreoWeb;
     private $title_abreviado;
     private $habilitaDebug;
 
@@ -61,6 +63,10 @@ class ClassTodas
         $this->dominioPrincipal    = $config['dominioPrincipal'];
         $this->siglaSistema        = $config['siglaSistema'];
         $this->uploadDir           = $config['uploadDir'];
+        $this->webmaster_email     = $config['webmaster_email'];
+        $this->webmaster_name      = $config['webmaster_name'];
+        $this->userCorreoWeb       = $config['userCorreoWeb'];
+        $this->passCorreoWeb       = $config['passCorreoWeb'];
         $this->connect();
     }
 
@@ -899,14 +905,14 @@ class ClassTodas
         /* SMTP CONFIG */
         try {
             $mail->CharSet      = "utf8";
-            $nombre_emisor      = "Liga de Naciones";
-            $correo_emisor      = "no-responder@ligadenaciones.cl";
+            $nombre_emisor      = $this->webmaster_name;
+            $correo_emisor      = $this->userCorreoWeb;
             $mail->SMTPAuth     = true;
             $mail->SMTPSecure   = "ssl";
-            $mail->Host         = "ligadenaciones.cl";
+            $mail->Host         = "copadenaciones.cl";
             $mail->Port         = 465;
-            $mail->Username     = "no-responder@ligadenaciones.cl";
-            $mail->Password     = '?v_A]4z*OaMW';
+            $mail->Username     = $this->userCorreoWeb;
+            $mail->Password     = $this->passCorreoWeb;
 
             $mail->SetFrom($correo_emisor, $nombre_emisor);
             $mail->Body = $body;

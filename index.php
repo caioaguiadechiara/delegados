@@ -14,6 +14,7 @@
   $dominioPrincipal         = $ClassTodas->dominioPrincipal();
   $Bienvenido               = $ClassTodas->title_system();
   $siglaSistema             = $ClassTodas->siglaSistema();
+  $adminUrl                 = $ClassTodas->get_base_url();
   if (isset($_REQUEST['logout'])) {
       session_destroy();
       echo '<script>location="login.php";</script>';
@@ -83,10 +84,10 @@
     <meta property="og:locale" content="es_ES">
     <meta name="description" content="Sistema de gestión de jugadores de la Liga de Naciones.">
     <meta property="og:description" content="Sistema de gestión de jugadores de la Liga de Naciones.">
-    <meta property="og:url" content="https://delegados.ligadenaciones.cl">
+    <meta property="og:url" content="<?php echo $adminUrl; ?>">
     <meta property="og:site_name" content="<?php echo $nombre_sistemaAbreviado; ?> | <?php echo $nombre_sistema; ?>">
     <meta name="theme-color" content="#3063A0">
-    <link rel="canonical" href="https://delegados.ligadenaciones.cl">
+    <link rel="canonical" href="<?php echo $adminUrl; ?>">
     <link rel="apple-touch-icon" sizes="180x180" href="images/favicon/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16x16.png">
@@ -98,7 +99,7 @@
     <link rel="stylesheet" href="assets/vendor/select2/css/select2.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/w/bs4/jszip-2.5.0/dt-1.10.18/b-1.5.6/b-colvis-1.5.6/b-flash-1.5.6/b-html5-1.5.6/b-print-1.5.6/datatables.min.css"/>
     <link rel="stylesheet" href="assets/vendor/toastr/build/toastr.min.css">
-    <link rel="stylesheet" href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css">
+    <link rel="stylesheet" href="assets/vendor/dropzone/dist/min/dropzone.min.css">
     <link rel="stylesheet" href="assets/vendor/flatpickr/flatpickr.min.css">
     <link rel="stylesheet" href="assets/stylesheets/theme.min.css" data-skin="default">
     <link rel="stylesheet" href="assets/stylesheets/theme-dark.min.css" data-skin="dark">
@@ -265,7 +266,7 @@
   <script src="https://cdn.datatables.net/w/bs4/jszip-2.5.0/dt-1.10.18/b-1.5.6/b-colvis-1.5.6/b-flash-1.5.6/b-html5-1.5.6/b-print-1.5.6/datatables.min.js"></script>
   <script src="assets/vendor/toastr/build/toastr.min.js"></script>
   <script src="assets/vendor/bootstrap-session-timeout/bootstrap-session-timeout.js"></script>
-  <script src="https://rawgit.com/enyo/dropzone/master/dist/dropzone.js"></script>
+  <script src="assets/vendor/dropzone/dist/min/dropzone.min.js"></script>
   <script src="assets/vendor/html2pdf.js/html2pdf.bundle.min.js"></script>
   <script src="assets/javascript/theme.min.js"></script>
   <script src="includes/js/main.js?v=<?php echo $hash?>"></script>

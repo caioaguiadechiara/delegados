@@ -1,18 +1,19 @@
 <?php
-session_start();
-include __DIR__.'/includes/class/ClassTodas.php';
-$ClassTodas = new ClassTodas();
-$ctx = hash_init('sha1');
-hash_update($ctx, 'SGF');
-$hash = hash_final($ctx) . date('DdMYHis');
-$nombre_sistema = $ClassTodas->title_system();
-$nombre_sistemaAbreviado = $ClassTodas->title_abreviado();
-$dominioPrincipal = $ClassTodas->dominioPrincipal();
+  session_start();
+  date_default_timezone_set('America/Santiago');
+  include __DIR__ . '/includes/class/ClassTodas.php';
+  $ClassTodas = new ClassTodas();
+  $ctx = hash_init('sha1');
+  hash_update($ctx, 'SGF');
+  $hash = hash_final($ctx) . date('DdMYHis');
+  $nombre_sistema = $ClassTodas->title_system();
+  $nombre_sistemaAbreviado = $ClassTodas->title_abreviado();
+  $dominioPrincipal = $ClassTodas->dominioPrincipal();
+  $adminUrl = $ClassTodas->get_base_url();
 ?>
 
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -22,8 +23,8 @@ $dominioPrincipal = $ClassTodas->dominioPrincipal();
   <meta property="og:locale" content="es_ES">
   <meta name="description" content="Sistema de gestión de jugadores de la Liga de Naciones.">
   <meta property="og:description" content="Sistema de gestión de jugadores de la Liga de Naciones.">
-  <link rel="canonical" href="https://delegados.ligadenaciones.cl">
-  <meta property="og:url" content="https://delegados.ligadenaciones.cl">
+  <link rel="canonical" href="<?php echo $adminUrl; ?>">
+  <meta property="og:url" content="<?php echo $adminUrl; ?>">
   <meta property="og:site_name" content="<?php echo $nombre_sistemaAbreviado; ?> | <?php echo $nombre_sistema; ?>">
   <meta property="og:updated_time" content="1">
   <link rel="apple-touch-icon" sizes="180x180" href="images/favicon/apple-touch-icon.png">
@@ -47,12 +48,9 @@ $dominioPrincipal = $ClassTodas->dominioPrincipal();
 </head>
 
 <body>
-  <!--[if lt IE 10]>
-    <div class="page-message" role="alert">You are using an <strong>outdated</strong> browser. Please <a class="alert-link" href="http://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</div>
-  <![endif]-->
   <main class="auth">
     <header id="auth-header" class="auth-header bg-dark">
-      <h1><a href="https://delegados.ligadenaciones.cl"><img class="rounded" src="images/logo-liga-de-naciones.png" alt="" height="150"></a><span class="sr-only">Entrar</span></h1>
+      <h1><a href="<?php echo $adminUrl; ?>"><img class="rounded" src="images/logo-liga-de-naciones.png" alt="" height="150"></a><span class="sr-only">Entrar</span></h1>
     </header>
     <form class="auth-form">
       <div class="form-group">
@@ -63,7 +61,8 @@ $dominioPrincipal = $ClassTodas->dominioPrincipal();
       </div>
       <div class="form-group">
         <div class="form-label-group">
-          <input type="password" class="form-control placeholder-shown" value="" id="inputPass" autocomplete="current-password" maxlength="12" tabindex="0"><label for="inputPassword">Contraseña</label>
+          <input type="password" class="form-control placeholder-shown" value="" id="inputPass"
+            autocomplete="current-password" maxlength="12" tabindex="0"><label for="inputPassword">Contraseña</label>
           <small id="inputUserHelp" class="form-text text-muted text-left">Digite tu contraseña.</small>
         </div>
       </div>
@@ -83,5 +82,4 @@ $dominioPrincipal = $ClassTodas->dominioPrincipal();
   <script src="includes/js/main.js?v=<?php echo $hash ?>"></script>
   <script src="assets/vendor/toastr/build/toastr.min.js"></script>
 </body>
-
 </html>
