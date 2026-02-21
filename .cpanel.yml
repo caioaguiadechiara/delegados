@@ -1,0 +1,6 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/ligadena/public_html/admin.copadenaciones.cl
+    - /opt/alt/php80/usr/bin/php /usr/local/bin/composer install --no-dev --optimize-autoloader
+    - /bin/cp -R * $DEPLOYPATH
