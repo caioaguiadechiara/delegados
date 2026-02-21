@@ -2209,7 +2209,7 @@ switch ($type){
       <div id="imprimirSumula" class="overflow-x-auto">
         <div class="row mb-2" style="min-width: 768px;">
           <div class="col-4">
-            <img class="float-left" src="images/logo-liga-de-naciones.png" alt="" height="50">
+            <img class="float-left" src="images/logo_copa.png" alt="" height="50">
             <div class="float-left">
               <table class="table mx-3 my-1 font-size-sm tabla-personalizada">
                 <thead class="text-uppercase text-nowrap bg-gray">
@@ -2230,7 +2230,7 @@ switch ($type){
           </div>
           <div class="col-4">
             $casillerosPartidoVisitaTxt
-            <img class="float-right" src="images/logo-liga-de-naciones.png" alt="" height="50">
+            <img class="float-right" src="images/logo_copa.png" alt="" height="50">
           </div>
         </div>
         <div class="row" style="min-width: 768px;">

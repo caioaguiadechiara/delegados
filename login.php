@@ -50,7 +50,7 @@
 <body>
   <main class="auth">
     <header id="auth-header" class="auth-header bg-dark">
-      <h1><a href="<?php echo $adminUrl; ?>"><img class="rounded" src="images/logo-liga-de-naciones.png" alt="" height="150"></a><span class="sr-only">Entrar</span></h1>
+      <h1><a href="<?php echo $adminUrl; ?>"><img class="rounded" src="images/logo_copa.png" alt="" height="150"></a><span class="sr-only">Entrar</span></h1>
     </header>
     <form class="auth-form">
       <div class="form-group">

@@ -124,22 +124,14 @@
         <div class="top-bar">
           <div class="top-bar-brand">
             <button class="hamburger hamburger-squeeze mr-2" type="button" data-toggle="aside-menu" aria-label="toggle aside menu"><span class="hamburger-box"><span class="hamburger-inner"></span></span></button>
-            <a href="index.php"><img src="images/logo-liga-de-naciones.png" alt="Liga de Naciones" height="50"></a>
+            <a href="index.php"><img src="images/logo_copa.png" alt="Liga de Naciones" height="50"></a>
           </div>
           <div class="top-bar-list">
             <div class="top-bar-item px-2 d-md-none d-lg-none d-xl-none">
               <button class="hamburger hamburger-squeeze" type="button" data-toggle="aside" aria-label="toggle menu"><span class="hamburger-box"><span class="hamburger-inner"></span></span></button>
-              <a href="index.php" class="navbar-brand ml-3"><img src="images/logo-liga-de-naciones.png" alt="Liga de Naciones" height="50"></a>
+              <a href="index.php" class="navbar-brand ml-3"><img src="images/logo_copa.png" alt="Liga de Naciones" height="50"></a>
             </div>
             <div class="top-bar-item top-bar-item-right px-0 d-flex">
-              <ul class="header-nav nav">
-                <li class="nav-item">
-                  <a class="nav-link" href="https://www.instagram.com/liganaciones/" target="_blank"><span class="fab fa-instagram"></span></a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="https://www.facebook.com/liganaciones/" target="_blank"><span class="fab fa-facebook"></span></a>
-                </li>
-              </ul>
               <div class="dropdown d-none d-md-flex">
                 <button class="btn-account" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="user-avatar user-avatar-md"><img src="assets/images/avatars/unknown-profile.jpg" alt=""></span> <span class="account-summary pr-lg-4 d-none d-lg-block"><span class="account-name">Hola, <?php echo strtok(ucfirst(strtolower($_SESSION[$siglaSistema.'_nombreProveedor'])), ' '); ?>!</span> <span class="account-description"><?php echo $_SESSION[$siglaSistema.'_rut']."-". $_SESSION[$siglaSistema.'_dv']; ?></span></span></button>
                 <div class="dropdown-menu">
