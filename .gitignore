@@ -1,4 +1,3 @@
 /documentos/*
 !/documentos/**/.gitkeep
 /includes/settings.php
-/vendor/
